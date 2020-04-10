@@ -22,6 +22,7 @@ This project provides the backend for the Urban Performance and Suitability tool
 This Oskari's server extension is intended to be used in an instance of oskari-server-v1.54.1, the oskari-server-v1.54.1 is available at [https://github.com/oskariorg/oskari-server/tree/1.54.1](https://github.com/oskariorg/oskari-server/tree/1.54.1)
 
 ### Compilation
+
 1. Build the UPT GUI project, following the instrucctions available in the readme file of the repository [https://github.com/UPTechMX/UPT-GUI](https://github.com/UPTechMX/UPT-GUI)
 2. Clone this repository with the command `git clone https://github.com/UPTechMX/UPT-Server-Extension`
 3. Move to the newly created directory `UPT-Server-Extension`
