@@ -82,12 +82,10 @@ public class ResultsUPHandler extends RestActionHandler {
                     for (ResultsValuesUP result : res.results) {
                         if(result!=null && indicators.getString("indicator")!=null && result.name.equals(indicators.getString("indicator"))) {
                             result.label=indicators.getString("label");
-                            result.units=indicators.getString("units");
-                            log.error(result,"edited");
+                            result.units=indicators.getString("units");       
                             break;
                         }
                     }
-                    log.error(res,"finished");
                 }
             }
             //Change range for percentage results
