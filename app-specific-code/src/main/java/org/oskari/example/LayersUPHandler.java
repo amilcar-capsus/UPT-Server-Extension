@@ -1,18 +1,5 @@
 package org.oskari.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,20 +8,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.oskari.example.up.UPFields;
+import org.oskari.example.up.UPFieldsList;
+import org.oskari.example.up.UPJobs;
+import org.oskari.example.up.UPRoads;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.oskari.example.up.UPFields;
-import org.oskari.example.up.UPFieldsList;
-import org.oskari.example.up.UPJobs;
-import org.oskari.example.up.UPRoads;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 
 @OskariActionRoute("LayersUPHandler")
@@ -351,21 +353,22 @@ public class LayersUPHandler extends RestActionHandler {
                 modules.add(data.getString("name"));
             };
 
-            ResponseEntity<List<String>> returns = null;
+            ResponseEntity<List<TableInfo>> returns = null;
             RestTemplate restTemplate = new RestTemplate();
 
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://" + upwsHost + ":" + upwsPort + "/layers/")
-                    .queryParam("modules", modules);
+                    .queryParam("modules", modules)
+                    .queryParam("scenario", Integer.parseInt(scenario_id));
 
             returns = restTemplate.exchange(
                     uriBuilder.toUriString(),
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<String>>() {
+                    new ParameterizedTypeReference<List<TableInfo>>() {
             }
             );
 
-            List<String> res = returns.getBody();
+            List<TableInfo> res = returns.getBody();
             Statement statement2 = connection.createStatement();
             ResultSet tablesLabel = statement2.executeQuery("SELECT distinct name, label\n" +
                 "	FROM public.up_layers"+
@@ -379,16 +382,16 @@ public class LayersUPHandler extends RestActionHandler {
                 labels.add(tablesLabel.getString("label"));
             };
 
-            for (String table : res) {
-                String label=table;
+            for (TableInfo table : res) {
+                String label=table.name;
                 for(String tab:tables){
-                    if(tab.equals(table)){
-                        label=labels.get(tables.indexOf(tab));
+                    if(tab.equals(table.name)){
+                        label=labels.get(tables.indexOf(tab))+" ("+table.value.intValue()+")";
                         break;
                     }
                 }
                 Directories child = new Directories();
-                child.setData(table);
+                child.setData(table.name);
                 child.setLabel(label);
                 child.setExpandedIcon(null);
                 child.setCollapsedIcon(null);
