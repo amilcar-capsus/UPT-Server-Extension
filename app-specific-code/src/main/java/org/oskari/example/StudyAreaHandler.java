@@ -1,7 +1,19 @@
 package org.oskari.example;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,16 +23,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 @OskariActionRoute("study_area")
 public class StudyAreaHandler extends RestActionHandler {
@@ -47,7 +49,7 @@ public class StudyAreaHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "getStudyAreas";
         ArrayList<StudyAreaUP> layers = new ArrayList<StudyAreaUP>();
         try (
@@ -55,7 +57,7 @@ public class StudyAreaHandler extends RestActionHandler {
                         upURL,
                         upUser,
                         upPassword);) {
-            
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement("select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");
             statement.setString(1, user_uuid);
             statement.execute();

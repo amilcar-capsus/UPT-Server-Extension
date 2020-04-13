@@ -1,6 +1,20 @@
 package org.oskari.example.st;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.oskari.example.Data;
+import org.oskari.example.Directories;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -10,17 +24,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.oskari.example.Data;
-import org.oskari.example.Directories;
 
 @OskariActionRoute("list_oskari_layers")
 public class STOskariLayers extends RestActionHandler {
@@ -55,12 +58,13 @@ public class STOskariLayers extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         ArrayList<Directories> directories = new ArrayList<Directories>();
         Data tree = new Data();
         String errorMsg = "Oskari Layers get ";
         Long studyArea = params.getRequiredParamLong("studyArea");
         try {
+            params.requireLoggedInUser();
             //Get directories
             Directories dir = new Directories();
             dir.setData("my_data");

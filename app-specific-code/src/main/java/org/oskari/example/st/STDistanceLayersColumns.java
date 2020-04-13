@@ -1,7 +1,20 @@
 package org.oskari.example.st;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
+import org.oskari.example.Layers;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,16 +24,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.logging.Level;
-import org.json.JSONObject;
-import org.oskari.example.Layers;
 
 @OskariActionRoute("list_suitability_layer_columns")
 
@@ -55,9 +58,9 @@ public class STDistanceLayersColumns extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         Layers layers = new Layers();
         try {
+            params.requireLoggedInUser();
             layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
             ObjectMapper Obj = new ObjectMapper();
             final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));

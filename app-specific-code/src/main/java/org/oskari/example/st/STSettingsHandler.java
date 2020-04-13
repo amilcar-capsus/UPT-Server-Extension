@@ -1,7 +1,21 @@
 package org.oskari.example.st;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,17 +25,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
 
 @OskariActionRoute("st_settings")
 public class STSettingsHandler extends RestActionHandler {
@@ -51,7 +54,7 @@ public class STSettingsHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Filters get";
         Long user_id = params.getUser().getId();
         Long layerId = Long.parseLong(params.getRequiredParam("st_layer_id"));
@@ -62,6 +65,7 @@ public class STSettingsHandler extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);) {
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "with study_area as(\n" +
                     "	select st_transform(st_setsrid(geometry,?),4326) as geometry from user_layer_data where user_layer_id=?\n" +
@@ -134,7 +138,7 @@ public class STSettingsHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long st_layer_id = Long.parseLong(params.getRequiredParam("st_layer_id"));
         Integer normalization_method = Integer.parseInt(params.getRequiredParam("normalization_method"));
         Double range_min = Double.parseDouble(params.getRequiredParam("range_min"));
@@ -153,6 +157,7 @@ public class STSettingsHandler extends RestActionHandler {
                         "	st_layers_id, normalization_method, range_min, range_max, smaller_better, weight)\n" +
                         "	VALUES (?, ?, ?, ?, ?, ?);"
                 );) {
+            params.requireLoggedInUser();
             statement.setLong(1, st_layer_id);
             statement.setInt(2, normalization_method);
             statement.setDouble(3, range_min);
@@ -187,7 +192,7 @@ public class STSettingsHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long id = Long.parseLong(params.getRequiredParam("id"));
         Long st_layer_id = Long.parseLong(params.getRequiredParam("st_layer_id"));
         Integer normalization_method = Integer.parseInt(params.getRequiredParam("normalization_method"));
@@ -206,6 +211,7 @@ public class STSettingsHandler extends RestActionHandler {
                 PreparedStatement statement = connection.prepareStatement(
                         "update public.st_settings set(st_layers_id,normalization_method,range_min,range_max,smaller_better,weight)= ( ?, ?, ?, ?, ?, ?) where id=?;"
                 );) {
+            params.requireLoggedInUser();
             statement.setLong(1, st_layer_id);
             statement.setInt(2, normalization_method);
             statement.setDouble(3, range_min);
@@ -240,7 +246,7 @@ public class STSettingsHandler extends RestActionHandler {
 
     @Override
     public void handleDelete(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long id = Long.parseLong(params.getRequiredParam("id"));
 
         PostStatus status = new PostStatus();
@@ -251,6 +257,7 @@ public class STSettingsHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_settings where  id = ?;");) {
+            params.requireLoggedInUser();
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
 

@@ -1,7 +1,23 @@
 package org.oskari.example.up;
 
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+import org.oskari.example.Tables;
+import org.springframework.web.client.RestTemplate;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,20 +27,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
-import org.oskari.example.Tables;
-import org.oskari.example.st.STLayersHandler;
-import org.springframework.web.client.RestTemplate;
 
 @OskariActionRoute("copy_data")
 public class CopyDataHandler extends RestActionHandler {
@@ -66,9 +68,10 @@ public class CopyDataHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers UP get ";
         try {
+            params.requireLoggedInUser();
             PostStatus status = null;
 
             switch (params.getRequiredParam("layerUPName")) {

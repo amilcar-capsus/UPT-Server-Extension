@@ -1,7 +1,21 @@
 package org.oskari.example.st;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,17 +25,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
 
 @OskariActionRoute("st_layers")
 public class STLayersHandler extends RestActionHandler {
@@ -49,7 +52,7 @@ public class STLayersHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers get";
         Long user_id = params.getUser().getId();
         Long study_area;
@@ -86,6 +89,7 @@ public class STLayersHandler extends RestActionHandler {
                             "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code  from public_layers	\n"+
                         ") \n"+
                         "select distinct id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from all_layers order by label");) {
+            params.requireLoggedInUser();
             statement.setLong(1, study_area);
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
@@ -149,7 +153,7 @@ public class STLayersHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
         String layerLabel = params.getRequiredParam("layerLabel");
         String field = params.getRequiredParam("field");
@@ -163,6 +167,7 @@ public class STLayersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO public.st_layers(user_layer_id, layer_field, st_layer_label,layer_mmu_code)VALUES ( ?, ?, ?,?);");) {
+            params.requireLoggedInUser();
 
             statement.setLong(1, layerId);
             statement.setString(2, field);
@@ -204,7 +209,7 @@ public class STLayersHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
         String layerLabel = params.getRequiredParam("layerLabel");
         String field = params.getRequiredParam("field");
@@ -217,6 +222,7 @@ public class STLayersHandler extends RestActionHandler {
                 PreparedStatement statement = connection.prepareStatement(
                     "update public.st_layers set(layer_field, st_layer_label,layer_mmu_code)=(?,?,?) where id=?;"
                 );) {
+            params.requireLoggedInUser();
 
             statement.setString(1, field);
             statement.setString(2, layerLabel);
@@ -257,7 +263,7 @@ public class STLayersHandler extends RestActionHandler {
 
     @Override
     public void handleDelete(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
         String layerLabel = params.getRequiredParam("layerLabel");
         String field = params.getRequiredParam("field");
@@ -270,6 +276,7 @@ public class STLayersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_layers where  id = ?;");) {
+            params.requireLoggedInUser();
 
             statement.setLong(1, layerId);
             

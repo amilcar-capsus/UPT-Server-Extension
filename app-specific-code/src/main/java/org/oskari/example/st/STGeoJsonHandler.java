@@ -1,57 +1,61 @@
 package org.oskari.example.st;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.*;
-import org.oskari.log.AuditLog;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import fi.nls.oskari.control.layer.*;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.oskari.map.userlayer.service.UserLayerException;
-
-import java.io.InputStream;
-import java.util.Map;
-
+import org.apache.commons.io.IOUtils;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
-
 import org.geotools.referencing.CRS;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.oskari.geojson.GeoJSONReader2;
-import org.oskari.geojson.GeoJSONSchemaDetector;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.domain.map.UserDataStyle;
-import fi.nls.oskari.domain.map.userlayer.UserLayer;
-import fi.nls.oskari.domain.map.userlayer.UserLayerData;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.oskari.control.userlayer.UserLayerHandlerHelper;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTDataCleanHandler;
+import org.oskari.geojson.GeoJSONReader2;
+import org.oskari.geojson.GeoJSONSchemaDetector;
+import org.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
+import org.oskari.map.userlayer.service.UserLayerException;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionConstants;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
+import fi.nls.oskari.domain.map.UserDataStyle;
+import fi.nls.oskari.domain.map.userlayer.UserLayer;
+import fi.nls.oskari.domain.map.userlayer.UserLayerData;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 
 
@@ -107,7 +111,6 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
 
 
         String sourceEPSG = params.getHttpParam(PARAM_SOURCE_EPSG_KEY);
@@ -118,6 +121,7 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
         FileItem jsonfile = null;
 
         try {
+            params.requireLoggedInUser();
             CoordinateReferenceSystem sourceCRS = decodeCRS(sourceEPSG);
             CoordinateReferenceSystem targetCRS = decodeCRS(targetEPSG);
 

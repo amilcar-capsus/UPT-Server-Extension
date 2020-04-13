@@ -1,7 +1,21 @@
 package org.oskari.example.st;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,17 +25,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
 
 @OskariActionRoute("st_filters")
 public class STFiltersHandler extends RestActionHandler {
@@ -49,7 +52,6 @@ public class STFiltersHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg = "Filters get";
         Long user_id = params.getUser().getId();
         Long study_area;
@@ -86,6 +88,7 @@ public class STFiltersHandler extends RestActionHandler {
                         + "	select id,user_layer_id,st_filter_label,label from public_layers	\n"
                         + ") \n"
                         + "select distinct id,user_layer_id,st_filter_label,label from all_layers  order by label ");) {
+            params.requireLoggedInUser();
             statement.setLong(1, study_area);
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
 
@@ -141,7 +144,6 @@ public class STFiltersHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
         String filterLabel = params.getRequiredParam("filterLabel");
 
@@ -153,6 +155,7 @@ public class STFiltersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO public.st_filters( user_layer_id, st_filter_label)VALUES ( ?, ?);");) {
+            params.requireLoggedInUser();
 
             statement.setInt(1, filterID);
             statement.setString(2, filterLabel);
@@ -181,7 +184,6 @@ public class STFiltersHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
         String filterLabel = params.getRequiredParam("filterLabel");
 
@@ -193,6 +195,7 @@ public class STFiltersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("update public.st_filters set st_filter_label =? where id=?;");) {
+            params.requireLoggedInUser();
 
             statement.setString(1, filterLabel);
             statement.setInt(2, filterID);
@@ -223,7 +226,7 @@ public class STFiltersHandler extends RestActionHandler {
 
     @Override
     public void handleDelete(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
         String filterLabel = params.getRequiredParam("filterLabel");
 
@@ -235,6 +238,7 @@ public class STFiltersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_filters where id = ?;");) {
+            params.requireLoggedInUser();
 
             statement.setInt(1, filterID);
 

@@ -74,15 +74,10 @@ public class AdminUPHandler extends RestActionHandler {
     
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
-        params.getResponse().setHeader("Access-Control-Allow-Origin", "*");
-        params.getResponse().setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        params.getResponse().setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        params.getResponse().setHeader("Access-Control-Expose-Headers", "x-requested-with");
       
         String errorMsg="Results UP post ";
         try {
-
+            params.requireLoggedInUser();
             //Upload file
             HttpServletRequest request=params.getRequest();
             request.setCharacterEncoding("UTF-8");

@@ -1,23 +1,15 @@
 package org.oskari.example.st;
 
-import org.oskari.example.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.util.List;
 import java.util.logging.Level;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.oskari.example.PostStatus;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +17,17 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 
 @OskariActionRoute("evaluate_distances")
@@ -58,9 +61,10 @@ public class STDistanceEvaluationHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         ResponseEntity<List<STDistanceExecution>> returns = null;
         try {
+            params.requireLoggedInUser();
             Long user_id = params.getUser().getId();
             String studyArea = params.getRequiredParam("study_area");
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://" + stwsHost + ":" + stwsPort + "/distances_status/")
@@ -100,9 +104,10 @@ public class STDistanceEvaluationHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Scenario UP post ";
         try {
+            params.requireLoggedInUser();
             Long user_id = params.getUser().getId();
 
             String study_area = params.getRequiredParam("study_area");

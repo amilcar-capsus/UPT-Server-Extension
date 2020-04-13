@@ -1,7 +1,37 @@
 package org.oskari.example.up;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Level;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.Assumptions;
+import org.oskari.example.PostStatus;
+import org.oskari.example.ScenarioUP;
+import org.oskari.example.Tables;
+import org.oskari.example.st.STLayersHandler;
+import org.oskari.log.AuditLog;
+import org.oskari.map.userlayer.service.UserLayerDbService;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionDeniedException;
 import fi.nls.oskari.control.ActionException;
@@ -15,33 +45,6 @@ import fi.nls.oskari.service.OskariComponentManager;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import javax.servlet.http.HttpServletRequest;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.web.client.RestTemplate;
-import org.oskari.example.Assumptions;
-import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUP;
-import org.oskari.example.Tables;
-import org.oskari.example.st.STLayersHandler;
-import org.oskari.log.AuditLog;
-import org.oskari.map.userlayer.service.UserLayerDbService;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseEntity;
 
 @OskariActionRoute("up_scenario")
 public class UPScenarioHandler extends RestActionHandler {
@@ -80,10 +83,11 @@ public class UPScenarioHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Scenario UP get ";
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
+            params.requireLoggedInUser();
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -119,9 +123,10 @@ public class UPScenarioHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Scenario UP post ";
         try {
+            params.requireLoggedInUser();
             ScenarioUP scenario = new ScenarioUP();
 
             scenario.setName(params.getRequiredParam("name"));
@@ -246,9 +251,10 @@ public class UPScenarioHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Scenario UP post ";
         try {
+            params.requireLoggedInUser();
             ScenarioUP scenario = new ScenarioUP();
             scenario.setScenarioId(Integer.parseInt(params.getRequiredParam("scenarioId")));
             scenario.setName(params.getRequiredParam("name"));

@@ -1,19 +1,5 @@
 package org.oskari.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +25,19 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 @OskariActionRoute("ScenarioUPHandler")
 public class ScenarioUPHandler extends RestActionHandler {
@@ -67,10 +70,10 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg = "Scenario UP get ";
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
+            params.requireLoggedInUser();
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -101,10 +104,10 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         
         String errorMsg = "Scenario UP post ";
         try {
+            params.requireLoggedInUser();
             Long user_id = params.getUser().getId();
             if ("evaluate".equals(params.getRequiredParam("action"))) {
                 String scenarios = String.join(",", params.getRequest().getParameterValues("scenariosId") );
@@ -263,9 +266,9 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
             ScenarioUP scenario = new ScenarioUP();
             scenario.setName(params.getRequiredParam("name"));
             scenario.setOwnerId(Integer.parseInt(user_id.toString()));

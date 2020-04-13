@@ -1,7 +1,23 @@
 package org.oskari.example.st;
 
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+import org.oskari.example.Tables;
+import org.springframework.web.client.RestTemplate;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,19 +27,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.web.client.RestTemplate;
-import org.oskari.example.PostStatus;
-import org.oskari.example.Tables;
 
 @OskariActionRoute("st_copy_layers")
 public class STCopyLayers extends RestActionHandler {
@@ -59,8 +62,8 @@ public class STCopyLayers extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         try {
+            params.requireLoggedInUser();
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "This method have not been implemented"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
         } catch (JsonProcessingException | JSONException ex) {
@@ -70,10 +73,11 @@ public class STCopyLayers extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         PostStatus status = null;
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
             if (params.getRequiredParam("layerSTName") != null
                     && params.getRequiredParam("layerName") != null
                     && params.getRequiredParam("tableST") != null

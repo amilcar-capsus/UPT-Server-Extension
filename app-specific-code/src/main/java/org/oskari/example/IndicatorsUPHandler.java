@@ -1,32 +1,34 @@
 package org.oskari.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
-import org.springframework.web.client.RestTemplate;
 import org.json.JSONObject;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.client.RestTemplate;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @OskariActionRoute("IndicatorsUPHandler")
@@ -53,11 +55,11 @@ public class IndicatorsUPHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg = "Scenario UP get ";
         
         ResponseEntity<List<IndicatorUP>> returns = null;
         try {
+            params.requireLoggedInUser();
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
               "http://"+ upwsHost +":"+upwsPort+"/indicator/",
@@ -94,9 +96,10 @@ public class IndicatorsUPHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+
         String errorMsg = "Scenario UP get ";
         try {
+            params.requireLoggedInUser();
             Long user_id = params.getUser().getId();
             RestTemplate restTemplate = new RestTemplate();
             ResultSet indicators=getIndicators(params);

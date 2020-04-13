@@ -1,22 +1,6 @@
 package org.oskari.example.up;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
-import fi.nls.oskari.util.ResponseHelper;
 import java.io.File;
-import java.util.logging.Level;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUPHandler;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +12,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+
 import javax.servlet.http.HttpServletRequest;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -36,6 +26,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.IndicatorUP;
+import org.oskari.example.PostStatus;
+import org.oskari.example.ScenarioUPHandler;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,12 +41,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import org.oskari.example.IndicatorUP;
-import org.springframework.core.ParameterizedTypeReference;
-
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 @OskariActionRoute("indicators_installer")
 public class UPCalculusModulesInstallerHandler extends RestActionHandler {
@@ -101,13 +102,13 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try (
             Connection connection = DriverManager.getConnection(
                     upURL,
                     upUser,
                     upPassword);) {
-
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, name, label, tooltip\n" +
                     "	FROM public.up_modules_translation where language=?;"
@@ -143,12 +144,13 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Assumptions post";
 
         List<FileItem> fileItems = getFileItems(params.getRequest());
 
         try {
+            params.requireLoggedInUser();
             for (FileItem indicator : fileItems) {
                 File memory = new File(FilenameUtils.getName(indicator.getName()));
                 indicator.write(memory);
@@ -204,7 +206,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
     }
     @Override
     public void handlePut(ActionParameters params) throws ActionException{
-        params.requireLoggedInUser();
+        
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
@@ -216,6 +218,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                         "WHERE id=?;"
                     );
             ) {
+                params.requireLoggedInUser();
                 statement.setString(1,  "english");
                 statement.setString(2, params.getRequiredParam("name"));
                 statement.setString(3,  params.getRequiredParam("label"));
@@ -230,7 +233,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
     
     @Override
     public void handleDelete(ActionParameters params) throws ActionException{
-        params.requireLoggedInUser();
+        
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
@@ -241,6 +244,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                         "	WHERE id=?;"
                     );
             ) {
+                params.requireLoggedInUser();
                 statement.setInt(1,  Integer.parseInt(params.getRequiredParam("id")));
                 deleteInstalledIndicator(params.getRequiredParam("name"));
                 statement.execute();                

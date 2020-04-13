@@ -1,23 +1,26 @@
 package org.oskari.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.oskari.example.st.STLayersHandler;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
 
 
 @OskariActionRoute("fix_data")
@@ -59,7 +62,7 @@ public class UPTDataCleanHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
@@ -88,7 +91,7 @@ public class UPTDataCleanHandler extends RestActionHandler {
                         "from datafix\n" +
                         "where user_layer_data.id=datafix.id");
                 ) {
-
+            params.requireLoggedInUser();
             statment.execute();
             statment2.setInt(1, Integer.parseInt(upProjection));
             statment2.execute();

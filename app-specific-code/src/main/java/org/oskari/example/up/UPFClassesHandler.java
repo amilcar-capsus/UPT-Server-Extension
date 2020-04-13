@@ -1,7 +1,23 @@
 package org.oskari.example.up;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.IndicatorsUPHandler;
+import org.oskari.example.PostStatus;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,28 +27,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.IndicatorsUPHandler;
-import org.oskari.example.PostStatus;
-import org.oskari.example.ResultsScenarioUP;
-import org.oskari.example.ResultsValuesUP;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @OskariActionRoute("classification_manager")
 public class UPFClassesHandler extends RestActionHandler {
@@ -66,9 +60,9 @@ public class UPFClassesHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg="Results UP post ";
         try {
+            params.requireLoggedInUser();
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<List<UPFClasses>> returns = null;                        
             returns = restTemplate.exchange(
@@ -105,8 +99,9 @@ public class UPFClassesHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try {
+            params.requireLoggedInUser();
             PostStatus postStatus = new PostStatus();
             RestTemplate restTemplate = new RestTemplate();
             UPFClasses data=new UPFClasses();
@@ -129,8 +124,9 @@ public class UPFClassesHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try{
+            params.requireLoggedInUser();
             PostStatus postStatus = new PostStatus();
             UPFClasses data=new UPFClasses();
             
@@ -157,8 +153,9 @@ public class UPFClassesHandler extends RestActionHandler {
 
     @Override
     public void handleDelete(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try{
+            params.requireLoggedInUser();
             Map<String, Integer> param= new HashMap<String, Integer>();
             param.put("id", Integer.parseInt(params.getRequiredParam("classification_id") ));
 

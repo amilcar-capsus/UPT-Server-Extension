@@ -1,6 +1,22 @@
 package org.oskari.example.st;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.oskari.example.Data;
+import org.oskari.example.Directories;
+import org.oskari.example.Layers;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -10,19 +26,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.oskari.example.Data;
-import org.oskari.example.Directories;
-import org.oskari.example.Layers;
 
 
 @OskariActionRoute("list_suitability_layers")
@@ -58,13 +61,14 @@ public class STDistanceLayers extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         ArrayList<Directories> directories = new ArrayList<Directories>();
         Data tree = new Data();
         String errorMsg = "Oskari Layers get ";
         String table = "";
         table += params.getHttpParam("table")==null ? "":params.getHttpParam("table");
         try {
+            params.requireLoggedInUser();
             //Get directories
             Directories dir = new Directories();
             dir.setData("scenario");

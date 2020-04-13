@@ -1,7 +1,20 @@
 package org.oskari.example.up;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.oskari.example.IndicatorsUPHandler;
+import org.oskari.example.PostStatus;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -11,17 +24,6 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.oskari.example.IndicatorsUPHandler;
-import org.oskari.example.PostStatus;
 
 @OskariActionRoute("indicators_labeling")
 public class UPIndicatorsLabelingHandler extends RestActionHandler {
@@ -49,7 +51,7 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         JSONArray indicators = new JSONArray();
         ObjectMapper Obj = new ObjectMapper();
         try (
@@ -57,6 +59,7 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
                         upURL,
                         upUser,
                         upPassword)) {
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, language, label, units, up_indicators_id\n"
                     + "	FROM public.up_indicators_translation;"
@@ -86,12 +89,13 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
                         upUser,
                         upPassword)) {
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO public.up_indicators_translation(\n"
                     + "	language, label, units, up_indicators_id)\n"
@@ -116,12 +120,13 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
                         upUser,
                         upPassword)) {
+            params.requireLoggedInUser();
+
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE public.up_indicators_translation\n"
                     + "	SET language=?, label=?, units=?\n"
@@ -146,12 +151,13 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
 
     @Override
     public void handleDelete(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         try (
                 Connection connection = DriverManager.getConnection(
                         upURL,
                         upUser,
                         upPassword)) {
+            params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM public.up_indicators_translation\n"
                     + "	WHERE id=?;"

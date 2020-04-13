@@ -1,33 +1,22 @@
 package org.oskari.example.up;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
-import fi.nls.oskari.util.ResponseHelper;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.logging.Level;
-import org.json.JSONObject;
-import org.oskari.example.PostStatus;
-
-import au.com.bytecode.opencsv.CSVReader;
-import fi.nls.oskari.domain.User;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
 import javax.servlet.http.HttpServletRequest;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -35,9 +24,23 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.oskari.example.Assumptions;
+import org.oskari.example.PostStatus;
 import org.oskari.example.Tables;
 import org.springframework.web.client.RestTemplate;
+
+import au.com.bytecode.opencsv.CSVReader;
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 @OskariActionRoute("up_csv_assumptions")
 public class UPAssumptionsCSVHandler extends RestActionHandler {
@@ -104,7 +107,7 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Assumptions post";
         Long study_area = Long.parseLong(params.getRequiredParam("study_area"));
 
@@ -119,6 +122,7 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
                         upURL,
                         upUser,
                         upPassword);) {
+            params.requireLoggedInUser();
             for (FileItem csv : fileItems) {
 
                 PreparedStatement statement0 = connection.prepareStatement(

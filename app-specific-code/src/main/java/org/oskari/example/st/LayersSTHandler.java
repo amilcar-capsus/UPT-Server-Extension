@@ -1,19 +1,5 @@
 package org.oskari.example.st;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.lang.reflect.Field;
 import java.sql.Array;
 import java.sql.Connection;
@@ -27,14 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.oskari.example.Amenities;
 import org.oskari.example.Data;
 import org.oskari.example.Directories;
@@ -45,6 +30,24 @@ import org.oskari.example.StudyAreaUP;
 import org.oskari.example.Tables;
 import org.oskari.example.up.UPFields;
 import org.oskari.example.up.UPFieldsList;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionDeniedException;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 
 @OskariActionRoute("LayersSTHandler")
@@ -90,12 +93,12 @@ public class LayersSTHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg = "Layers ST get ";
         Data tree = new Data();
         ArrayList<Directories> directories = new ArrayList<Directories>();
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
             if ("list_directories".equals(params.getRequiredParam("action"))) {
                 //Get directories
                 Directories dir = new Directories();
@@ -425,9 +428,10 @@ public class LayersSTHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers ST get ";
         try {
+            params.requireLoggedInUser();
             PostStatus status = null;
             if ("index_values".equals(params.getRequiredParam("action"))) {
                 indexSuitability(params);

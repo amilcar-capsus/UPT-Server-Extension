@@ -1,64 +1,66 @@
 package org.oskari.example.st;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.*;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.*;
-import org.oskari.log.AuditLog;
-
-import java.util.*;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import fi.nls.oskari.control.layer.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.oskari.map.userlayer.service.UserLayerException;
-
+import org.apache.commons.io.IOUtils;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
-
 import org.geotools.referencing.CRS;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.oskari.geojson.GeoJSONReader2;
-import org.oskari.geojson.GeoJSONSchemaDetector;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.nls.oskari.domain.map.UserDataStyle;
-import fi.nls.oskari.domain.map.userlayer.UserLayer;
-import fi.nls.oskari.domain.map.userlayer.UserLayerData;
-import java.util.logging.Level;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.oskari.control.userlayer.UserLayerHandlerHelper;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTDataCleanHandler;
+import org.oskari.geojson.GeoJSONReader2;
+import org.oskari.geojson.GeoJSONSchemaDetector;
+import org.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
+import org.oskari.map.userlayer.service.UserLayerException;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
 import fi.nls.oskari.domain.User;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import fi.nls.oskari.domain.map.UserDataStyle;
+import fi.nls.oskari.domain.map.userlayer.UserLayer;
+import fi.nls.oskari.domain.map.userlayer.UserLayerData;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 
 
@@ -139,9 +141,9 @@ public class STDistancesGeoJsonHandler extends AbstractLayerAdminHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         ResponseEntity<List<STDistanceGeoJSON>> returns = null;
         try (Connection connection = DriverManager.getConnection(stURL, stUser, stPassword);) {
+            params.requireLoggedInUser();
             String studyArea = params.getRequiredParam("study_area");
             Long user_id = params.getUser().getId();
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://" + stwsHost + ":" + stwsPort + "/distances_evaluation/")
