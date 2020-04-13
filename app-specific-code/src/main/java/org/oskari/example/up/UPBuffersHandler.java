@@ -160,29 +160,29 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
                         new ParameterizedTypeReference<List<UPBuffers>>() {
                 });
                 List<UPBuffers> response = returns.getBody();
-
-                for (UPBuffers index : response) {
-                    String Layer_name = "";
-                    PreparedStatement statement1 = connection.prepareStatement("select name from up_scenario where id=? limit 1");
-                    statement1.setInt(1, Integer.parseInt(scenario));
-                    ResultSet layers_name = statement1.executeQuery();
-
-                    if (layers_name.next()) {
-                        Layer_name = layers_name.getString("name");
+                
+                String Layer_name = "";
+                PreparedStatement statement1 = connection.prepareStatement("select name from up_scenario where id=? limit 1");
+                statement1.setInt(1, Integer.parseInt(scenario));
+                ResultSet layers_name = statement1.executeQuery();
+                LOG.error(statement1.toString());
+                if (layers_name.next()) {
+                    Layer_name = layers_name.getString("name");
+                    for (UPBuffers index : response) {
+                        LOG.error(Obj.writeValueAsString(index));
+                        mapSrs = "EPSG:" + upProjection;
+                        name = Layer_name + "_" + index.name;
+                        desc = "This layer was created by Urban Performance for the scenario " + Layer_name;
+                        source = "Urban Performance";
+                        uuid = params.getUser().getUuid();
+                        sourceEPSG = "EPSG:" + upProjection;
+                        geojson_in = index.buffer;
+                        ip = params.getClientIp();
+                        user = params.getUser();
+                        this.handleLayerCreation(params);
                     }
-
-                    mapSrs = "EPSG:" + upProjection;
-                    name = Layer_name + " " + index.name;
-                    desc = "This layer was created by Urban Performance for the scenario " + Layer_name;
-                    source = "Urban Performance";
-                    uuid = params.getUser().getUuid();
-                    sourceEPSG = "EPSG:" + upProjection;
-                    geojson_in = index.buffer;
-                    ip = params.getClientIp();
-                    user = params.getUser();
-                    this.handleLayerCreation(params);
+                    this.registerLayers(Integer.parseInt(scenario));
                 }
-                this.registerLayers(Integer.parseInt(scenario));
             }
             this.writeResponse(params);
         } catch (Exception e) {
@@ -382,6 +382,7 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
                 PreparedStatement statement = connection.prepareStatement("insert into up_scenario_buffers(scenario,user_layer_id) values(?,?) on conflict(scenario,user_layer_id) do nothing;");
                 statement.setInt(1, scenario);
                 statement.setLong(2, ulayer.getId());
+                LOG.debug(statement.toString(), ulayer);
                 statement.execute();
             }
         } catch (Exception e) {
