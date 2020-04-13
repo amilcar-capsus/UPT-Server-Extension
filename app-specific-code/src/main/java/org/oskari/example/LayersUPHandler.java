@@ -70,12 +70,13 @@ public class LayersUPHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers UP get ";
         Data tree = new Data();
         ArrayList<Directories> directories = new ArrayList<Directories>();
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
             if ("list_directories".equals(params.getRequiredParam("action"))) {
                 //Get directories
                 Directories dir = new Directories();
@@ -179,9 +180,10 @@ public class LayersUPHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers UP get ";
         try {
+            params.requireLoggedInUser();
             PostStatus status = null;
             if ("copy_data".equals(params.getRequiredParam("action"))) {
                 if (params.getRequiredParam("layerUPName") != null
