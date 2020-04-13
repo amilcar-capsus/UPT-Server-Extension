@@ -19,14 +19,13 @@ import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 
 import au.com.bytecode.opencsv.CSVReader;
+import fi.nls.oskari.domain.User;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
@@ -49,6 +48,7 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
     private static String upwsHost;
     private static String upwsPort;
     private static String upProjection;
+    
 
     private JSONArray errors;
     private ObjectMapper Obj;
@@ -75,7 +75,8 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
     private final int userlayerMaxFileSize = PropertyUtil.getOptional(PROPERTY_USERLAYER_MAX_FILE_SIZE_MB, 10) * MB;
 
     private static final Logger log = LogFactory.getLogger(UPAssumptionsCSVHandler.class);
-
+    
+    private User user_logged;
     @Override
     public void preProcess(ActionParameters params) throws ActionException {
         // common method called for all request methods
@@ -91,6 +92,8 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
 
         errors = new JSONArray();
         Obj = new ObjectMapper();
+        
+        user_logged=params.getUser();
 
     }
 
@@ -119,20 +122,18 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
             for (FileItem csv : fileItems) {
 
                 PreparedStatement statement0 = connection.prepareStatement(
-                        "select min(id) as scenario_id from up_scenario where study_area=?\n");
+                        "select min(id) as scenario_id from up_scenario where study_area=? and owner_id=?\n");
                 statement0.setLong(1, study_area);
+                statement0.setLong(2, user_logged.getId());
                 ResultSet scenario = statement0.executeQuery();
                 while (scenario.next()) {
                     scenario_id = scenario.getInt("scenario_id");
                 }
-                status.message += "step 1 :" + scenario_id.toString();
                 CSVReader reader = new CSVReader(new InputStreamReader(csv.getInputStream()), ',', '"', 0);
-                status.message += "step 2 : file readed" + reader.toString();
                 boolean headers = true;
                 String[] header = null;
                 String[] nextLine = null;
                 while ((nextLine = reader.readNext()) != null) {
-                    status.message += Arrays.toString(nextLine);
                     PreparedStatement statement = connection.prepareStatement(
                             "insert into up_assumptions(study_area,scenario,category,name,value,units,description,source) \n"
                             + "values(?,?,?,?,?,?,?,?) \n"
@@ -146,15 +147,9 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
                         statement.setString(6, nextLine[ArrayUtils.indexOf(header, "units")]);
                         statement.setString(7, nextLine[ArrayUtils.indexOf(header, "description")]);
                         statement.setString(8, nextLine[ArrayUtils.indexOf(header, "source")]);
-                        try {
-                            statement.execute();
-                        } catch (Exception e) {
-                            try {
-                                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-                            } catch (JsonProcessingException ex) {
-                                java.util.logging.Logger.getLogger(UPAssumptionsCSVHandler.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
+                        
+                        statement.execute();
+                        
                     } else {
                         header = nextLine;
                         headers = false;
@@ -204,12 +199,29 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
                 upURL,
                 upUser,
                 upPassword)) {
-
-            Statement statement = connection.createStatement();
-            String query = "SELECT " + scenario_id + " as scenario, category, name, value\n"
-                    + "FROM public.up_assumptions\n"
-                    + "where study_area=" + study_area;
-            ResultSet data_set = statement.executeQuery(query);
+            PreparedStatement statement = connection.prepareStatement(
+                    "with assumptions as(\n" +
+                    "	SELECT distinct study_area,category,name,value,units,description,source\n" +
+                    "	FROM public.up_assumptions\n" +
+                    "	where study_area=?\n" +
+                    "\n" +
+                    ")\n" +
+                    "select   \n" +
+                    "	? as scenario,\n" +
+                    "	assumptions.study_area,\n" +
+                    "	assumptions.category,\n" +
+                    "	assumptions.name,\n" +
+                    "	assumptions.value,\n" +
+                    "	assumptions.units,\n" +
+                    "	assumptions.description,\n" +
+                    "	assumptions.source\n" +
+                    "from assumptions"
+            );
+            statement.setInt(1, Integer.parseInt(study_area));
+            statement.setInt(2, scenario_id);
+            statement.executeQuery();
+            
+            ResultSet data_set = statement.getResultSet();
             ArrayList<Assumptions> data_in = new ArrayList<>();
             while (data_set.next()) {
                 Assumptions val = new Assumptions();
@@ -217,12 +229,66 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
                 val.category = data_set.getString("category");
                 val.name = data_set.getString("name");
                 val.value = data_set.getDouble("value");
+                val.owner_id=user_logged.getId();
                 data_in.add(val);
             }
             Tables<Assumptions> final_data = new Tables<>(data_in);
 
             RestTemplate restTemplate = new RestTemplate();
             postStatus = restTemplate.postForObject("http://" + upwsHost + ":" + upwsPort + "/assumptions/", final_data, PostStatus.class);
+        } catch (Exception e) {
+            errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
+            throw new Exception();
+        }
+    }
+
+    protected void updateAssumptionsAllScenarios(Integer scenario_id, String study_area) throws Exception {
+        PostStatus postStatus;
+        try (Connection connection = DriverManager.getConnection(
+                upURL,
+                upUser,
+                upPassword)) {
+
+            PreparedStatement statement = connection.prepareStatement(
+                "with assumptions as(\n"
+                    + "    SELECT study_area,category,name,value,units,description,source\n"
+                    + "    FROM public.up_assumptions\n"
+                    + "    where scenario=?\n"
+                    + "\n"
+                    + ") , scenarios as(\n"
+                    + "    select DISTINCT id \n"
+                    + "    from up_scenario \n"
+                    + "    where study_area=? and owner_id=?\n"
+                    + ")\n"
+                    + ", scenarios_assumptions as (\n"
+                    + "    select scenarios.id as scenario,study_area,category,name,value,units,description,source\n"
+                    + "    from assumptions \n"
+                    + "    inner join scenarios on 1=1\n"
+                    + ") ,all_assumptions as(\n"
+                    + "    select \n"
+                    + "        scenarios_assumptions.scenario,\n"
+                    + "        scenarios_assumptions.study_area,\n"
+                    + "        scenarios_assumptions.category,\n"
+                    + "        scenarios_assumptions.name,\n"
+                    + "        scenarios_assumptions.value,\n"
+                    + "        scenarios_assumptions.units,\n"
+                    + "        scenarios_assumptions.description,\n"
+                    + "        scenarios_assumptions.source,\n"
+                    + "        up_assumptions.scenario as scenario2\n"
+                    + "    from scenarios_assumptions\n"
+                    + "    left join up_assumptions\n"
+                    + "    on scenarios_assumptions.scenario = up_assumptions.scenario\n"
+                    + "    and scenarios_assumptions.category = up_assumptions.category\n"
+                    + "    and scenarios_assumptions.name = up_assumptions.name\n"
+                    + "\n"
+                    + ")insert into up_assumptions(scenario,study_area,category,name,value,units,description,source)\n"
+                    + "select scenario,study_area,category,name,value,units,description,source from all_assumptions\n"
+                    + "where scenario2 is null"
+            );
+            statement.setInt(1, scenario_id);
+            statement.setInt(2, Integer.parseInt(study_area));
+            statement.setLong(3, user_logged.getId());
+            statement.execute();
         } catch (Exception e) {
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
             throw new Exception();
