@@ -10,5 +10,6 @@ public class Assumptions {
     public String units;
     public String description;
     public String source;
+    public Long owner_id;
     
 }
