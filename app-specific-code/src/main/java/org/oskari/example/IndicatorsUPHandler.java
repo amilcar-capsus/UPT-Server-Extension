@@ -76,7 +76,6 @@ public class IndicatorsUPHandler extends RestActionHandler {
                 for (IndicatorUP index : response){
                     if(index!=null && indicators.getString("name")!=null && index.module.equals(indicators.getString("name"))) {
                         index.setLabel(indicators.getString("label"));
-                        log.error(params, indicators.getString("name")+" "+indicators.getString("label"));
                         //Convert to Json Object
                         ObjectMapper Obj = new ObjectMapper();
                         JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
@@ -85,8 +84,6 @@ public class IndicatorsUPHandler extends RestActionHandler {
                     }
                 }
             }
-            
-            log.debug("User:  " + user_id.toString() + " -> " + out.toString());
             ResponseHelper.writeResponse(params,out);
         } catch (Exception e) {
             errorMsg = errorMsg + e.getMessage();
@@ -103,7 +100,6 @@ public class IndicatorsUPHandler extends RestActionHandler {
             Long user_id = params.getUser().getId();
             RestTemplate restTemplate = new RestTemplate();
             ResultSet indicators=getIndicators(params);
-            log.debug("User:  " + user_id.toString() + " -> " + indicators.toString()+indicators.toString());
             ResponseHelper.writeResponse(params,indicators);
         } catch (Exception e) {
             errorMsg = errorMsg + e.getMessage();
