@@ -78,6 +78,14 @@ public class IndicatorsUPHandler extends RestActionHandler {
                 for (IndicatorUP index : response){
                     if(index!=null && indicators.getString("name")!=null && index.module.equals(indicators.getString("name"))) {
                         index.setLabel(indicators.getString("label"));
+                        //Update dependencies field
+                        String[] deps;
+                        deps=index.dependencies.replace("[","").replace("]","").replaceAll("\"","").split(",");
+                        for (String dependency : deps){
+                            if(indicators.getString("name")!=null && dependency.equals(indicators.getString("name"))) {
+                                index.dependencies=index.dependencies.replaceAll(dependency, indicators.getString("label"));
+                            }
+                        }
                         //Convert to Json Object
                         ObjectMapper Obj = new ObjectMapper();
                         JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
