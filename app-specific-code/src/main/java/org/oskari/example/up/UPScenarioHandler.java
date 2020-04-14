@@ -183,6 +183,7 @@ public class UPScenarioHandler extends RestActionHandler {
                         assumption.units = data.getString("units");
                         assumption.description = data.getString("description");
                         assumption.source = data.getString("source");
+                        assumption.owner_id=user_id;
 
                         Layers.put(i, assumption);
                         i++;
@@ -354,6 +355,7 @@ public class UPScenarioHandler extends RestActionHandler {
                 val.category = data_set.getString("category");
                 val.name = data_set.getString("name");
                 val.value = data_set.getDouble("value");
+                val.owner_id=user_id;
                 data_in.add(val);
             }
             Tables<Assumptions> final_data = new Tables<>(data_in);
