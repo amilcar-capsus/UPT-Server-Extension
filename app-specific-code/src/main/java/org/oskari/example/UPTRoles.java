@@ -84,34 +84,27 @@ public class UPTRoles extends RestActionHandler {
             }
         }
     }
-    public ArrayList handleGet(User user)throws ActionException {
+    public ArrayList handleGet(ActionParameters params,User user)throws Exception {
+        this.preProcess(params);
         Long user_id = user.getId();
-        try(
-            Connection connection = DriverManager.getConnection(
-                        upURL,
-                        upUser,
-                        upPassword)) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "select oskari_roles.name from oskari_users\n" +
-                    "inner join oskari_role_oskari_user\n" +
-                    "on oskari_role_oskari_user.user_id=oskari_users.id\n" +
-                    "inner join oskari_roles on oskari_roles.id=oskari_role_oskari_user.role_id\n" +
-                    "where oskari_users.id=?");
-            statement.setLong(1, user_id);
-            ResultSet data=statement.executeQuery();
-            ArrayList<String> roles=new ArrayList<>();
-            while(data.next()){
-                roles.add(data.getString("name"));
-            }
-            return roles;
-        }catch(Exception e){
-            try {
-                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-            } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(UPTRoles.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        
+        Connection connection = DriverManager.getConnection(
+                    upURL,
+                    upUser,
+                    upPassword);
+        PreparedStatement statement = connection.prepareStatement(
+                "select oskari_roles.name from oskari_users\n" +
+                "inner join oskari_role_oskari_user\n" +
+                "on oskari_role_oskari_user.user_id=oskari_users.id\n" +
+                "inner join oskari_roles on oskari_roles.id=oskari_role_oskari_user.role_id\n" +
+                "where oskari_users.id=?");
+        statement.setLong(1, user_id);
+        ResultSet data=statement.executeQuery();
+        ArrayList<String> roles=new ArrayList<>();
+        while(data.next()){
+            roles.add(data.getString("name"));
         }
-        return new ArrayList<String>();
+        return roles;
     }
     @Override
     public void handlePost(ActionParameters params)throws ActionException {
