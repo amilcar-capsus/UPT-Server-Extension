@@ -52,6 +52,8 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("indicators_installer")
 public class UPCalculusModulesInstallerHandler extends RestActionHandler {
@@ -109,6 +111,10 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                     upUser,
                     upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, name, label, tooltip\n" +
                     "	FROM public.up_modules_translation where language=?;"
@@ -133,7 +139,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
             java.util.logging.Logger.getLogger(UPCalculusModulesInstallerHandler.class.getName()).log(Level.SEVERE, null, e);
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-                ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+                ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
                 java.util.logging.Logger.getLogger(UPCalculusModulesInstallerHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
