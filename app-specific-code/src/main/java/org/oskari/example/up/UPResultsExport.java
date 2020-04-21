@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.oskari.example.up;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,10 +36,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- *
- * @author mark
- */
 @OskariActionRoute("up_results_export")
 
 public class UPResultsExport extends RestActionHandler {
