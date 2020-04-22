@@ -36,7 +36,7 @@ public class STLayersHandler extends RestActionHandler {
     
     private JSONArray errors;
     private ObjectMapper Obj;
-    
+    private String user_uuid;
     @Override
     public void preProcess(ActionParameters params) throws ActionException {
         // common method called for all request methods
@@ -46,6 +46,7 @@ public class STLayersHandler extends RestActionHandler {
         stUser = PropertyUtil.get("db.username");
         stPassword = PropertyUtil.get("db.password");
         
+        user_uuid = params.getUser().getUuid();
         errors = new JSONArray();
         Obj = new ObjectMapper();
     }
@@ -64,33 +65,24 @@ public class STLayersHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement(
-                        "with study_area as(\n"+
-                        "    select geometry from user_layer_data where user_layer_id=?\n"+
-                        "), user_layers as(\n"+
-                            "select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code\n"+
-                            "from st_layers\n"+
-                            "inner join user_layer_data on user_layer_data.user_layer_id = st_layers.user_layer_id\n"+
-                            ", study_area\n"+
-                            "where \n"+
-                            "st_intersects(study_area.geometry,user_layer_data.geometry)\n"+
-                            "--and user_layer_data.user_layer_id=?\n"+
-                        "), public_layers as(\n"+
-                            "select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,user_layer_data.user_layer_id,layer_field,layer_mmu_code\n"+
-                            "from st_layers\n"+
-                            "inner join user_layer_data on user_layer_data.user_layer_id = st_layers.user_layer_id\n"+
-                            "inner join layers_space on layers_space.user_layer_id = st_layers.user_layer_id\n"+
-                            ", study_area\n"+
-                            "where \n"+
-                            "st_intersects(study_area.geometry,user_layer_data.geometry)\n"+
-                            "and layers_space.space in ('public','suitability')\n"+
-                        "), all_layers as(\n"+
-                            "select  id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from user_layers\n"+
-                            "union all \n"+
-                            "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code  from public_layers	\n"+
-                        ") \n"+
-                        "select distinct id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from all_layers order by label");) {
+                    "with study_area as(\n" +
+                    "    select geometry from user_layer_data where user_layer_id=?\n" +
+                    "), user_layers as(\n" +
+                    "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code\n" +
+                    "    from st_layers\n" +
+                    "    inner join user_layer_data on user_layer_data.user_layer_id = st_layers.user_layer_id\n" +
+                    "    inner join user_layer on user_layer.id = user_layer_data.user_layer_id\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    , study_area\n" +
+                    "    where \n" +
+                    "    (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and\n" +
+                    "    st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
+                    ")\n" +
+                    "select  id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from user_layers"
+                        );) {
             params.requireLoggedInUser();
             statement.setLong(1, study_area);
+            statement.setString(2, user_uuid);
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
             //statement.setLong(2, user_id);

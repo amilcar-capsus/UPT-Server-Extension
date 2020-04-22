@@ -1,0 +1,2145 @@
+begin;
+    create table if not exists up_indicators(
+            id serial NOT NULL,
+            indicator character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated timestamp with time zone,
+            CONSTRAINT up_indicators_pkey PRIMARY KEY (id),
+            CONSTRAINT up_indicators_indicator_key UNIQUE (indicator)
+        );
+
+    insert into up_indicators(indicator)
+        values('pop_total') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('footprint_km2') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('land_consumption_km') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('infill_area_km2') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_density') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('ghg_emissions') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_consumption') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('tot_water') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_lighting') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_water') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_transport') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_swaste') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_buildings') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('municipal_service_costs')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('infrastructure_costs') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('infrastructure_new_costs') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('infrastructure_infill_costs') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('job_prox') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('transit_prox') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('school_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('elementary_school_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('secondary_school_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('high_school_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('public_space_proximity')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('sports_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('worship_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('university_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('health_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('nursery_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('public_service_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cultural_facility_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('market_proximity') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('hazard_exp') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('hu_tot') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('vhu_tot')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('vhu_rate') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('land_consumption_pct') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_gasoline') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_diesel') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('transport_energy') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('collection_energy') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_jobs') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_transit') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_school') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_elementary_school') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_secondary_school') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_high_school') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_public_service') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_sports') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_worship') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_university') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_health') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_nursery') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_public_space') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_cultural_facility') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_market') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_hazards') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_infill') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_expan') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('overcrowding') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('house_deficit') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('unpermited_housing') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('intersections_density') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('sidewalks_coverage') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pedestrian_crossing_coverage') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('lighting_coverage') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('water_metering') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_metering')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('solid_waste_annual_collection_costs') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('additional_annual_municipal_revenues') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('financial_balance') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('prim_road_km') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('prim_road_km2') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('sec_road_km') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('sec_road_km2') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('ter_road_km') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('ter_road_km2') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('unpermitted_housing') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('hu_cost')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values ('infrastructure_costs_consolidation') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('municipal_expenditure') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('municipal_revenue_pop') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('base_vacant_rate') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('street_coef') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('tree_cover') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('carbon_sequestration') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('tot_cycle') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cycle_cover') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('avge_cycle_track') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('covkwh')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cotkwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('so2kwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pm2_5kwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('noxkwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cokwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pm10kwh') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('carbon_seq_nr') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pop_prox_cycle') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('nrisk_prox') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('pspace_capita') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cycle_prox') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('roads_density') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('emissions_transport') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('agric_consumption') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('greenland_consumption')ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('other_land_consumption') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_security') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('ren_energy') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('plrunning_cost') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cwrunning_cost') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('solidw_coverage') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('city_data') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('indirect_data') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('borrowed_data') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('energy_wwt') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('wwt_pct') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('wwtrunning_cost') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('inv_cost') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('cw_coverage')
+            ,('localren_energy') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('local_energy') ON CONFLICT (indicator)
+            DO nothing;
+        insert into up_indicators(indicator)
+            values('ww')
+            ON CONFLICT (indicator)
+            DO nothing;
+
+    create table if not exists up_indicators_translation(
+            id serial NOT NULL,
+            language character varying(20) COLLATE pg_catalog."default" NOT NULL,
+            label character varying(60) COLLATE pg_catalog."default" ,
+            units character varying(60) COLLATE pg_catalog."default" ,
+            up_indicators_id int not null,
+            created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated timestamp with time zone,
+            CONSTRAINT up_indicators_translation_pkey PRIMARY KEY (id),
+            CONSTRAINT up_indicators_id_fkey FOREIGN KEY (up_indicators_id)
+                REFERENCES public.up_indicators (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+            CONSTRAINT up_indicators_translation_key UNIQUE (up_indicators_id,language)
+        );
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','pop_total'
+        ,(select min(id) as id from up_indicators where indicator='pop_total' )
+    ) on conflict(up_indicators_id,language) do nothing;
+
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','footprint_km2'
+        ,(select min(id) as id from up_indicators where indicator='footprint_km2' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','land_consumption_km'
+        ,(select min(id) as id from up_indicators where indicator='land_consumption_km' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','infill_area_km2'
+        ,(select min(id) as id from up_indicators where indicator='infill_area_km2' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','pop_density'
+        ,(select min(id) as id from up_indicators where indicator='pop_density' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'ghg_emissions'
+        ,(select min(id) as id from up_indicators where indicator='ghg_emissions' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_consumption'
+        ,(select min(id) as id from up_indicators where indicator='energy_consumption' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'tot_water'
+        ,(select min(id) as id from up_indicators where indicator='tot_water' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_lighting'
+        ,(select min(id) as id from up_indicators where indicator='energy_lighting' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_water'
+        ,(select min(id) as id from up_indicators where indicator='energy_water' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_transport'
+        ,(select min(id) as id from up_indicators where indicator='energy_transport' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_swaste'
+        ,(select min(id) as id from up_indicators where indicator='energy_swaste' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_buildings'
+        ,(select min(id) as id from up_indicators where indicator='energy_buildings' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'municipal_service_costs'
+        ,(select min(id) as id from up_indicators where indicator='municipal_service_costs' )
+    )on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'infrastructure_costs'
+        ,(select min(id) as id from up_indicators where indicator='infrastructure_costs' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'infrastructure_new_costs'
+        ,(select min(id) as id from up_indicators where indicator='infrastructure_new_costs' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'infrastructure_infill_costs'
+        ,(select min(id) as id from up_indicators where indicator='infrastructure_infill_costs' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'job_prox'
+        ,(select min(id) as id from up_indicators where indicator='job_prox' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'transit_prox'
+        ,(select min(id) as id from up_indicators where indicator='transit_prox' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'school_proximity'
+        ,(select min(id) as id from up_indicators where indicator='school_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'elementary_school_proximity'
+        ,(select min(id) as id from up_indicators where indicator='elementary_school_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'secondary_school_proximity'
+        ,(select min(id) as id from up_indicators where indicator='secondary_school_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'high_school_proximity'
+        ,(select min(id) as id from up_indicators where indicator='high_school_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'public_space_proximity'
+        ,(select min(id) as id from up_indicators where indicator='public_space_proximity' )
+    )on conflict(up_indicators_id,language) do nothing;
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2',
+        'sports_proximity',
+        (select min(id) as id from up_indicators where indicator='sports_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'worship_proximity'
+        ,(select min(id) as id from up_indicators where indicator='worship_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'university_proximity'
+        ,(select min(id) as id from up_indicators where indicator='university_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'health_proximity'
+        ,(select min(id) as id from up_indicators where indicator='health_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'nursery_proximity'
+        ,(select min(id) as id from up_indicators where indicator='nursery_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'public_service_proximity'
+        ,(select min(id) as id from up_indicators where indicator='public_service_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cultural_facility_proximity'
+        ,(select min(id) as id from up_indicators where indicator='cultural_facility_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'market_proximity'
+        ,(select min(id) as id from up_indicators where indicator='market_proximity' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'hazard_exp'
+        ,(select min(id) as id from up_indicators where indicator='hazard_exp' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'hu_tot'
+        ,(select min(id) as id from up_indicators where indicator='hu_tot' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'vhu_tot'
+        ,(select min(id) as id from up_indicators where indicator='vhu_tot' )
+    )on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','vhu_tot' 
+        ,(select min(id) as id from up_indicators where indicator='vhu_tot' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'land_consumption_pct'
+        ,(select min(id) as id from up_indicators where indicator='land_consumption_pct' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_gasoline'
+        ,(select min(id) as id from up_indicators where indicator='energy_gasoline' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_diesel'
+        ,(select min(id) as id from up_indicators where indicator='energy_diesel' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'transport_energy'
+        ,(select min(id) as id from up_indicators where indicator='transport_energy' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'collection_energy'
+        ,(select min(id) as id from up_indicators where indicator='collection_energy' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_jobs'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_jobs' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_transit'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_transit' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_school'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_school' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_elementary_school'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_elementary_school' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_secondary_school'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_secondary_school' )
+    )on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','pop_prox_high_school'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_high_school' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_public_service'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_public_service' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_sports'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_sports' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_worship'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_worship' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_university'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_university' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_health'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_health' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_nursery'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_nursery' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_public_space'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_public_space' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_cultural_facility'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_cultural_facility' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_market'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_market' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_hazards'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_hazards' )
+    )on conflict(up_indicators_id,language) do nothing;
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_hazards'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_hazards' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_expan'
+        ,(select min(id) as id from up_indicators where indicator='pop_expan' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'overcrowding'
+        ,(select min(id) as id from up_indicators where indicator='overcrowding' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'house_deficit'
+        ,(select min(id) as id from up_indicators where indicator='house_deficit' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'unpermited_housing'
+        ,(select min(id) as id from up_indicators where indicator='unpermited_housing' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'intersections_density'
+        ,(select min(id) as id from up_indicators where indicator='intersections_density' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'sidewalks_coverage'
+        ,(select min(id) as id from up_indicators where indicator='sidewalks_coverage' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pedestrian_crossing_coverage'
+        ,(select min(id) as id from up_indicators where indicator='pedestrian_crossing_coverage' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'lighting_coverage'
+        ,(select min(id) as id from up_indicators where indicator='lighting_coverage' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'water_metering'
+        ,(select min(id) as id from up_indicators where indicator='water_metering' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_metering'
+        ,(select min(id) as id from up_indicators where indicator='energy_metering' )
+    )on conflict(up_indicators_id,language) do nothing;
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'solid_waste_annual_collection_costs'
+        ,(select min(id) as id from up_indicators where indicator='solid_waste_annual_collection_costs' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'additional_annual_municipal_revenues'
+        ,(select min(id) as id from up_indicators where indicator='additional_annual_municipal_revenues' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'financial_balance'
+        ,(select min(id) as id from up_indicators where indicator='financial_balance' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'prim_road_km'
+        ,(select min(id) as id from up_indicators where indicator='prim_road_km' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'prim_road_km2'
+        ,(select min(id) as id from up_indicators where indicator='prim_road_km2' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'sec_road_km'
+        ,(select min(id) as id from up_indicators where indicator='sec_road_km' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'sec_road_km2'
+        ,(select min(id) as id from up_indicators where indicator='sec_road_km2' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'ter_road_km'
+        ,(select min(id) as id from up_indicators where indicator='ter_road_km' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'ter_road_km2'
+        ,(select min(id) as id from up_indicators where indicator='ter_road_km2' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'unpermitted_housing'
+        ,(select min(id) as id from up_indicators where indicator='unpermitted_housing' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'hu_cost'
+        ,(select min(id) as id from up_indicators where indicator='hu_cost' )
+    )on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2','infrastructure_costs_consolidation'
+        ,(select min(id) as id from up_indicators where indicator='infrastructure_costs_consolidation' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'municipal_expenditure'
+        ,(select min(id) as id from up_indicators where indicator='municipal_expenditure' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'municipal_revenue_pop'
+        ,(select min(id) as id from up_indicators where indicator='municipal_revenue_pop' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'base_vacant_rate'
+        ,(select min(id) as id from up_indicators where indicator='base_vacant_rate' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'street_coef'
+        ,(select min(id) as id from up_indicators where indicator='street_coef' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'tree_cover'
+        ,(select min(id) as id from up_indicators where indicator='tree_cover' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'carbon_sequestration'
+        ,(select min(id) as id from up_indicators where indicator='carbon_sequestration' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'tot_cycle'
+        ,(select min(id) as id from up_indicators where indicator='tot_cycle' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cycle_cover'
+        ,(select min(id) as id from up_indicators where indicator='cycle_cover' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'avge_cycle_track'
+        ,(select min(id) as id from up_indicators where indicator='avge_cycle_track' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'covkwh'
+        ,(select min(id) as id from up_indicators where indicator='covkwh' )
+    )on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cotkwh'
+        ,(select min(id) as id from up_indicators where indicator='cotkwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'so2kwh'
+        ,(select min(id) as id from up_indicators where indicator='so2kwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pm2_5kwh'
+        ,(select min(id) as id from up_indicators where indicator='pm2_5kwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'noxkwh'
+        ,(select min(id) as id from up_indicators where indicator='noxkwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cokwh'
+        ,(select min(id) as id from up_indicators where indicator='cokwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pm10kwh'
+        ,(select min(id) as id from up_indicators where indicator='pm10kwh' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'carbon_seq_nr'
+        ,(select min(id) as id from up_indicators where indicator='carbon_seq_nr' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pop_prox_cycle'
+        ,(select min(id) as id from up_indicators where indicator='pop_prox_cycle' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'nrisk_prox'
+        ,(select min(id) as id from up_indicators where indicator='nrisk_prox' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'pspace_capita'
+        ,(select min(id) as id from up_indicators where indicator='pspace_capita' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cycle_prox'
+        ,(select min(id) as id from up_indicators where indicator='cycle_prox' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'roads_density'
+        ,(select min(id) as id from up_indicators where indicator='roads_density' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'emissions_transport'
+        ,(select min(id) as id from up_indicators where indicator='emissions_transport' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'agric_consumption'
+        ,(select min(id) as id from up_indicators where indicator='agric_consumption' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'greenland_consumption'
+        ,(select min(id) as id from up_indicators where indicator='greenland_consumption' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'other_land_consumption'
+        ,(select min(id) as id from up_indicators where indicator='other_land_consumption' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_security'
+        ,(select min(id) as id from up_indicators where indicator='energy_security' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'ren_energy'
+        ,(select min(id) as id from up_indicators where indicator='ren_energy' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'plrunning_cost'
+        ,(select min(id) as id from up_indicators where indicator='plrunning_cost' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cwrunning_cost'
+        ,(select min(id) as id from up_indicators where indicator='cwrunning_cost' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'solidw_coverage'
+        ,(select min(id) as id from up_indicators where indicator='solidw_coverage' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'city_data'
+        ,(select min(id) as id from up_indicators where indicator='city_data' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'indirect_data'
+        ,(select min(id) as id from up_indicators where indicator='indirect_data' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'borrowed_data'
+        ,(select min(id) as id from up_indicators where indicator='borrowed_data' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'energy_wwt'
+        ,(select min(id) as id from up_indicators where indicator='energy_wwt' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'wwt_pct'
+        ,(select min(id) as id from up_indicators where indicator='wwt_pct' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'wwtrunning_cost'
+        ,(select min(id) as id from up_indicators where indicator='wwtrunning_cost' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'inv_cost'
+        ,(select min(id) as id from up_indicators where indicator='inv_cost' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'cw_coverage'
+        ,(select min(id) as id from up_indicators where indicator='cw_coverage' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'localren_energy'
+        ,(select min(id) as id from up_indicators where indicator='localren_energy' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'local_energy'
+        ,(select min(id) as id from up_indicators where indicator='local_energy' )
+    ) 
+    on conflict(up_indicators_id,language) do nothing;
+
+    insert into up_indicators_translation(
+    language, units,
+    label,
+    up_indicators_id
+    )
+    values(
+       'English','km2'
+        ,'ww'
+        ,(select min(id) as id from up_indicators where indicator='ww' )
+    )
+    on conflict(up_indicators_id,language) do nothing;
+    
+
+    /*Modules translation*/
+    create table if not exists up_modules_translation(
+        id serial NOT NULL,
+        language character varying(20) COLLATE pg_catalog."default" NOT NULL,
+        name character varying(250) COLLATE pg_catalog."default" NOT NULL,
+        label character varying(250) COLLATE pg_catalog."default" NOT NULL,
+        tooltip text COLLATE pg_catalog."default" NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_modules_translation_pkey PRIMARY KEY (id)
+        ,CONSTRAINT up_modules_translation_language_name_key UNIQUE (language, name)
+    );
+    
+    CREATE TABLE  if not exists public.up_scenario(
+        id serial,
+        name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        description character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        owner_id integer,
+        is_base integer,
+        study_area bigint,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT scenario_pkey PRIMARY KEY (id),
+        CONSTRAINT up_scenario_oskari_users_id_fkey FOREIGN KEY (owner_id)
+                REFERENCES public.oskari_users(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_scenario_user_layer_id_fkey FOREIGN KEY (study_area)
+                REFERENCES public.user_layer(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+    );
+    
+    CREATE TABLE  if not exists public.up_assumptions(
+        id serial,
+        study_area bigint,
+        scenario int,
+        category varchar(45),
+        name varchar(45),
+        value double precision,
+        units text,
+        description text,
+        "source" text,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_assumptions_pkey PRIMARY KEY (id),
+        CONSTRAINT up_assumptions_user_layer_id_fkey FOREIGN KEY (study_area)
+                REFERENCES public.user_layer(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_assumptions_up_scenario_id_fkey FOREIGN KEY (scenario) REFERENCES up_scenario (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_assumptions_study_area_scenario_category_name_key UNIQUE (study_area,scenario,category,name)
+    );
+    
+    
+    CREATE TABLE  if not exists public.up_layers(
+        id serial,
+        language character varying(20) COLLATE pg_catalog."default" NOT NULL,
+        name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        label character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        description text,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_layers_pkey PRIMARY KEY (id),
+        CONSTRAINT up_layers_language_name_key UNIQUE (language, name)
+    );
+    CREATE TABLE  if not exists public.up_layers_fields(
+        id serial,
+        up_layers_id integer not null,
+        name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        label character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        language character varying(20),
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_layers_fields_pkey PRIMARY KEY (id),
+        CONSTRAINT up_layers_fields_up_layers_id_fkey FOREIGN KEY (up_layers_id)
+                REFERENCES public.up_layers(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_layers_fields_up_layers_id_language_name_key 
+        UNIQUE (up_layers_id,language, name)
+    );
+
+    create table if not exists st_table_fields(
+        id serial,
+        "table" character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        label character varying(45) COLLATE pg_catalog."default" NOT NULL,
+        language character varying(20) COLLATE pg_catalog."default" NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT st_layers_fields_pkey PRIMARY KEY (id),
+        CONSTRAINT st_table_fields_language_name_key UNIQUE ("table", name, language)
+    );
+
+    
+    create table if not exists up_scenario_modules(
+        id serial NOT NULL,
+        module integer NOT NULL,
+        scenario integer NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_scenario_modules_pkey PRIMARY KEY (id),
+        CONSTRAINT up_scenario_modules_up_modules_translation_id_fkey FOREIGN KEY (module)
+                REFERENCES public.up_modules_translation(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_scenario_modules_up_scenario_id_fkey FOREIGN KEY (scenario)
+                REFERENCES public.up_scenario(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+    );
+    
+    create table if not exists up_scenarios_layers(
+        id serial NOT NULL,
+        up_scenarios_id integer,
+        source_layer int,
+        target_layer int,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT up_scenarios_layers_pkey PRIMARY KEY (id),
+        CONSTRAINT up_scenarios_layers_up_scenario_id_fkey FOREIGN KEY (up_scenarios_id)
+        REFERENCES public.up_scenario(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_scenarios_layers_user_layer_id_fkey FOREIGN KEY (source_layer)
+                REFERENCES public.user_layer(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT up_scenarios_layers_up_layers_id_fkey FOREIGN KEY (target_layer)
+                REFERENCES public.up_layers(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE       
+        
+    );
+    
+    create table if not exists layers_space(
+        id bigserial not null,
+        user_layer_id int not null,
+        space VARCHAR(50),-- allowed values public, suitability, urbanperformance
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT layers_space_pkey PRIMARY KEY (id),
+        CONSTRAINT layers_space_user_layer_id_fkey FOREIGN KEY (user_layer_id)
+                REFERENCES public.user_layer(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+    );
+    create table if not exists st_layers(
+        id bigserial not null,
+        user_layer_id bigint not null,
+        layer_field text NOT NULL,
+        layer_mmu_code text NOT NULL,
+        st_layer_label text NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT st_layers_pkey PRIMARY KEY (id),
+        CONSTRAINT st_layers_user_layer_id_fkey FOREIGN KEY (user_layer_id) REFERENCES user_layer (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT st_layers_user_layer_id_key UNIQUE (user_layer_id)
+    );
+    CREATE INDEX  if not exists st_layers_user_layer_id
+    ON public.st_layers USING btree
+    (user_layer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+    create table if not exists st_settings(
+        id bigserial not null,
+	st_layers_id BIGINT not null,
+	normalization_method  int not null,
+	range_min double PRECISION not null,
+	range_max double PRECISION not null,
+	smaller_better integer not null,
+	weight double PRECISION not null,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+	CONSTRAINT st_settings_pkey PRIMARY KEY (id),
+	CONSTRAINT st_settings_st_layers_id_fkey FOREIGN KEY (st_layers_id)
+            REFERENCES public.st_layers(id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE
+    );
+    CREATE INDEX  if not exists  st_settings_st_layers_id_idx
+    ON public.st_settings USING btree
+    (st_layers_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+    CREATE TABLE if not exists st_operation(
+        id serial,
+        name character varying(20),
+        CONSTRAINT st_operation_pkey PRIMARY KEY (id),
+        CONSTRAINT st_operation_name_key UNIQUE (name)
+    );
+    insert into st_operation(name) values ('union'),('intersection'),('difference') on conflict(name) do nothing;
+
+    create table if not exists st_join_options(
+        id serial not null,
+        value int not null,
+        language varchar(20) not null,
+        label varchar(50) not null,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT st_join_options_options_pkey PRIMARY KEY (id),
+        CONSTRAINT st_join_options_st_operation_fk
+            FOREIGN KEY (value)
+            REFERENCES st_operation(id)
+            ON DELETE CASCADE,
+        CONSTRAINT st_join_options_value_language_key UNIQUE (value,  language)
+    );
+
+    INSERT INTO public.st_join_options(
+	value,  language, label)
+	VALUES (1,'english','Union'),
+        (2,'english','Intersection'),
+        (3,'english','Difference') on conflict(value,  language) do nothing;
+
+    
+
+    CREATE TABLE if not exists st_normalization(
+        id serial,
+        name character varying(20),
+        CONSTRAINT st_normalization_pkey PRIMARY KEY (id),
+        CONSTRAINT st_normalization_name_key UNIQUE (name)
+    );
+
+    insert into st_normalization(name) values ('observe'),('reference'),('standarize') on conflict(name) do nothing;
+
+    create table if not exists st_normalization_method_options(
+	id serial not null,
+    value int not null,
+	language varchar(20) not null,
+	label varchar(50) not null,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+	CONSTRAINT st_normalization_method_options_pkey PRIMARY KEY (id),
+    CONSTRAINT st_normalization_method_options_st_normalization_fk
+        FOREIGN KEY (value)
+        REFERENCES st_normalization(id)
+        ON DELETE CASCADE,
+    CONSTRAINT st_normalization_method_options_value_language_key UNIQUE (value,  language)
+    );
+
+    INSERT INTO public.st_normalization_method_options(
+	value, language, label)
+	VALUES (1,'english','Observe'),
+        (2,'english','Reference'),
+        (3,'english','Standarize') on conflict(value,  language) do nothing;
+
+    create table if not exists st_normalization_type_options(
+            id serial not null,
+            value int not null,
+            type  varchar(20) not null,
+            language varchar(20) not null,
+            label varchar(50) not null,
+            created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated timestamp with time zone,
+            CONSTRAINT st_normalization_type_options_pkey PRIMARY KEY (id)
+    );
+
+    create table if not exists st_filters(
+        id bigserial not null,
+        user_layer_id bigint not null,
+        st_filter_label text NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT st_filters_pkey PRIMARY KEY (id),
+        CONSTRAINT st_filters_user_layer_id_fkey FOREIGN KEY (user_layer_id) REFERENCES user_layer (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT st_filters_user_layer_id_key UNIQUE (user_layer_id)
+    );
+    CREATE INDEX  if not exists st_filters_user_layer_id_idx
+    ON public.st_filters USING btree
+    (user_layer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+    create table if not exists institutions(
+        id bigserial not null,
+        members integer,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT institutions_pkey PRIMARY KEY (id),
+        CONSTRAINT institutions_oskari_users_id_fkey FOREIGN KEY (members)
+                REFERENCES public.oskari_users(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+    );
+
+    create table if not exists up_scenario_buffers(
+        id bigserial not null,
+        scenario integer,
+        user_layer_id bigint not null,
+        CONSTRAINT up_scenario_buffers_user_layer_id_fkey FOREIGN KEY (user_layer_id) REFERENCES user_layer (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT scenario_user_layer_id_key UNIQUE (scenario,user_layer_id)
+    );
+
+end;
+
