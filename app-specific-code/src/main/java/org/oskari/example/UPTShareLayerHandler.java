@@ -59,9 +59,9 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
-            PreparedStatement statement = connection.prepareStatement("select case when upt_user_layer_scope.id is null then 0 else upt_user_layer_scope.id end as id ,layer_name, case when is_public is null then 0 else is_public end as is_public\n" +
-                "from user_layer\n" +
-                "left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+            PreparedStatement statement = connection.prepareStatement("select user_layer.id ,layer_name,case when is_public is null then 0 else is_public end as is_public \n" +
+                " from user_layer \n" +
+                " left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id " +
                 "where uuid=?");
             statement.setString(1, params.getUser().getUuid());
             
@@ -107,9 +107,10 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
-            PreparedStatement statement = connection.prepareStatement("insert into upt_user_layer_scope(user_layer_id,is_public) values (?,?)");
+            PreparedStatement statement = connection.prepareStatement("insert into upt_user_layer_scope(user_layer_id,is_public) values (?,?) on conflict(user_layer_id) do update set is_public=?;");
             statement.setLong(1, Long.parseLong(params.getRequiredParam("id")));
             statement.setInt(2, Integer.parseInt(params.getRequiredParam("is_public")));
+            statement.setInt(3, Integer.parseInt(params.getRequiredParam("is_public")));
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
             statement.execute();
