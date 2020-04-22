@@ -88,6 +88,20 @@ public class UPScenarioHandler extends RestActionHandler {
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
             params.requireLoggedInUser();
+            
+            Connection connection = DriverManager.getConnection(
+                        upURL,
+                        upUser,
+                        upPassword);
+            PreparedStatement statement = connection.prepareStatement("select id from up_scenario where owner_id=?");
+            statement.setLong(1, params.getUser().getId());
+            
+            ResultSet uScenarios=statement.executeQuery();
+            ArrayList<Integer> scenarios=new ArrayList<>();
+            while(uScenarios.next()){
+                scenarios.add(uScenarios.getInt("id"));
+            }
+            
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -101,9 +115,10 @@ public class UPScenarioHandler extends RestActionHandler {
             JSONArray out = new JSONArray();
             for (ScenarioUP index : response) {
                 //Convert to Json Object
-
-                final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
-                out.put(json);
+                if(scenarios.contains(index.scenario_id)){
+                    final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
+                    out.put(json);
+                }
             }
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting scenarios"))));
             ResponseHelper.writeResponse(params, out);
