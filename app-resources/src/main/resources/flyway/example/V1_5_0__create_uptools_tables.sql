@@ -2141,5 +2141,26 @@ begin;
         CONSTRAINT scenario_user_layer_id_key UNIQUE (scenario,user_layer_id)
     );
 
+    CREATE INDEX  if not exists  up_scenario_buffers_user_layer_id_idx
+    ON public.up_scenario_buffers USING btree
+    (user_layer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+    create table if not exists upt_user_layer_scope(
+        id bigserial not null,
+        user_layer_id bigint not null,
+        is_public int,
+        CONSTRAINT upt_user_layer_scope_user_layer_id_fkey FOREIGN KEY (user_layer_id) REFERENCES user_layer (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT upt_user_layer_scope_id_key UNIQUE (user_layer_id)
+    );
+
+    CREATE INDEX  if not exists  upt_user_layer_scope_user_layer_id_idx
+    ON public.upt_user_layer_scope USING btree
+    (user_layer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 end;
 
