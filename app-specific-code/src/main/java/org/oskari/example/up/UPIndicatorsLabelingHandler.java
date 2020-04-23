@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.IndicatorsUPHandler;
 import org.oskari.example.PostStatus;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
@@ -31,7 +30,7 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
     private static String upURL;
     private static String upUser;
     private static String upPassword;
-    private static final Logger log = LogFactory.getLogger(IndicatorsUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPIndicatorsLabelingHandler.class);
     
     private JSONArray errors;
     private ObjectMapper Obj;
