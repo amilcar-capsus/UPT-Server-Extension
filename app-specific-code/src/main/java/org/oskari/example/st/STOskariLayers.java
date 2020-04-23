@@ -106,10 +106,9 @@ public class STOskariLayers extends RestActionHandler {
                 PreparedStatement statement = connection.prepareStatement("with study_area as(\n" +
                     "	select geometry from user_layer_data where user_layer_id=?\n" +
                     "), user_layers as(\n" +
-                    "    select case when upt_user_layer_scope.id is null then 0 else upt_user_layer_scope.id end as id,\n" +
+                    "    select user_layer.id,\n" +
                     "    layer_name ,\n" +
                     "    case when is_public is null then 0 else is_public end as is_public\n" +
-                    "    ,wkt\n" +
                     "    from user_layer\n" +
                     "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
                     "    where user_layer.uuid=? or upt_user_layer_scope.is_public=1\n" +

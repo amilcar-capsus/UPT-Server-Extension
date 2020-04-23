@@ -60,9 +60,8 @@ public class StudyAreaHandler extends RestActionHandler {
             params.requireLoggedInUser();
             PreparedStatement statement = connection.prepareStatement(
                     "with user_layers as(\n" +
-                    "    select case when user_layer.id is null then 0 else user_layer.id end as id,\n" +
-                    "    layer_name ,\n" +
-                    "    case when is_public is null then 0 else is_public end as is_public\n" +
+                    "    select user_layer.id,\n" +
+                    "    layer_name \n" +
                     "    from user_layer\n" +
                     "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
                     "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +

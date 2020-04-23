@@ -550,7 +550,7 @@ public class LayersSTHandler extends RestActionHandler {
                         stUser,
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("with user_layers as(\n" +
-                    "    select case when user_layer.id is null then 0 else user_layer.id end as id,\n" +
+                    "    select user_layer.id,\n" +
                     "    layer_name" +
                     "    from user_layer\n" +
                     "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +

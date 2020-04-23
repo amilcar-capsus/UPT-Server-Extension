@@ -313,20 +313,17 @@ public class LayersUPHandler extends RestActionHandler {
                         upPassword);
                 PreparedStatement statement = connection.prepareStatement(
                     "with user_layers as(\n" +
-                    "    select case when upt_user_layer_scope.id is null then 0 else upt_user_layer_scope.id end as id,\n" +
-                    "    layer_name ,\n" +
-                    "    case when is_public is null then 0 else is_public end as is_public\n" +
-                    "    ,wkt\n" +
+                    "    select user_layer.id ,\n" +
+                    "    layer_name \n" +
                     "    from user_layer\n" +
                     "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
                     "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +
                     ")\n" +
                     "select id,layer_name\n" +
-                    "from user_layers\n" +
-                    ",study_area"
+                    "from user_layers"
                 );) {
                         //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
-            statement.setString(2, user_uuid);
+            statement.setString(1, user_uuid);
             
             boolean status = statement.execute();
             if (status) {
