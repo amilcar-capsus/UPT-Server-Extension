@@ -115,9 +115,23 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
             if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
             }
+            
+            ResponseEntity<List<IndicatorUP>> returns = null;
+            RestTemplate restTemplate = new RestTemplate();
+            returns = restTemplate.exchange(
+              "http://"+ upwsHost +":"+upwsPort+"/indicator/",
+              HttpMethod.GET,
+              null,
+              new ParameterizedTypeReference<List<IndicatorUP>>(){});
+            
+            Long user_id = params.getUser().getId();
+            List<IndicatorUP> responseFromUP = returns.getBody();
+            
+            
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, name, label, tooltip\n" +
-                    "	FROM public.up_modules_translation where language=?;"
+                    "	FROM public.up_modules_translation where language=?\n"
+                    + "order by label asc;"
             );
             statement.setString(1, "english");
             ResultSet indicators= statement.executeQuery();
@@ -129,6 +143,21 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                 indicator.label=indicators.getString("label");
                 indicator.description=indicators.getString("tooltip");
                 indicator.id=indicators.getInt("id");
+                //Update dependencies field
+                for (IndicatorUP index : responseFromUP){
+                    if(index!=null && indicator.name!=null && index.module.equals(indicator.name)) {
+                        //Update dependencies field
+                        String[] deps;
+                        deps=index.dependencies.replace("[","").replace("]","").replaceAll("\"","").split(",");
+                        for (String dependency : deps){
+                            if(dependency.equals(indicator.name)) {
+                                index.dependencies=index.dependencies.replaceAll(dependency, indicator.label);
+                            }
+                        }
+                        indicator.dependencies=index.dependencies;
+                        break;
+                    }
+                }
                 response.put(JSONHelper.createJSONObject(Obj.writeValueAsString(indicator)));
             }
             ResponseHelper.writeResponse(params, response);
