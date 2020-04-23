@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.IndicatorsUPHandler;
 import org.oskari.example.PostStatus;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -37,7 +36,7 @@ public class UPFClassesHandler extends RestActionHandler {
 
     private static String upwsHost;
     private static String upwsPort;
-    private static final Logger log = LogFactory.getLogger(IndicatorsUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPFClassesHandler.class);
     
     private JSONArray errors;
     private ObjectMapper Obj;
