@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.IndicatorUP;
 import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUPHandler;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ContentDisposition;
@@ -84,7 +83,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
     private final DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory(MAX_SIZE_MEMORY, null);
     private final int userlayerMaxFileSize = PropertyUtil.getOptional(PROPERTY_USERLAYER_MAX_FILE_SIZE_MB, 10) * MB;
 
-    private static final Logger log = LogFactory.getLogger(ScenarioUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPCalculusModulesInstallerHandler.class);
 
     @Override
     public void preProcess(ActionParameters params) throws ActionException {

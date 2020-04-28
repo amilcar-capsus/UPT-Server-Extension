@@ -26,7 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.ResultsScenarioUP;
-import org.oskari.example.ResultsUPHandler;
 import org.oskari.example.ResultsValuesUP;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -49,7 +48,7 @@ public class UPResultsExport extends RestActionHandler {
     private User user_logged;
     private JSONArray errors;
     private ObjectMapper Obj;
-    private static final Logger log = LogFactory.getLogger(UPAssumptionsCSVHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPResultsExport.class);
 
     @Override
     public void preProcess(ActionParameters params) throws ActionException {

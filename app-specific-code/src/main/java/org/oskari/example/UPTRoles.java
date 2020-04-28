@@ -32,7 +32,7 @@ public class UPTRoles extends RestActionHandler {
 
     private static String upwsHost;
     private static String upwsPort;
-    private static final Logger log = LogFactory.getLogger(ScenarioUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPTRoles.class);
 
     private JSONArray errors;
     private ObjectMapper Obj;
