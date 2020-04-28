@@ -1,5 +1,6 @@
-package org.oskari.example;
+package org.oskari.example.up;
 
+import org.oskari.example.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

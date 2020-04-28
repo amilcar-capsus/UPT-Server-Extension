@@ -25,7 +25,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.Assumptions;
 import org.oskari.example.PostStatus;
 import org.oskari.example.Tables;
 import org.springframework.web.client.RestTemplate;

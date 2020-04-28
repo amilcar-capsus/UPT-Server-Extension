@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.Assumptions;
 import org.oskari.example.PostStatus;
 import org.springframework.web.client.RestTemplate;
 
