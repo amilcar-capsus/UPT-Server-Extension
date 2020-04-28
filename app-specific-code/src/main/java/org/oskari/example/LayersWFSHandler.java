@@ -34,6 +34,7 @@ import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
 
+
 /**
  * Dummy Rest action route
  */
@@ -110,7 +111,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
                 java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -147,7 +148,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error ", e.toString()))));
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
@@ -182,7 +183,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error ", e.toString()))));
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             errorMsg = errorMsg + e.toString();
             log.info(e, errorMsg);
