@@ -15,9 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.Assumptions;
 import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUPHandler;
 import org.springframework.web.client.RestTemplate;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
@@ -29,6 +27,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("up_assumptions")
 public class UPAssumptionsHandler extends RestActionHandler {
@@ -39,7 +38,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
     private static String upwsHost;
     private static String upwsPort;
-    private static final Logger log = LogFactory.getLogger(ScenarioUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPAssumptionsHandler.class);
 
     private JSONArray errors;
     private ObjectMapper Obj;
@@ -74,6 +73,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "select id,study_area,scenario,category,name,value,units,description,source \n"
                     + "from up_assumptions \n"
@@ -132,7 +136,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        
+        //Just UPTAdmin can use this method
         String errorMsg = "UPAssumptions post";
         Long user_id = params.getUser().getId();
         
@@ -154,6 +158,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "insert into up_assumptions(study_area,scenario,category,name,value,units,description,source) \n"
                     + "values(?,?,?,?,?,?,?,?)\n");
@@ -186,7 +195,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
-        
+        //Just UPTAdmin can use this method
         String errorMsg = "UPAssumptions post";
         JSONObject json = null;
         try (
@@ -195,6 +204,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             Long id = Long.parseLong(params.getRequiredParam("id"));
             Long study_area = Long.parseLong(params.getRequiredParam("study_area"));

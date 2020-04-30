@@ -56,6 +56,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 
 
@@ -122,6 +123,11 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
 
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             CoordinateReferenceSystem sourceCRS = decodeCRS(sourceEPSG);
             CoordinateReferenceSystem targetCRS = decodeCRS(targetEPSG);
 

@@ -63,6 +63,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("scenario_buffers")
 public class UPBuffersHandler extends AbstractLayerAdminHandler {
@@ -143,6 +144,11 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
         ResponseEntity<List<UPBuffers>> returns = null;
         try ( Connection connection = DriverManager.getConnection(upURL, upUser, upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             String[] scenarios = params.getRequest().getParameterValues("scenariosId");
             Long user_id = params.getUser().getId();
             for (String scenario : scenarios) {

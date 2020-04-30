@@ -1,5 +1,6 @@
-package org.oskari.example;
+package org.oskari.example.up;
 
+import org.oskari.example.*;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -70,12 +71,18 @@ public class LayersUPHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers UP get ";
         Data tree = new Data();
         ArrayList<Directories> directories = new ArrayList<Directories>();
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             if ("list_directories".equals(params.getRequiredParam("action"))) {
                 //Get directories
                 Directories dir = new Directories();
@@ -179,9 +186,15 @@ public class LayersUPHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
+        
         String errorMsg = "Layers UP get ";
         try {
+            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus status = null;
             if ("copy_data".equals(params.getRequiredParam("action"))) {
                 if (params.getRequiredParam("layerUPName") != null
@@ -309,8 +322,20 @@ public class LayersUPHandler extends RestActionHandler {
                         upURL,
                         upUser,
                         upPassword);
-                PreparedStatement statement = connection.prepareStatement("select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
+                PreparedStatement statement = connection.prepareStatement(
+                    "with user_layers as(\n" +
+                    "    select user_layer.id ,\n" +
+                    "    layer_name \n" +
+                    "    from user_layer\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +
+                    ")\n" +
+                    "select id,layer_name\n" +
+                    "from user_layers"
+                );) {
+                        //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
             statement.setString(1, user_uuid);
+            
             boolean status = statement.execute();
             if (status) {
                 ResultSet data = statement.getResultSet();
@@ -520,9 +545,19 @@ public class LayersUPHandler extends RestActionHandler {
                         upURL,
                         upUser,
                         upPassword);) {
-            Statement statement = connection.createStatement();
-            ResultSet data = statement.executeQuery("SELECT id,layer_name FROM public.user_layer");
-
+            PreparedStatement statement = connection.prepareStatement("with user_layers as(\n" +
+                    "    select case when upt_user_layer_scope.id is null then 0 else upt_user_layer_scope.id end as id,\n" +
+                    "    layer_name ,\n" +
+                    "    case when is_public is null then 0 else is_public end as is_public\n" +
+                    "    ,wkt\n" +
+                    "    from user_layer\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    where user_layer.uuid=? or upt_user_layer_scope.is_public=1\n" +
+                    ")\n" +
+                    "select id,layer_name\n" +
+                    "from user_layers\n");
+            statement.setString(1, user_uuid);
+            ResultSet data = statement.executeQuery();
             while (data.next()) {
                 StudyAreaUP child = new StudyAreaUP();
                 child.setId(data.getInt("id"));

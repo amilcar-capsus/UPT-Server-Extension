@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.IndicatorUP;
 import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUPHandler;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ContentDisposition;
@@ -52,6 +51,8 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("indicators_installer")
 public class UPCalculusModulesInstallerHandler extends RestActionHandler {
@@ -82,7 +83,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
     private final DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory(MAX_SIZE_MEMORY, null);
     private final int userlayerMaxFileSize = PropertyUtil.getOptional(PROPERTY_USERLAYER_MAX_FILE_SIZE_MB, 10) * MB;
 
-    private static final Logger log = LogFactory.getLogger(ScenarioUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPCalculusModulesInstallerHandler.class);
 
     @Override
     public void preProcess(ActionParameters params) throws ActionException {
@@ -109,9 +110,27 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                     upUser,
                     upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
+            ResponseEntity<List<IndicatorUP>> returns = null;
+            RestTemplate restTemplate = new RestTemplate();
+            returns = restTemplate.exchange(
+              "http://"+ upwsHost +":"+upwsPort+"/indicator/",
+              HttpMethod.GET,
+              null,
+              new ParameterizedTypeReference<List<IndicatorUP>>(){});
+            
+            Long user_id = params.getUser().getId();
+            List<IndicatorUP> responseFromUP = returns.getBody();
+            
+            
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, name, label, tooltip\n" +
-                    "	FROM public.up_modules_translation where language=?;"
+                    "	FROM public.up_modules_translation where language=?\n"
+                    + "order by label asc;"
             );
             statement.setString(1, "english");
             ResultSet indicators= statement.executeQuery();
@@ -123,6 +142,21 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
                 indicator.label=indicators.getString("label");
                 indicator.description=indicators.getString("tooltip");
                 indicator.id=indicators.getInt("id");
+                //Update dependencies field
+                for (IndicatorUP index : responseFromUP){
+                    if(index!=null && indicator.name!=null && index.module.equals(indicator.name)) {
+                        //Update dependencies field
+                        String[] deps;
+                        deps=index.dependencies.replace("[","").replace("]","").replaceAll("\"","").split(",");
+                        for (String dependency : deps){
+                            if(dependency.equals(indicator.name)) {
+                                index.dependencies=index.dependencies.replaceAll(dependency, indicator.label);
+                            }
+                        }
+                        indicator.dependencies=index.dependencies;
+                        break;
+                    }
+                }
                 response.put(JSONHelper.createJSONObject(Obj.writeValueAsString(indicator)));
             }
             ResponseHelper.writeResponse(params, response);
@@ -133,7 +167,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
             java.util.logging.Logger.getLogger(UPCalculusModulesInstallerHandler.class.getName()).log(Level.SEVERE, null, e);
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-                ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+                ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
                 java.util.logging.Logger.getLogger(UPCalculusModulesInstallerHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {

@@ -19,11 +19,7 @@ import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.RestActionHandler;
 import fi.nls.oskari.domain.User;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import org.apache.commons.fileupload.FileUploadException;
+import java.util.ArrayList;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +28,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @OskariActionRoute("AdminUPHandler")
@@ -78,6 +73,10 @@ public class AdminUPHandler extends RestActionHandler {
         String errorMsg="Results UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             //Upload file
             HttpServletRequest request=params.getRequest();
             request.setCharacterEncoding("UTF-8");

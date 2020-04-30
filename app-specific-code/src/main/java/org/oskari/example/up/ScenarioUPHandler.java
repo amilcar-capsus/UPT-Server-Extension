@@ -1,5 +1,20 @@
-package org.oskari.example;
+package org.oskari.example.up;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.*;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.ResponseHelper;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,34 +26,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.oskari.example.PostStatus;
+import org.oskari.example.Tables;
+import org.oskari.example.UPTRoles;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionDeniedException;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
-import fi.nls.oskari.util.ResponseHelper;
-
+/**
+ * Dummy Rest action route
+ */
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 @OskariActionRoute("ScenarioUPHandler")
 public class ScenarioUPHandler extends RestActionHandler {
 
@@ -70,10 +76,15 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
+        params.requireLoggedInUser();
         String errorMsg = "Scenario UP get ";
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
-            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -93,7 +104,7 @@ public class ScenarioUPHandler extends RestActionHandler {
             }
 
             Long user_id = params.getUser().getId();
-            
+            log.debug("User:  " + user_id.toString() + " -> " + out.toString());
             ResponseHelper.writeResponse(params, out);
         } catch (Exception e) {
             errorMsg = errorMsg + e.getMessage();
@@ -104,15 +115,21 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handlePost(ActionParameters params) throws ActionException {
-        
+        params.requireLoggedInUser();
+        // throw new ActionException("This will be logged including stack trace");
         String errorMsg = "Scenario UP post ";
         try {
-            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             if ("evaluate".equals(params.getRequiredParam("action"))) {
                 String scenarios = String.join(",", params.getRequest().getParameterValues("scenariosId") );
                 String scenario = String.join("_", params.getRequest().getParameterValues("scenariosId") );
-        
+                //String indicators = params.getRequiredParam("indicators");
+
                 //Get scenario indicators
                 Connection connection = DriverManager.getConnection(
                         upURL,
@@ -179,7 +196,7 @@ public class ScenarioUPHandler extends RestActionHandler {
                                     + ") c2 on 1=1");) {
                         ResultSet data=statement.executeQuery();
                         if (status) {
-                            
+                            //ResultSet data = statement.getResultSet();
                             Integer i = 0;
                             while (data.next()) {
                                 Assumptions assumption = new Assumptions();
@@ -216,7 +233,7 @@ public class ScenarioUPHandler extends RestActionHandler {
             } else if ("status".equals(params.getRequiredParam("action"))) {
                 ResponseEntity<List<ScenarioExecutionUP>> returns = null;
                 try {
-                    
+                    //String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario_status/";
                     String scenario = String.join("_", params.getRequest().getParameterValues("scenariosId") );
                     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://" + upwsHost + ":" + upwsPort + "/scenario_status/")
                             .queryParam("scenario", scenario);
@@ -249,6 +266,27 @@ public class ScenarioUPHandler extends RestActionHandler {
                         java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+//                ScenarioExecutionUP returns = new ScenarioExecutionUP();
+//                try {
+//                    String scenario = String.join(",", params.getRequiredParam("scenarios"));
+//                    RestTemplate restTemplate = new RestTemplate();
+//                    //user, scenario, indicators
+//                    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+//                    map.add("scenario", scenario);
+//                    
+//                    returns = restTemplate.postForObject("http://" + upwsHost + ":" + upwsPort + "/scenario_status/", map, ScenarioExecutionUP.class);
+//                    ObjectMapper mapper = new ObjectMapper();
+//                    String jsonString = mapper.writeValueAsString(returns);
+//                    log.debug("User:  " + user_id + " -> " + jsonString );
+//                    ResponseHelper.writeResponse(params, jsonString);
+//                } catch (Exception e) {
+//                    errorMsg = errorMsg + e.getMessage() ;
+//                    ObjectMapper mapper = new ObjectMapper();
+//                    String jsonString = mapper.writeValueAsString(returns);
+//                    log.debug("User:  " + user_id.toString() + " -> " + jsonString);
+//                    ResponseHelper.writeResponse(params, errorMsg);
+//                    
+//                }
             }
         } catch (Exception e) {
             errorMsg = errorMsg + e.getMessage();
@@ -266,9 +304,14 @@ public class ScenarioUPHandler extends RestActionHandler {
 
     @Override
     public void handlePut(ActionParameters params) throws ActionException {
+        params.requireLoggedInUser();
         Long user_id = params.getUser().getId();
         try {
-            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
             scenario.setName(params.getRequiredParam("name"));
             scenario.setOwnerId(Integer.parseInt(user_id.toString()));
@@ -279,12 +322,18 @@ public class ScenarioUPHandler extends RestActionHandler {
             //Create Scenario
             long row = this.setScenario(scenario);
 
+            //Create Indicators for sceanrio
+//            for (String index:indicators){
+//                this.setScenarioIndicators(index,scenario)
+//            }          
+            System.out.println("row " + row);
+            log.debug("User:  " + user_id.toString() + " -> " + scenario.toString());
             ResponseHelper.writeResponse(params, null);
         } catch (Exception e) {
             log.debug("User:  " + user_id.toString() + " -> " + e.toString());
             ResponseHelper.writeResponse(params, null);
         }
-
+//        throw new ActionParamsException("Notify there was something wrong with the params");
     }
 
     @Override
@@ -302,13 +351,13 @@ public class ScenarioUPHandler extends RestActionHandler {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            
+            //user, scenario, indicators
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
             map.add("user", user);
             map.add("scenario", scenario);
             map.add("indicators", indicators);
 
-
+//            returns = restTemplate.postForObject(PropertyUtil.get("urbanperformance.server")+"/scenario_evaluation/",map, ScenarioExecutionUP.class);
             returns = restTemplate.postForObject("http://" + upwsHost + ":" + upwsPort + "/scenario_evaluation/", map, ScenarioExecutionUP.class);
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(returns);
@@ -319,12 +368,15 @@ public class ScenarioUPHandler extends RestActionHandler {
             log.error(e, errorMsg);
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-
+                //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
                 java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             return false;
         }
+//        ObjectMapper mapper = new ObjectMapper();
+//        String jsonString = mapper.writeValueAsString(returns);
+//        return returns;
     }
 
     protected long setScenario(ScenarioUP scenario) {

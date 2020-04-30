@@ -28,6 +28,8 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
+import org.oskari.example.UPTRoles;
 
 
 @OskariActionRoute("evaluate_distances")
@@ -65,6 +67,11 @@ public class STDistanceEvaluationHandler extends RestActionHandler {
         ResponseEntity<List<STDistanceExecution>> returns = null;
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             String studyArea = params.getRequiredParam("study_area");
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://" + stwsHost + ":" + stwsPort + "/distances_status/")
@@ -108,6 +115,10 @@ public class STDistanceEvaluationHandler extends RestActionHandler {
         String errorMsg = "Scenario UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             Long user_id = params.getUser().getId();
 
             String study_area = params.getRequiredParam("study_area");

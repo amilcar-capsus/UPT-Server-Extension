@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.IndicatorsUPHandler;
 import org.oskari.example.PostStatus;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
@@ -24,6 +23,8 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("indicators_labeling")
 public class UPIndicatorsLabelingHandler extends RestActionHandler {
@@ -31,7 +32,7 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
     private static String upURL;
     private static String upUser;
     private static String upPassword;
-    private static final Logger log = LogFactory.getLogger(IndicatorsUPHandler.class);
+    private static final Logger log = LogFactory.getLogger(UPIndicatorsLabelingHandler.class);
     
     private JSONArray errors;
     private ObjectMapper Obj;
@@ -60,6 +61,11 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
                         upUser,
                         upPassword)) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, language, label, units, up_indicators_id\n"
                     + "	FROM public.up_indicators_translation;"
@@ -96,6 +102,11 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
                         upUser,
                         upPassword)) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO public.up_indicators_translation(\n"
                     + "	language, label, units, up_indicators_id)\n"
@@ -126,6 +137,10 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
                         upUser,
                         upPassword)) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE public.up_indicators_translation\n"
@@ -158,6 +173,11 @@ public class UPIndicatorsLabelingHandler extends RestActionHandler {
                         upUser,
                         upPassword)) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM public.up_indicators_translation\n"
                     + "	WHERE id=?;"

@@ -48,6 +48,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 
 @OskariActionRoute("LayersSTHandler")
@@ -99,6 +100,10 @@ public class LayersSTHandler extends RestActionHandler {
         Long user_id = params.getUser().getId();
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             if ("list_directories".equals(params.getRequiredParam("action"))) {
                 //Get directories
                 Directories dir = new Directories();
@@ -432,6 +437,11 @@ public class LayersSTHandler extends RestActionHandler {
         String errorMsg = "Layers ST get ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus status = null;
             if ("index_values".equals(params.getRequiredParam("action"))) {
                 indexSuitability(params);
@@ -549,7 +559,15 @@ public class LayersSTHandler extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);
-                PreparedStatement statement = connection.prepareStatement("select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%'");) {
+                PreparedStatement statement = connection.prepareStatement("with user_layers as(\n" +
+                    "    select user_layer.id,\n" +
+                    "    layer_name" +
+                    "    from user_layer\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%'\n" +
+                    ")\n" +
+                    "select  id,layer_name\n" +
+                    "from user_layers");) {
             statement.setString(1, user_uuid);
             
             boolean status = statement.execute();
@@ -621,16 +639,20 @@ public class LayersSTHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             PreparedStatement statement = connection.prepareStatement(
-                    "with study_area as(\n"
-                    + "	select st_transform(st_setsrid(geometry,?),4326) as geometry from user_layer_data where user_layer_id=?\n"
-                    + "),layers as(\n"
-                    + "	select user_layer.id from user_layer,study_area where  st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n"
-                    + ")\n"
-                    + "select st_layers.id, st_layer_label as label \n"
-                    + "from st_layers,layers\n"
-                    + "where st_layers.user_layer_id in(layers.id)");
+                    "with study_area as(\n" +
+                    "	select st_transform(st_setsrid(geometry,?),4326) as geometry from user_layer_data where user_layer_id=?\n" +
+                    "),layers as(\n" +
+                    "	select user_layer.id from user_layer\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    ,study_area \n" +
+                    "    where  (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n" +
+                    ")\n" +
+                    "select st_layers.id, st_layer_label as label \n" +
+                    "from st_layers,layers\n" +
+                    "where st_layers.user_layer_id in(layers.id)");
             statement.setInt(1, Integer.parseInt(stProjection));
             statement.setLong(2, study_area);
+            statement.setString(3, user_uuid);
 
             ResultSet data = statement.executeQuery();
 
@@ -714,9 +736,16 @@ public class LayersSTHandler extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);) {
-            Statement statement = connection.createStatement();
-            ResultSet data = statement.executeQuery("select id as id, st_filter_label as label \n"
-                    + "from st_filters");
+            PreparedStatement statement = connection.prepareStatement(
+                "select st_filters.id as id, st_filter_label as label\n" +
+                "from st_filters\n" +
+                "inner join user_layer on user_layer.id=st_filters.user_layer_id\n" +
+                "left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                "where  (user_layer.uuid=? or upt_user_layer_scope.is_public=1)"
+            );
+            statement.setString(1, user_uuid);
+            ResultSet data = statement.executeQuery();
+            
 
             while (data.next()) {
                 STLayers layer = new STLayers();

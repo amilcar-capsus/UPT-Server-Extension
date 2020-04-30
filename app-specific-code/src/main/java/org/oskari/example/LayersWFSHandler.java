@@ -1,18 +1,5 @@
 package org.oskari.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vividsolutions.jts.geom.Envelope;
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.ResponseHelper;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.map.OskariLayer;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vividsolutions.jts.geom.Envelope;
+
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -29,11 +21,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.map.OskariLayer;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
+
 
 /**
  * Dummy Rest action route
@@ -75,12 +75,17 @@ public class LayersWFSHandler extends RestActionHandler {
 
     @Override
     public void handleGet(ActionParameters params) throws ActionException {
-        params.requireLoggedInUser();
         String errorMsg = "Layers WFS capsus get ";
         Data tree = new Data();
         ArrayList<Directories> directories = new ArrayList<>();
         Long user_id = params.getUser().getId();
         try {
+            params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             if ("list_layers".equals(params.getRequiredParam("action"))) {
                 Directories dir = new Directories();
                 dir.setData("my_wfs");
@@ -111,7 +116,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
                 java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -148,7 +153,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error ", e.toString()))));
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
@@ -183,7 +188,7 @@ public class LayersWFSHandler extends RestActionHandler {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error ", e.toString()))));
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Detail ", e.getMessage()))));
             } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(ScenarioUPHandler.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(LayersWFSHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             errorMsg = errorMsg + e.toString();
             log.info(e, errorMsg);

@@ -50,6 +50,11 @@ public class OskariColumnsHandler extends RestActionHandler {
         Long user_id = params.getUser().getId();
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Layers layers = new Layers();
             layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
             ObjectMapper Obj = new ObjectMapper();

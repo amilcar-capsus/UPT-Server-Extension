@@ -1,5 +1,6 @@
-package org.oskari.example;
+package org.oskari.example.up;
 
+import org.oskari.example.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -58,7 +59,23 @@ public class StudyAreaHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
-            PreparedStatement statement = connection.prepareStatement("select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
+            PreparedStatement statement = connection.prepareStatement(
+                    "with user_layers as(\n" +
+                    "    select user_layer.id,\n" +
+                    "    layer_name \n" +
+                    "    from user_layer\n" +
+                    "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+                    "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +
+                    ")\n" +
+                    "select id,layer_name\n" +
+                    "from user_layers" 
+                    //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'"
+            );
             statement.setString(1, user_uuid);
             statement.execute();
             ResultSet data = statement.getResultSet();
@@ -77,12 +94,10 @@ public class StudyAreaHandler extends RestActionHandler {
                 out.put(json);
             }
             ResponseHelper.writeResponse(params, out);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(StudyAreaHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override

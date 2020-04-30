@@ -20,9 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.Assumptions;
 import org.oskari.example.PostStatus;
-import org.oskari.example.ScenarioUP;
 import org.oskari.example.Tables;
 import org.oskari.example.st.STLayersHandler;
 import org.oskari.log.AuditLog;
@@ -45,6 +43,7 @@ import fi.nls.oskari.service.OskariComponentManager;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("up_scenario")
 public class UPScenarioHandler extends RestActionHandler {
@@ -88,6 +87,24 @@ public class UPScenarioHandler extends RestActionHandler {
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
+            Connection connection = DriverManager.getConnection(
+                        upURL,
+                        upUser,
+                        upPassword);
+            PreparedStatement statement = connection.prepareStatement("select id from up_scenario where owner_id=?");
+            statement.setLong(1, params.getUser().getId());
+            
+            ResultSet uScenarios=statement.executeQuery();
+            ArrayList<Integer> scenarios=new ArrayList<>();
+            while(uScenarios.next()){
+                scenarios.add(uScenarios.getInt("id"));
+            }
+            
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -101,9 +118,10 @@ public class UPScenarioHandler extends RestActionHandler {
             JSONArray out = new JSONArray();
             for (ScenarioUP index : response) {
                 //Convert to Json Object
-
-                final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
-                out.put(json);
+                if(scenarios.contains(index.scenario_id)){
+                    final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(index));
+                    out.put(json);
+                }
             }
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting scenarios"))));
             ResponseHelper.writeResponse(params, out);
@@ -127,6 +145,11 @@ public class UPScenarioHandler extends RestActionHandler {
         String errorMsg = "Scenario UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
 
             scenario.setName(params.getRequiredParam("name"));
@@ -183,6 +206,7 @@ public class UPScenarioHandler extends RestActionHandler {
                         assumption.units = data.getString("units");
                         assumption.description = data.getString("description");
                         assumption.source = data.getString("source");
+                        assumption.owner_id=user_id;
 
                         Layers.put(i, assumption);
                         i++;
@@ -255,6 +279,11 @@ public class UPScenarioHandler extends RestActionHandler {
         String errorMsg = "Scenario UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
             scenario.setScenarioId(Integer.parseInt(params.getRequiredParam("scenarioId")));
             scenario.setName(params.getRequiredParam("name"));
@@ -296,7 +325,11 @@ public class UPScenarioHandler extends RestActionHandler {
         params.requireLoggedInUser();
         String errorMsg = "Scenario UP post ";
         try {
-
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Integer scenarioId = Integer.parseInt(params.getRequiredParam("scenario_id"));
             //delete Scenario
             boolean row = deleteScenarioUP(scenarioId.toString());
@@ -354,6 +387,7 @@ public class UPScenarioHandler extends RestActionHandler {
                 val.category = data_set.getString("category");
                 val.name = data_set.getString("name");
                 val.value = data_set.getDouble("value");
+                val.owner_id=user_id;
                 data_in.add(val);
             }
             Tables<Assumptions> final_data = new Tables<>(data_in);

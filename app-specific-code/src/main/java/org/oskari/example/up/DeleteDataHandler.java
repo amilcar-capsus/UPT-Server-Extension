@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
+import org.oskari.example.UPTRoles;
 import org.oskari.example.st.LayersSTHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -68,6 +70,10 @@ public class DeleteDataHandler extends RestActionHandler {
         params.requireLoggedInUser();
         String errorMsg = "Layers UP get ";
         try {
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             if (params.getRequiredParam("layerUPName") != null
                     && params.getRequiredParam("scenarioId") != null) {

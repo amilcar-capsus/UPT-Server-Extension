@@ -25,6 +25,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("st_standardization")
 public class STStandardizationMethodHandler extends RestActionHandler {
@@ -63,6 +64,11 @@ public class STStandardizationMethodHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, value, language, label\n"
                     + "FROM public.st_normalization_method_options;");
@@ -86,20 +92,10 @@ public class STStandardizationMethodHandler extends RestActionHandler {
                 out.put(json);
             }
             ResponseHelper.writeResponse(params, out);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errorMsg = errorMsg + e.toString();
                 log.error(e, errorMsg);
-                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Executing query: " + e.toString()))));
-                ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
-            } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
-                java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (JsonProcessingException e) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, e);
-            try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Executing query: " + e.toString()))));
                 ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
             } catch (JsonProcessingException ex) {
@@ -128,6 +124,11 @@ public class STStandardizationMethodHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO public.st_normalization_method_options(\n"
                     + "method, value, language, label)\n"
@@ -143,7 +144,7 @@ public class STStandardizationMethodHandler extends RestActionHandler {
 
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Standarization method registered"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -154,11 +155,7 @@ public class STStandardizationMethodHandler extends RestActionHandler {
             }
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -177,6 +174,11 @@ public class STStandardizationMethodHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin")){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE public.st_normalization_method_options\n"
                     + "SET value=?, language=?, label=?\n"
@@ -189,7 +191,7 @@ public class STStandardizationMethodHandler extends RestActionHandler {
             ResultSet data = statement.executeQuery();
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Operation method registered"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Query error:"+e.toString()))));
                 ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
@@ -201,11 +203,7 @@ public class STStandardizationMethodHandler extends RestActionHandler {
             
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -221,6 +219,11 @@ public class STStandardizationMethodHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM public.st_normalization_method_options\n"
                     + "WHERE id=?;");
@@ -231,7 +234,7 @@ public class STStandardizationMethodHandler extends RestActionHandler {
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Standarization method registered"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Query error: "+ e.toString()))));
                 ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
@@ -242,10 +245,6 @@ public class STStandardizationMethodHandler extends RestActionHandler {
             }
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 }

@@ -25,6 +25,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("st_standardization_options")
 public class STStandardizationOptionsHandler extends RestActionHandler {
@@ -63,6 +64,11 @@ public class STStandardizationOptionsHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id, name\n"
                     + "FROM public.st_normalization;"
@@ -86,19 +92,9 @@ public class STStandardizationOptionsHandler extends RestActionHandler {
             }
             log.debug("User:  " + user_id.toString());
             ResponseHelper.writeResponse(params, out);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-            try {
-                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Query error: " + e.toString()))));
-                ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
-            } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(STStandardizationOptionsHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
-                java.util.logging.Logger.getLogger(STStandardizationOptionsHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (JsonProcessingException e) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, e);
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", "Query error: " + e.toString()))));
                 ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));

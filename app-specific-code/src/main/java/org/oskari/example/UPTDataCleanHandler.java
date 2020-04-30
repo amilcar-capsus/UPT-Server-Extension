@@ -21,6 +21,7 @@ import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
+import java.util.ArrayList;
 
 
 @OskariActionRoute("fix_data")
@@ -92,6 +93,11 @@ public class UPTDataCleanHandler extends RestActionHandler {
                         "where user_layer_data.id=datafix.id");
                 ) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             statment.execute();
             statment2.setInt(1, Integer.parseInt(upProjection));
             statment2.execute();

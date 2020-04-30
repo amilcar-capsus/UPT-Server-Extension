@@ -25,7 +25,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.oskari.example.Assumptions;
 import org.oskari.example.PostStatus;
 import org.oskari.example.Tables;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +40,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("up_csv_assumptions")
 public class UPAssumptionsCSVHandler extends RestActionHandler {
@@ -123,6 +123,12 @@ public class UPAssumptionsCSVHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             for (FileItem csv : fileItems) {
 
                 PreparedStatement statement0 = connection.prepareStatement(
