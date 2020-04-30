@@ -43,6 +43,7 @@ import fi.nls.oskari.service.OskariComponentManager;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("up_scenario")
 public class UPScenarioHandler extends RestActionHandler {
@@ -86,6 +87,10 @@ public class UPScenarioHandler extends RestActionHandler {
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             
             Connection connection = DriverManager.getConnection(
                         upURL,
@@ -140,6 +145,11 @@ public class UPScenarioHandler extends RestActionHandler {
         String errorMsg = "Scenario UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
 
             scenario.setName(params.getRequiredParam("name"));
@@ -269,6 +279,11 @@ public class UPScenarioHandler extends RestActionHandler {
         String errorMsg = "Scenario UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
             scenario.setScenarioId(Integer.parseInt(params.getRequiredParam("scenarioId")));
             scenario.setName(params.getRequiredParam("name"));
@@ -310,7 +325,11 @@ public class UPScenarioHandler extends RestActionHandler {
         params.requireLoggedInUser();
         String errorMsg = "Scenario UP post ";
         try {
-
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Integer scenarioId = Integer.parseInt(params.getRequiredParam("scenario_id"));
             //delete Scenario
             boolean row = deleteScenarioUP(scenarioId.toString());

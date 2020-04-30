@@ -24,6 +24,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("list_oskari_layers")
 public class STOskariLayers extends RestActionHandler {
@@ -66,6 +67,10 @@ public class STOskariLayers extends RestActionHandler {
         Long studyArea = params.getRequiredParamLong("studyArea");
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             //Get directories
             Directories dir = new Directories();
             dir.setData("my_data");

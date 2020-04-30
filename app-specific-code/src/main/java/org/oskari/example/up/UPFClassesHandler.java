@@ -26,6 +26,8 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("classification_manager")
 public class UPFClassesHandler extends RestActionHandler {
@@ -62,6 +64,11 @@ public class UPFClassesHandler extends RestActionHandler {
         String errorMsg="Results UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<List<UPFClasses>> returns = null;                        
             returns = restTemplate.exchange(
@@ -101,6 +108,11 @@ public class UPFClassesHandler extends RestActionHandler {
         
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus postStatus = new PostStatus();
             RestTemplate restTemplate = new RestTemplate();
             UPFClasses data=new UPFClasses();
@@ -126,6 +138,11 @@ public class UPFClassesHandler extends RestActionHandler {
         
         try{
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus postStatus = new PostStatus();
             UPFClasses data=new UPFClasses();
             
@@ -155,6 +172,11 @@ public class UPFClassesHandler extends RestActionHandler {
         
         try{
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Map<String, Integer> param= new HashMap<String, Integer>();
             param.put("id", Integer.parseInt(params.getRequiredParam("classification_id") ));
 

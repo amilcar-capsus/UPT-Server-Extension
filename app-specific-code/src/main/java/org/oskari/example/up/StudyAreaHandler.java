@@ -59,6 +59,11 @@ public class StudyAreaHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "with user_layers as(\n" +
                     "    select user_layer.id,\n" +
@@ -89,12 +94,10 @@ public class StudyAreaHandler extends RestActionHandler {
                 out.put(json);
             }
             ResponseHelper.writeResponse(params, out);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(StudyAreaHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override

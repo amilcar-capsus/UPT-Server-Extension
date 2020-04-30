@@ -58,6 +58,11 @@ public class MmuUPHandler extends RestActionHandler {
         String errorMsg = "Scenario UP get ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             RestTemplate restTemplate = new RestTemplate();
             List<MmuUP> mmus;

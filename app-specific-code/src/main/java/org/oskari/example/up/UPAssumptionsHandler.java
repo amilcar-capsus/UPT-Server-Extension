@@ -27,6 +27,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("up_assumptions")
 public class UPAssumptionsHandler extends RestActionHandler {
@@ -72,6 +73,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "select id,study_area,scenario,category,name,value,units,description,source \n"
                     + "from up_assumptions \n"
@@ -152,6 +158,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "insert into up_assumptions(study_area,scenario,category,name,value,units,description,source) \n"
                     + "values(?,?,?,?,?,?,?,?)\n");
@@ -193,6 +204,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
                         upUser,
                         upPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             Long id = Long.parseLong(params.getRequiredParam("id"));
             Long study_area = Long.parseLong(params.getRequiredParam("study_area"));

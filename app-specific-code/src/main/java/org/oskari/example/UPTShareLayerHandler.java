@@ -59,6 +59,11 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement("select user_layer.id ,layer_name,case when is_public is null then 0 else is_public end as is_public \n" +
                 " from user_layer \n" +
                 " left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id " +
@@ -107,6 +112,11 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement("insert into upt_user_layer_scope(user_layer_id,is_public) values (?,?) on conflict(user_layer_id) do update set is_public=?;");
             statement.setLong(1, Long.parseLong(params.getRequiredParam("id")));
             statement.setInt(2, Integer.parseInt(params.getRequiredParam("is_public")));
@@ -138,6 +148,11 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement("update upt_user_layer_scope set is_public = ? where user_layer_id=?");
             statement.setInt(1, Integer.parseInt(params.getRequiredParam("is_public")));
             statement.setLong(2, Long.parseLong(params.getRequiredParam("id")));

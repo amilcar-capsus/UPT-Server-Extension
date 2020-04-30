@@ -25,6 +25,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("st_settings")
 public class STSettingsHandler extends RestActionHandler {
@@ -66,6 +67,11 @@ public class STSettingsHandler extends RestActionHandler {
                         stUser,
                         stPassword);) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PreparedStatement statement = connection.prepareStatement(
                     "with study_area as(\n" +
                     "	select st_transform(st_setsrid(geometry,?),4326) as geometry from user_layer_data where user_layer_id=?\n" +
@@ -119,7 +125,7 @@ public class STSettingsHandler extends RestActionHandler {
             
             ResponseHelper.writeResponse(params, out);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -131,9 +137,7 @@ public class STSettingsHandler extends RestActionHandler {
             
             errorMsg = errorMsg + e.toString();
             log.error(e, errorMsg);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -158,6 +162,11 @@ public class STSettingsHandler extends RestActionHandler {
                         "	VALUES (?, ?, ?, ?, ?, ?);"
                 );) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             statement.setLong(1, st_layer_id);
             statement.setInt(2, normalization_method);
             statement.setDouble(3, range_min);
@@ -172,7 +181,7 @@ public class STSettingsHandler extends RestActionHandler {
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Settings registered"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -183,11 +192,7 @@ public class STSettingsHandler extends RestActionHandler {
             }
             
             log.error(e);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -212,6 +217,11 @@ public class STSettingsHandler extends RestActionHandler {
                         "update public.st_settings set(st_layers_id,normalization_method,range_min,range_max,smaller_better,weight)= ( ?, ?, ?, ?, ?, ?) where id=?;"
                 );) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             statement.setLong(1, st_layer_id);
             statement.setInt(2, normalization_method);
             statement.setDouble(3, range_min);
@@ -226,7 +236,7 @@ public class STSettingsHandler extends RestActionHandler {
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Settings updated"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -237,11 +247,7 @@ public class STSettingsHandler extends RestActionHandler {
             }
             log.error(e);
             
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -258,6 +264,10 @@ public class STSettingsHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_settings where  id = ?;");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
 
@@ -266,7 +276,7 @@ public class STSettingsHandler extends RestActionHandler {
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Settings deleted"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -276,10 +286,6 @@ public class STSettingsHandler extends RestActionHandler {
                 java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             log.error(e);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STSettingsHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

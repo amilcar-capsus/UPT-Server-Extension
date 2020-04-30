@@ -25,6 +25,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("st_filters")
 public class STFiltersHandler extends RestActionHandler {
@@ -89,6 +90,11 @@ public class STFiltersHandler extends RestActionHandler {
                         + ") \n"
                         + "select distinct id,user_layer_id,st_filter_label,label from all_layers  order by label ");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             statement.setLong(1, study_area);
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
 
@@ -156,6 +162,10 @@ public class STFiltersHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO public.st_filters( user_layer_id, st_filter_label)VALUES ( ?, ?);");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setInt(1, filterID);
             statement.setString(2, filterLabel);
@@ -166,7 +176,7 @@ public class STFiltersHandler extends RestActionHandler {
 
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Filter registered"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -175,10 +185,6 @@ public class STFiltersHandler extends RestActionHandler {
             } catch (JSONException ex) {
                 java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -196,6 +202,10 @@ public class STFiltersHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("update public.st_filters set st_filter_label =? where id=?;");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setString(1, filterLabel);
             statement.setInt(2, filterID);
@@ -206,7 +216,7 @@ public class STFiltersHandler extends RestActionHandler {
 
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "filter updated"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
@@ -217,11 +227,7 @@ public class STFiltersHandler extends RestActionHandler {
                 java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             log.error(e);
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     @Override
@@ -239,6 +245,10 @@ public class STFiltersHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_filters where id = ?;");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setInt(1, filterID);
 
@@ -248,7 +258,7 @@ public class STFiltersHandler extends RestActionHandler {
 
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Filter delete"))));
             ResponseHelper.writeResponse(params, new JSONObject().put("Errors", errors));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
                 ResponseHelper.writeError(params, "", 500, new JSONObject().put("Errors", errors));
@@ -257,10 +267,6 @@ public class STFiltersHandler extends RestActionHandler {
             } catch (JSONException ex) {
                 java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (JsonProcessingException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            java.util.logging.Logger.getLogger(STFiltersHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

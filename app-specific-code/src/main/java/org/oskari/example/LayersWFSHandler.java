@@ -81,6 +81,11 @@ public class LayersWFSHandler extends RestActionHandler {
         Long user_id = params.getUser().getId();
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             if ("list_layers".equals(params.getRequiredParam("action"))) {
                 Directories dir = new Directories();
                 dir.setData("my_wfs");

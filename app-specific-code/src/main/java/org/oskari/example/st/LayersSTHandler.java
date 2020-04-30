@@ -48,6 +48,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 
 @OskariActionRoute("LayersSTHandler")
@@ -99,6 +100,10 @@ public class LayersSTHandler extends RestActionHandler {
         Long user_id = params.getUser().getId();
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
             if ("list_directories".equals(params.getRequiredParam("action"))) {
                 //Get directories
                 Directories dir = new Directories();
@@ -432,6 +437,11 @@ public class LayersSTHandler extends RestActionHandler {
         String errorMsg = "Layers ST get ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus status = null;
             if ("index_values".equals(params.getRequiredParam("action"))) {
                 indexSuitability(params);

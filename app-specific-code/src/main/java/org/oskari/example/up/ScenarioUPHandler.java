@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.Tables;
+import org.oskari.example.UPTRoles;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +80,11 @@ public class ScenarioUPHandler extends RestActionHandler {
         String errorMsg = "Scenario UP get ";
         ResponseEntity<List<ScenarioUP>> returns = null;
         try {
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             String transactionUrl = "http://" + upwsHost + ":" + upwsPort + "/scenario/";
             RestTemplate restTemplate = new RestTemplate();
             returns = restTemplate.exchange(
@@ -113,6 +119,11 @@ public class ScenarioUPHandler extends RestActionHandler {
         // throw new ActionException("This will be logged including stack trace");
         String errorMsg = "Scenario UP post ";
         try {
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             Long user_id = params.getUser().getId();
             if ("evaluate".equals(params.getRequiredParam("action"))) {
                 String scenarios = String.join(",", params.getRequest().getParameterValues("scenariosId") );
@@ -296,6 +307,11 @@ public class ScenarioUPHandler extends RestActionHandler {
         params.requireLoggedInUser();
         Long user_id = params.getUser().getId();
         try {
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             ScenarioUP scenario = new ScenarioUP();
             scenario.setName(params.getRequiredParam("name"));
             scenario.setOwnerId(Integer.parseInt(user_id.toString()));

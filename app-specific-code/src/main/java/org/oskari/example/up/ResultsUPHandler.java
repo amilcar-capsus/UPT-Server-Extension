@@ -33,6 +33,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import java.util.ArrayList;
 
 @OskariActionRoute("scenario-results")
 public class ResultsUPHandler extends RestActionHandler {
@@ -67,6 +68,11 @@ public class ResultsUPHandler extends RestActionHandler {
         String errorMsg="Results UP post ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             String transactionUrl = "http://"+upwsHost+":"+upwsPort+"/scenario-results/";
 
             UriComponentsBuilder builder = UriComponentsBuilder

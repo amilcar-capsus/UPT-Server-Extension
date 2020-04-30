@@ -25,6 +25,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("st_layers")
 public class STLayersHandler extends RestActionHandler {
@@ -81,6 +82,11 @@ public class STLayersHandler extends RestActionHandler {
                     "select  id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from user_layers"
                         );) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             statement.setLong(1, study_area);
             statement.setString(2, user_uuid);
             
@@ -160,6 +166,10 @@ public class STLayersHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO public.st_layers(user_layer_id, layer_field, st_layer_label,layer_mmu_code)VALUES ( ?, ?, ?,?);");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setLong(1, layerId);
             statement.setString(2, field);
@@ -215,6 +225,10 @@ public class STLayersHandler extends RestActionHandler {
                     "update public.st_layers set(layer_field, st_layer_label,layer_mmu_code)=(?,?,?) where id=?;"
                 );) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setString(1, field);
             statement.setString(2, layerLabel);
@@ -269,6 +283,10 @@ public class STLayersHandler extends RestActionHandler {
                         stPassword);
                 PreparedStatement statement = connection.prepareStatement("delete from public.st_layers where  id = ?;");) {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
 
             statement.setLong(1, layerId);
             

@@ -27,6 +27,7 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("copy_data")
 public class CopyDataHandler extends RestActionHandler {
@@ -72,6 +73,11 @@ public class CopyDataHandler extends RestActionHandler {
         String errorMsg = "Layers UP get ";
         try {
             params.requireLoggedInUser();
+            ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
+                throw new Exception("User privilege is not enough for this action");
+            }
+            
             PostStatus status = null;
 
             switch (params.getRequiredParam("layerUPName")) {
