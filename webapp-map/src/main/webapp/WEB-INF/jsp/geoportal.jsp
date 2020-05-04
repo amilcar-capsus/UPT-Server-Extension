@@ -4,9 +4,9 @@
 
             <!DOCTYPE html>
             <html>
-
+            <!--viewName-->
             <head>
-                <title>${viewName}</title>
+                <title>Geoportal</title>
 
                 <!-- ############# css ################# -->
                 <link rel="stylesheet" type="text/css" href="/Oskari${path}/icons.css" />
