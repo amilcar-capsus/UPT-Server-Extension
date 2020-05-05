@@ -704,10 +704,10 @@
                 <!-- ############# /Javascript ################# -->
                 <script src="/Oskari${path}/PLID/runtime-es2015.c5fa8325f89fc516600b.js" type="module"></script>
                 <script src="/Oskari${path}/PLID/runtime-es5.c5fa8325f89fc516600b.js" nomodule defer></script>
-                <script src="/Oskari${path}/PLID/polyfills-es5.9b39a7c3ad50d2eaa6ef.js" nomodule defer></script>
-                <script src="/Oskari${path}/PLID/polyfills-es2015.7183d4df5cd77a2ca03b.js" type="module"></script>
-                <script src="/Oskari${path}/PLID/main-es2015.2ecefe3fbc39c53b7eca.js" type="module"></script>
-                <script src="/Oskari${path}/PLID/main-es5.2ecefe3fbc39c53b7eca.js" nomodule defer></script>
+                <script src="/Oskari${path}/PLID/polyfills-es5.1763667ef3e4a2f44b7a.js" nomodule defer></script>
+                <script src="/Oskari${path}/PLID/polyfills-es2015.a97e9dc74a8a8be4f874.js" type="module"></script>
+                <script src="/Oskari${path}/PLID/main-es2015.2681e851ddf2517d2ca5.js" type="module"></script>
+                <script src="/Oskari${path}/PLID/main-es5.2681e851ddf2517d2ca5.js" nomodule defer></script>
     </body>
 
 </html>
