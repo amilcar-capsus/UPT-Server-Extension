@@ -100,7 +100,7 @@ public class STSettingsHandler extends RestActionHandler {
             while (data.next()) {
                 STSettings layer = new STSettings(layerId);
                 layer.id = data.getLong("id");
-                layer.normalization_method = data.getInt("normalization_method") != 1 ? data.getInt("normalization_method") : 3;
+                layer.normalization_method = data.getInt("normalization_method") != 0 ? data.getInt("normalization_method") : 3;
                 layer.range_min = data.getDouble("range_min") != 0 ? data.getDouble("range_min") : 0;
                 layer.range_max = data.getDouble("range_max") != 0 ? data.getDouble("range_max") : 1;
                 layer.smaller_better = data.getInt("smaller_better") != 0 ? data.getInt("smaller_better") : 0;
