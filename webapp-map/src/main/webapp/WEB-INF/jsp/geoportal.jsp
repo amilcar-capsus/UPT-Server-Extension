@@ -706,8 +706,8 @@
                 <script src="/Oskari${path}/PLID/runtime-es5.c5fa8325f89fc516600b.js" nomodule defer></script>
                 <script src="/Oskari${path}/PLID/polyfills-es5.1763667ef3e4a2f44b7a.js" nomodule defer></script>
                 <script src="/Oskari${path}/PLID/polyfills-es2015.a97e9dc74a8a8be4f874.js" type="module"></script>
-                <script src="/Oskari${path}/PLID/main-es2015.e55f079ee2430397b951.js" type="module"></script>
-                <script src="/Oskari${path}/PLID/main-es5.e55f079ee2430397b951.js" nomodule defer></script>
+                <script src="/Oskari${path}/PLID/main-es2015.d17c3e98d43db8bfe2de.js" type="module"></script>
+                <script src="/Oskari${path}/PLID/main-es5.d17c3e98d43db8bfe2de.js" nomodule defer></script>
     </body>
 
 </html>
