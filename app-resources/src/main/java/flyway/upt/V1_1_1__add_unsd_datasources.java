@@ -15,15 +15,15 @@ public class V1_1_1__add_unsd_datasources implements JdbcMigration {
     private static final String prefix = "UN Agenda 2030 SD Goal";
 
     public void migrate(Connection connection) throws Exception {
-        addDS(connection, "Affordable and clean energy", "7");
+        /* addDS(connection, "Affordable and clean energy", "7");
         addDS(connection, "Decent work and economic growth", "8");
         addDS(connection, "Industry, innovation and infrastructure", "9");
         addDS(connection, "Reduced inequalities", "10");
         addDS(connection, "Sustainable cities and communities", "11");
-        addDS(connection, "Responsible consumption and production", "12");
+        addDS(connection, "Responsible consumption and production", "12");*/
     }
 
-    private void addDS(Connection conn, String name, String goal) throws SQLException {
+    /* private void addDS(Connection conn, String name, String goal) throws SQLException {
         name = prefix + " " + goal + ": " + name;
         try (PreparedStatement statement = conn.prepareStatement(getDSInsert(name, goal))){
             statement.execute();
@@ -48,5 +48,5 @@ public class V1_1_1__add_unsd_datasources implements JdbcMigration {
                     "WHERE locale like '%" + name + "%'), " +
                 "(SELECT id FROM oskari_maplayer WHERE type='statslayer' AND name = '" + layer + "'), " +
                 "'{}');";
-    }
+    }*/
 }

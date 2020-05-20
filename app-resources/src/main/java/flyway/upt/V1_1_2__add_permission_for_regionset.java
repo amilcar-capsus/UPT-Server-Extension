@@ -26,7 +26,7 @@ public class V1_1_2__add_permission_for_regionset implements JdbcMigration {
 
     public void migrate(Connection connection)
             throws SQLException {
-        PermissionService service = new PermissionServiceMybatisImpl();
+        /* PermissionService service = new PermissionServiceMybatisImpl();
         for(Resource resToUpdate : getResources()) {
             Optional<Resource> dbRes = service.findResource(ResourceType.maplayer, resToUpdate.getMapping());
             if(dbRes.isPresent()) {
@@ -43,7 +43,7 @@ public class V1_1_2__add_permission_for_regionset implements JdbcMigration {
                 resToUpdate.addPermission(permission);
             }
             service.saveResource(resToUpdate);
-        }
+        }*/
     }
 
     // statslayers described as layer resources for permissions handling
