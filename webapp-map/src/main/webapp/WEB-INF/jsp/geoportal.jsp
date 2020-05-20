@@ -606,11 +606,11 @@
                 <nav id="maptools">
                     <div id="logobar">
                     </div>
-                    <div id="language-selector-root">
-                    </div>
                     <div id="menubar">
                     </div>
                     <div id="divider">
+                    </div>
+                    <div id="language-selector-root">
                     </div>
                     <div id="toolbar">
                     </div>
