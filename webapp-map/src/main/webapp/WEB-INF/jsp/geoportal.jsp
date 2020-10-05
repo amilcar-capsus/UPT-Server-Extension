@@ -697,12 +697,12 @@
                         </script>
 
                         <!-- ############# /Javascript ################# -->
-                        <script src="/Oskari${path}/PLID/runtime-es2015.c5fa8325f89fc516600b.js" type="module"></script>
-                        <script src="/Oskari${path}/PLID/runtime-es5.c5fa8325f89fc516600b.js" nomodule defer></script>
-                        <script src="/Oskari${path}/PLID/polyfills-es5.1763667ef3e4a2f44b7a.js" nomodule defer></script>
-                        <script src="/Oskari${path}/PLID/polyfills-es2015.a97e9dc74a8a8be4f874.js" type="module"></script>
-                        <script src="/Oskari${path}/PLID/main-es2015.e7409a90a766859194e3.js" type="module"></script>
-                        <script src="/Oskari${path}/PLID/main-es5.e7409a90a766859194e3.js" nomodule defer></script>
+                        <script src="/Oskari${path}/PLID/runtime-es2015.js" type="module"></script>
+                        <script src="/Oskari${path}/PLID/runtime-es5.js" nomodule defer></script>
+                        <script src="/Oskari${path}/PLID/polyfills-es5.js" nomodule defer></script>
+                        <script src="/Oskari${path}/PLID/polyfills-es2015.js" type="module"></script>
+                        <script src="/Oskari${path}/PLID/main-es2015.js" type="module"></script>
+                        <script src="/Oskari${path}/PLID/main-es5.js" nomodule defer></script>
             </body>
 
             </html>
