@@ -684,9 +684,7 @@
 
                 <script type="text/javascript">
                     var ajaxUrl = '${ajaxUrl}';
-                    var controlParams = $ {
-                        controlParams
-                    };
+                    var controlParams = ${controlParams};
                 </script>
                 <%-- Pre-compiled application JS, empty unless created by build job --%>
                     <script type="text/javascript" src="/Oskari${path}/oskari.min.js">
