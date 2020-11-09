@@ -677,7 +677,7 @@ begin;
     )
     values(
        'English','%',
-        'Sport facility proximity',
+        'Sports facility proximity',
         (select min(id) as id from up_indicators where indicator='sports_proximity' )
     ) 
     on conflict(up_indicators_id,language) do nothing;
@@ -1257,7 +1257,7 @@ begin;
     up_indicators_id
     )
     values(
-       'English','km2'
+       'English','km/km2'
         ,'Kilometers of primary roads per square kilometer'
         ,(select min(id) as id from up_indicators where indicator='prim_road_km2' )
     ) 
@@ -1281,7 +1281,7 @@ begin;
     up_indicators_id
     )
     values(
-       'English','km2'
+       'English','km/km2'
         ,'Kilometers of secondary roads per square kilometer'
         ,(select min(id) as id from up_indicators where indicator='sec_road_km2' )
     ) 
@@ -1622,7 +1622,7 @@ begin;
     up_indicators_id
     )
     values(
-       'English','kgCO2eq /capita/annum'
+       'English','kgCO2eq/capita/annum'
         ,'Commuting emissions'
         ,(select min(id) as id from up_indicators where indicator='emissions_transport' )
     ) 
