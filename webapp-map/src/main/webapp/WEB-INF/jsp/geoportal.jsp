@@ -456,6 +456,7 @@
                             background-color: #d9d9d9!important;
                             border: 1px solid #d9d9d9!important;
                             color: #196480!important;
+                            min-width: 2.5em !important;
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button:hover,
                         app-root .geoportal-btn.tools-geoportal .ui-button:focus,
@@ -704,7 +705,9 @@
 
                 <script type="text/javascript">
                     var ajaxUrl = '${ajaxUrl}';
-                    var controlParams = ${controlParams};
+                    var controlParams = $ {
+                        controlParams
+                    };
                 </script>
                 <%-- Pre-compiled application JS, empty unless created by build job --%>
                     <script type="text/javascript" src="/Oskari${path}/oskari.min.js">
