@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Adds content-editor bundle to default and user views.
  */
-public class V1_0_2__add_content_editor implements JdbcMigration {
+public class V2_0_2__add_content_editor implements JdbcMigration {
     private static final String BUNDLE_ID = "content-editor";
 
     public void migrate(Connection connection) throws Exception {

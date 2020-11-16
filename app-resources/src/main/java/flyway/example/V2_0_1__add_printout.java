@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Adds printout bundle to default and user views.
  */
-public class V1_0_1__add_printout implements JdbcMigration {
+public class V2_0_1__add_printout implements JdbcMigration {
     private static final String BUNDLE_ID = "printout";
 
     public void migrate(Connection connection) throws Exception {

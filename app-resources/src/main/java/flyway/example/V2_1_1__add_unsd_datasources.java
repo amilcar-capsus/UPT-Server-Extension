@@ -9,7 +9,7 @@ import java.sql.SQLException;
 /**
  * Register UN statistics datasource
  */
-public class V1_1_1__add_unsd_datasources implements JdbcMigration {
+public class V2_1_1__add_unsd_datasources implements JdbcMigration {
 
     private static final String layer = "ne_110m_countries";
     private static final String prefix = "UN Agenda 2030 SD Goal";

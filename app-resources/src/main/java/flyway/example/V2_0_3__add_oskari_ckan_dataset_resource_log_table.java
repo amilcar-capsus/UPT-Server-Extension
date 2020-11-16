@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class V1_0_3__add_oskari_ckan_dataset_resource_log_table implements JdbcMigration {
+public class V2_0_3__add_oskari_ckan_dataset_resource_log_table implements JdbcMigration {
     public void migrate(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("CREATE SEQUENCE \"public\".\"oskari_ckan_dataset_resource_log_id_seq\" \n" +
                 "INCREMENT 1\n" +
