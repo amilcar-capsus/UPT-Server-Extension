@@ -606,6 +606,17 @@
                             border: 1px solid #f5ad3c!important;
                             color: #ffffff!important;
                         }
+                        app-root #analysis.suitability.geoportal-btn.ui-button {
+                            border: 1px solid #196480 !important;
+                            background-color: #196480 !important;
+                        }
+
+                        app-root #analysis.suitability.geoportal-btn.ui-button:hover,
+                        app-root #analysis.suitability.geoportal-btn.ui-button:focus,
+                        app-root #analysis.suitability.geoportal-btn.ui-button:active {
+                            border: 1px solid #196480 !important;
+                            background-color: #196480 !important;
+                        }
                     }
                 </style>
                 <!-- ############# /css ################# -->
