@@ -302,11 +302,11 @@
                         }
                         app-root #suitability .ui-slider:not(.ui-state-disabled) .ui-slider-handle:hover,
                         #suitability .custom-control-input:checked~.custom-control-label::before {
-                            background-color: #196480;
-                            border-color: #196480;
+                            background-color: #6ab1e2 !important;
+                            border-color: #6ab1e2 !important;
                         }
                         app-root #suitability .ui-slider .ui-slider-range {
-                            background-color: #196480;
+                            background-color: #6ab1e2 !important;
                         }
                         .suitability .selected-layers {
                             background-color: #323232;
