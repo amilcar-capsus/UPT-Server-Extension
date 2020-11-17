@@ -276,7 +276,7 @@
                         app-root #suitability.gp_modal .nav-item .nav-link,
                         app-root .suitability.gp_modal .nav-item .nav-link {
                             background: #2e2f2f !important;
-                            color: #196480 !important;
+                            color: #6ab1e2 !important;
                         }
                         app-root .urbanperformance.gp_modal .nav-item .active,
                         app-root .urbanperformance .tab-content .active {
@@ -288,7 +288,7 @@
                         app-root .suitability.gp_modal .nav-item .active,
                         app-root .suitability .tab-content .active {
                             background: #4B565F !important;
-                            color: #196480 !important;
+                            color: #6ab1e2 !important;
                         }
                         .highlight-results {
                             color: #FF8680 !important;
@@ -448,8 +448,8 @@
                         app-root .geoportal-btn.advanced-geoportal .ui-button,
                         app-root .geoportal-btn.advanced-geoportal .ui-button:hover,
                         app-root .geoportal-btn.advanced-geoportal .ui-button:focus {
-                            background-color: #343e46 !important;
-                            border: 1px solid #343e46 !important;
+                            background-color: #2e2f2f !important;
+                            border: 1px solid #2e2f2f !important;
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button,
                         app-root .geoportal-btn.tools-geoportal.ui-button {
@@ -500,7 +500,7 @@
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button:enabled:focus,
                         app-root .geoportal-btn.advanced-geoportal .ui-button:enabled:focus {
-                            box-shadow: 0 0 0 0.2em #4E565E !important;
+                            box-shadow: 0 0 0 0.2em #2e2f2f !important;
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button,
                         app-root .geoportal-btn.tools-geoportal .ui-button:hover,
@@ -508,8 +508,8 @@
                         app-root .geoportal-btn.advanced-geoportal .ui-button,
                         app-root .geoportal-btn.advanced-geoportal .ui-button:hover,
                         app-root .geoportal-btn.advanced-geoportal .ui-button:focus {
-                            background-color: #4E565E !important;
-                            border: #4E565E !important;
+                            background-color: #2e2f2f !important;
+                            border: #2e2f2f !important;
                         }
                         app-root .ui-button.ui-state-default.ui-button-success,
                         app-root .ui-buttonset.ui-button-success>.ui-button.ui-state-default {
