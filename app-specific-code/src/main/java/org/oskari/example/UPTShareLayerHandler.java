@@ -112,7 +112,7 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);) {
-            /params.requireLoggedInUser();
+            params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
             if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
