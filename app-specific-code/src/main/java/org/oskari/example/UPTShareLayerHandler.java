@@ -58,16 +58,17 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);) {
-            params.requireLoggedInUser();
+            /*params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
             if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
-            }
+            }*/
             
             PreparedStatement statement = connection.prepareStatement("select user_layer.id ,layer_name,case when is_public is null then 0 else is_public end as is_public \n" +
                 " from user_layer \n" +
-                " left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id " +
-                "where uuid=?");
+                " left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id ");
+                // +
+                //"where uuid=?");
             statement.setString(1, params.getUser().getUuid());
             
             errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Executing query: " + statement.toString()))));
@@ -111,7 +112,7 @@ public class UPTShareLayerHandler  extends RestActionHandler {
                         stURL,
                         stUser,
                         stPassword);) {
-            params.requireLoggedInUser();
+            /params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
             if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
