@@ -5,7 +5,7 @@ import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
 
 import java.sql.Connection;
 
-public class V2_0_4__initial_db_content implements JdbcMigration {
+public class V1_0_4__initial_db_content implements JdbcMigration {
 
     public void migrate(Connection connection)
             throws Exception {

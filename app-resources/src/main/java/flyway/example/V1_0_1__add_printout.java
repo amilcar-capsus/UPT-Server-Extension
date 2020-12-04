@@ -7,10 +7,10 @@ import java.sql.Connection;
 import java.util.List;
 
 /**
- * Adds content-editor bundle to default and user views.
+ * Adds printout bundle to default and user views.
  */
-public class V2_0_2__add_content_editor implements JdbcMigration {
-    private static final String BUNDLE_ID = "content-editor";
+public class V1_0_1__add_printout implements JdbcMigration {
+    private static final String BUNDLE_ID = "printout";
 
     public void migrate(Connection connection) throws Exception {
 
