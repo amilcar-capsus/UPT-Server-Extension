@@ -2108,7 +2108,7 @@ begin;
     INSERT INTO public.st_normalization_method_options(
 	value, language, label)
 	VALUES 
-        (1, 'english','Observe')
+        (1, 'english','Observe'),
         (2,'english','Benchmark'),
         (3,'english','Standardize') on conflict(value,  language) do nothing;
 
