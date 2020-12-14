@@ -7,9 +7,13 @@
             <!--viewName-->
 
             <head>
-                <title>Geoportal</title>
+                <title>Urban Hotspots</title>
 
                 <!-- ############# css ################# -->
+                <link rel="icon" type="image/png" href="/Oskari${path}/PLID/assets/img/fav-16.png" sizes="16x16">
+                <link rel="icon" type="image/png" href="/Oskari${path}/PLID/assets/img/fav-32.png" sizes="32x32">
+                <link rel="icon" type="image/png" href="/Oskari${path}/PLID/assets/img/fav-96.png" sizes="96x96">
+                <link rel="icon" type="image/png" href="/Oskari${path}/PLID/assets/img/fav-194.png" sizes="194x194">
                 <link rel="stylesheet" type="text/css" href="/Oskari${path}/icons.css" />
                 <link rel="stylesheet" type="text/css" href="/Oskari${path}/oskari.min.css" />
                 <style type="text/css">
