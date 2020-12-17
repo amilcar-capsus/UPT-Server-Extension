@@ -42,20 +42,20 @@ import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
 import org.oskari.map.userlayer.service.UserLayerException;
 
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionConstants;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
-import fi.nls.oskari.domain.map.UserDataStyle;
-import fi.nls.oskari.domain.map.userlayer.UserLayer;
-import fi.nls.oskari.domain.map.userlayer.UserLayerData;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
-import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.annotation.OskariActionRoute;
+import org.oskari.control.ActionConstants;
+import org.oskari.control.ActionException;
+import org.oskari.control.ActionParameters;
+import org.oskari.control.ActionParamsException;
+import org.oskari.control.layer.AbstractLayerAdminHandler;
+import org.oskari.domain.map.UserDataStyle;
+import org.oskari.domain.map.userlayer.UserLayer;
+import org.oskari.domain.map.userlayer.UserLayerData;
+import org.oskari.log.LogFactory;
+import org.oskari.log.Logger;
+import org.oskari.util.JSONHelper;
+import org.oskari.util.PropertyUtil;
+import org.oskari.util.ResponseHelper;
 import org.oskari.example.UPTRoles;
 
 

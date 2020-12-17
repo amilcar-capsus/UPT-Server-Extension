@@ -23,16 +23,16 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.springframework.http.ResponseEntity;
 
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.domain.map.OskariLayer;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
-import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.annotation.OskariActionRoute;
+import org.oskari.control.ActionException;
+import org.oskari.control.ActionParameters;
+import org.oskari.control.RestActionHandler;
+import org.oskari.domain.map.OskariLayer;
+import org.oskari.log.LogFactory;
+import org.oskari.log.Logger;
+import org.oskari.util.JSONHelper;
+import org.oskari.util.PropertyUtil;
+import org.oskari.util.ResponseHelper;
 
 
 /**

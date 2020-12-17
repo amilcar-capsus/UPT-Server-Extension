@@ -1,6 +1,6 @@
 package flyway.example;
 
-import fi.nls.oskari.db.DBHandler;
+import org.oskari.db.DBHandler;
 import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
 
 import java.sql.Connection;
