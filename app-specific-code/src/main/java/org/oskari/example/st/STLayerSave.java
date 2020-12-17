@@ -6,7 +6,7 @@ import fi.mml.map.mapwindow.service.wms.WebMapServiceParseException;
 import fi.mml.map.mapwindow.util.OskariLayerWorker;
 import fi.nls.oskari.annotation.OskariActionRoute;
 import org.oskari.cache.JedisManager;
-import org.oskari.control.*;
+import fi.nls.oskari.control.*;
 import fi.nls.oskari.domain.map.DataProvider;
 import fi.nls.oskari.domain.map.OskariLayer;
 // import fi.nls.oskari.domain.map.wfs.WFSLayerConfiguration;
@@ -40,8 +40,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.oskari.control.ActionConstants.PARAM_SRS;
-import org.oskari.control.layer.*;
+import static fi.nls.oskari.control.ActionConstants.PARAM_SRS;
+import fi.nls.oskari.control.layer.*;
 
 
 @OskariActionRoute("STLayerSave")

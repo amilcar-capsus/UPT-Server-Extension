@@ -19,11 +19,11 @@ import org.oskari.service.wfs.client.OskariWFSClient;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
-import org.oskari.control.ActionCommonException;
-import org.oskari.control.ActionConstants;
-import org.oskari.control.ActionException;
-import org.oskari.control.ActionParameters;
-import org.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.ActionCommonException;
+import fi.nls.oskari.control.ActionConstants;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;

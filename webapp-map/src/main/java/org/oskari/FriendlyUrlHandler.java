@@ -1,7 +1,7 @@
 package org.oskari;
 
 import org.oskari.MapController;
-import org.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParameters;
 import org.oskari.spring.extension.OskariParam;
 import fi.nls.oskari.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;

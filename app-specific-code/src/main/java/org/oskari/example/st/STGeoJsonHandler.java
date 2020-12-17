@@ -43,11 +43,11 @@ import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
 import org.oskari.map.userlayer.service.UserLayerException;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
-import org.oskari.control.ActionConstants;
-import org.oskari.control.ActionException;
-import org.oskari.control.ActionParameters;
-import org.oskari.control.ActionParamsException;
-import org.oskari.control.layer.AbstractLayerAdminHandler;
+import fi.nls.oskari.control.ActionConstants;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
 import fi.nls.oskari.domain.map.UserDataStyle;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
