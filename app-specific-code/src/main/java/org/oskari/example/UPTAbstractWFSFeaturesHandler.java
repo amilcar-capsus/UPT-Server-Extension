@@ -11,7 +11,7 @@ import fi.nls.oskari.service.OskariComponentManager;
 
 import org.oskari.permissions.PermissionService;
 import org.oskari.service.user.UserLayerService;
-import fi.nls.oskari.service.util.ServiceFactory;
+import org.oskari.service.util.ServiceFactory;
 import org.oskari.service.wfs.client.CachingOskariWFSClient;
 import org.oskari.service.wfs.client.OskariFeatureClient;
 import org.oskari.service.wfs.client.OskariWFSClient;
