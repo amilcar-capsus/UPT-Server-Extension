@@ -31,9 +31,9 @@ import org.springframework.web.client.RestTemplate;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.oskari.annotation.OskariActionRoute;
-import org.oskari.control.ActionException;
-import org.oskari.control.ActionParameters;
-import org.oskari.control.RestActionHandler;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
 import fi.nls.oskari.domain.User;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;

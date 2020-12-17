@@ -16,9 +16,9 @@ import org.oskari.example.Data;
 import org.oskari.example.Directories;
 
 import org.oskari.annotation.OskariActionRoute;
-import org.oskari.control.ActionException;
-import org.oskari.control.ActionParameters;
-import org.oskari.control.RestActionHandler;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
 import org.oskari.util.JSONHelper;

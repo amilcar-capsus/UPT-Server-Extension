@@ -1,6 +1,6 @@
 package org.oskari.example;
 
-import org.oskari.control.*;
+import fi.nls.oskari.control.*;
 import org.oskari.util.PropertyUtil;
 import java.util.List;
 
@@ -13,10 +13,10 @@ import org.oskari.annotation.OskariActionRoute;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
 import org.oskari.util.ResponseHelper;
-import org.oskari.control.ActionException;
-import org.oskari.control.ActionParameters;
-import org.oskari.control.ActionParamsException;
-import org.oskari.control.RestActionHandler;
+import fi.nls.oskari.control.ActionException;
+import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.ActionParamsException;
+import fi.nls.oskari.control.RestActionHandler;
 import fi.nls.oskari.domain.User;
 import java.io.File;
 import java.util.ArrayList;
