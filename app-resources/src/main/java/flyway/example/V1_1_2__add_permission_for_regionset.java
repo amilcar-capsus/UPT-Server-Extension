@@ -1,14 +1,14 @@
 package flyway.example;
 
-import org.oskari.domain.Role;
-import org.oskari.domain.User;
-import org.oskari.domain.map.OskariLayer;
+import fi.nls.oskari.domain.Role;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.map.layer.OskariLayerService;
 import org.oskari.OskariComponentManager;
 import org.oskari.ServiceException;
 import org.oskari.ServiceRuntimeException;
 import org.oskari.UserService;
-import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.oskari.permissions.PermissionService;
 import org.oskari.permissions.PermissionServiceMybatisImpl;
 import org.oskari.permissions.model.*;

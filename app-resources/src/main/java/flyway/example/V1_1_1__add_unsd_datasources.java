@@ -1,6 +1,6 @@
 package flyway.example;
 
-import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

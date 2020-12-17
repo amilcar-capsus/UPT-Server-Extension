@@ -11,7 +11,7 @@ import org.oskari.control.ActionException;
 import org.oskari.control.ActionParameters;
 import org.oskari.control.ActionParamsException;
 import org.oskari.control.RestActionHandler;
-import org.oskari.domain.User;
+import fi.nls.oskari.domain.User;
 import org.oskari.util.JSONHelper;
 import org.oskari.util.PropertyUtil;
 import java.lang.reflect.Field;

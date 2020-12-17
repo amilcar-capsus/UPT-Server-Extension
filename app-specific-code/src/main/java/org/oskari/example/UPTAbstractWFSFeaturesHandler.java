@@ -5,8 +5,8 @@ import org.oskari.control.ActionException;
 import org.oskari.control.ActionHandler;
 import org.oskari.control.ActionParamsException;
 import org.oskari.control.layer.PermissionHelper;
-import org.oskari.domain.User;
-import org.oskari.domain.map.OskariLayer;
+import fi.nls.oskari.domain.User;
+import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.OskariComponentManager;
 
 import org.oskari.permissions.PermissionService;

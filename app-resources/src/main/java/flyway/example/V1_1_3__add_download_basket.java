@@ -1,7 +1,7 @@
 package flyway.example;
 
-import org.oskari.util.FlywayHelper;
-import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
+import org.oskari.helpers.AppSetupHelper;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
 
 import java.sql.Connection;
 import java.util.List;

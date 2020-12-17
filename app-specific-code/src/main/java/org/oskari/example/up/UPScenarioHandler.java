@@ -36,7 +36,7 @@ import org.oskari.control.ActionException;
 import org.oskari.control.ActionParameters;
 import org.oskari.control.ActionParamsException;
 import org.oskari.control.RestActionHandler;
-import org.oskari.domain.map.userlayer.UserLayer;
+import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
 import org.oskari.OskariComponentManager;

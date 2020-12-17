@@ -6,7 +6,7 @@ import org.oskari.annotation.OskariActionRoute;
 import org.oskari.control.ActionException;
 import org.oskari.control.ActionParameters;
 import org.oskari.control.RestActionHandler;
-import org.oskari.domain.User;
+import fi.nls.oskari.domain.User;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
 import org.oskari.util.JSONHelper;
