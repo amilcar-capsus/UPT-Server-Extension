@@ -23,7 +23,7 @@ import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.Tables;
 import org.oskari.example.st.STLayersHandler;
-import fi.nls.oskari.log.AuditLog;
+import org.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;

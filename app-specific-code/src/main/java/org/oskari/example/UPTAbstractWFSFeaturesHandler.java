@@ -10,11 +10,11 @@ import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.service.OskariComponentManager;
 
 import org.oskari.permissions.PermissionService;
-import org.oskari.service.user.UserLayerService;
-import org.oskari.service.util.ServiceFactory;
-import org.oskari.service.wfs.client.CachingOskariWFSClient;
-import org.oskari.service.wfs.client.OskariFeatureClient;
-import org.oskari.service.wfs.client.OskariWFSClient;
+import fi.nls.oskari.service.user.UserLayerService;
+import fi.nls.oskari.service.util.ServiceFactory;
+import fi.nls.oskari.service.wfs.client.CachingOskariWFSClient;
+import fi.nls.oskari.service.wfs.client.OskariFeatureClient;
+import fi.nls.oskari.service.wfs.client.OskariWFSClient;
 
 import java.util.Collection;
 import java.util.Map;

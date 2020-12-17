@@ -38,7 +38,7 @@ import org.oskari.example.st.STDistanceEvaluationHandler;
 import org.oskari.example.st.STLayersHandler;
 import org.oskari.geojson.GeoJSONReader2;
 import org.oskari.geojson.GeoJSONSchemaDetector;
-import fi.nls.oskari.log.AuditLog;
+import org.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;

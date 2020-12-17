@@ -36,7 +36,7 @@ import org.oskari.example.PostStatus;
 import org.oskari.example.UPTDataCleanHandler;
 import org.oskari.geojson.GeoJSONReader2;
 import org.oskari.geojson.GeoJSONSchemaDetector;
-import fi.nls.oskari.log.AuditLog;
+import org.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
