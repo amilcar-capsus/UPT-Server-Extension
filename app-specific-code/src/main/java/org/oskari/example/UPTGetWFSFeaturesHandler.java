@@ -13,8 +13,8 @@ import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import fi.nls.oskari.service.user.UserLayerService;
-import fi.nls.oskari.service.wfs.client.OskariWFSClient;
+import org.oskari.service.user.UserLayerService;
+import org.oskari.service.wfs.client.OskariWFSClient;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
