@@ -39,7 +39,7 @@ import org.oskari.control.RestActionHandler;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
-import org.oskari.OskariComponentManager;
+import fi.nls.oskari.service.OskariComponentManager;
 import org.oskari.util.JSONHelper;
 import org.oskari.util.PropertyUtil;
 import org.oskari.util.ResponseHelper;

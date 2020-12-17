@@ -7,7 +7,7 @@ import org.oskari.control.ActionParamsException;
 import org.oskari.control.layer.PermissionHelper;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.OskariLayer;
-import org.oskari.OskariComponentManager;
+import fi.nls.oskari.service.OskariComponentManager;
 
 import org.oskari.permissions.PermissionService;
 import org.oskari.service.user.UserLayerService;

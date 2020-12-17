@@ -4,8 +4,8 @@ import fi.nls.oskari.domain.Role;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.map.layer.OskariLayerService;
-import org.oskari.OskariComponentManager;
-import org.oskari.ServiceException;
+import fi.nls.oskari.service.OskariComponentManager;
+import fi.nls.oskari.service.ServiceException;
 import org.oskari.ServiceRuntimeException;
 import org.oskari.UserService;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * Add permissions for regionset: countries
  */
-public class V1_1_2__add_permission_for_regionset implements JdbcMigration {
+public class V1_1_2__add_permission_for_regionset implements BaseJavaMigration {
 
     public void migrate(Connection connection)
             throws SQLException {

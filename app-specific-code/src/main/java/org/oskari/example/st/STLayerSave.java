@@ -18,7 +18,7 @@ import org.oskari.map.layer.group.link.OskariLayerGroupLink;
 import org.oskari.map.layer.group.link.OskariLayerGroupLinkService;
 import org.oskari.map.view.ViewService;
 import org.oskari.map.view.util.ViewHelper;
-import org.oskari.ServiceException;
+import fi.nls.oskari.service.ServiceException;
 import org.oskari.capabilities.CapabilitiesCacheService;
 import org.oskari.capabilities.OskariLayerCapabilitiesHelper;
 import org.oskari.util.*;
