@@ -17,7 +17,7 @@ public class V1_1_3__add_download_basket extends BaseJavaMigration {
         Connection connection = context.getConnection();
         final List<Long> views = AppSetupHelper.getSetupsForUserAndDefaultType(connection);
         for(Long viewId : views){
-            if (AppSetupHelper.appContainsBundle(connection, BUNDLE_ID, viewId)) {
+            if (AppSetupHelper.appContainsBundle(connection, viewId, BUNDLE_ID)) {
                 continue;
             }
             AppSetupHelper.addBundleToApp(connection, viewId, BUNDLE_ID);
