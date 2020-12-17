@@ -1,12 +1,12 @@
 package flyway.example;
 
-import fi.nls.oskari.db.DBHandler;
+//import fi.nls.oskari.db.DBHandler;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.oskari.helpers.AppSetupHelper;
 
 import java.sql.Connection;
 
-public class V1_0_3__initial_db_content implements BaseJavaMigration {
+public class V1_0_3__initial_db_content extends BaseJavaMigration {
 
     public void migrate(Connection connection)
             throws Exception {

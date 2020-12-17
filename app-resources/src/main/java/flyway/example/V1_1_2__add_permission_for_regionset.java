@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * Add permissions for regionset: countries
  */
-public class V1_1_2__add_permission_for_regionset implements BaseJavaMigration {
+public class V1_1_2__add_permission_for_regionset extends BaseJavaMigration {
 
     public void migrate(Connection connection)
             throws SQLException {

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Adds download-basket bundle to default and user views.
  */
-public class V1_1_3__add_download_basket implements BaseJavaMigration {
+public class V1_1_3__add_download_basket extends BaseJavaMigration {
     private static final String BUNDLE_ID = "download-basket";
 
     public void migrate(Connection connection) throws Exception {
