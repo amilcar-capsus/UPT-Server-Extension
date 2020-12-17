@@ -27,7 +27,7 @@ import org.oskari.control.ActionParamsException;
 import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
-import org.oskari.ServiceRuntimeException;
+import fi.nls.oskari.service.ServiceRuntimeException;
 import org.oskari.util.ResponseHelper;
 
 @OskariActionRoute("GetWFSFeatures")
