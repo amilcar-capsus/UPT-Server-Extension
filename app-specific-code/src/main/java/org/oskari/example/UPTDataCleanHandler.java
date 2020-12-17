@@ -11,16 +11,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.oskari.example.st.STLayersHandler;
 
-import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionDeniedException;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.RestActionHandler;
-import fi.nls.oskari.log.LogFactory;
-import fi.nls.oskari.log.Logger;
-import fi.nls.oskari.util.JSONHelper;
-import fi.nls.oskari.util.PropertyUtil;
+import org.oskari.annotation.OskariActionRoute;
+import org.oskari.control.ActionDeniedException;
+import org.oskari.control.ActionException;
+import org.oskari.control.ActionParameters;
+import org.oskari.control.ActionParamsException;
+import org.oskari.control.RestActionHandler;
+import org.oskari.log.LogFactory;
+import org.oskari.log.Logger;
+import org.oskari.util.JSONHelper;
+import org.oskari.util.PropertyUtil;
 import java.util.ArrayList;
 
 

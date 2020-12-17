@@ -1,13 +1,13 @@
 package org.oskari.example;
 
-import fi.nls.oskari.control.ActionDeniedException;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionHandler;
-import fi.nls.oskari.control.ActionParamsException;
-import fi.nls.oskari.control.layer.PermissionHelper;
-import fi.nls.oskari.domain.User;
-import fi.nls.oskari.domain.map.OskariLayer;
-import fi.nls.oskari.service.OskariComponentManager;
+import org.oskari.control.ActionDeniedException;
+import org.oskari.control.ActionException;
+import org.oskari.control.ActionHandler;
+import org.oskari.control.ActionParamsException;
+import org.oskari.control.layer.PermissionHelper;
+import org.oskari.domain.User;
+import org.oskari.domain.map.OskariLayer;
+import org.oskari.OskariComponentManager;
 
 import org.oskari.permissions.PermissionService;
 import org.oskari.service.user.UserLayerService;
