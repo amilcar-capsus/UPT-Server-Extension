@@ -2,7 +2,7 @@ package flyway.example;
 
 import fi.nls.oskari.db.DBHandler;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
-import org.oskari.helpers.AppSetupHelper
+import org.oskari.helpers.AppSetupHelper;
 
 import java.sql.Connection;
 
