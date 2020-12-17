@@ -9,6 +9,7 @@ import fi.nls.oskari.service.ServiceException;
 import fi.nls.oskari.service.ServiceRuntimeException;
 import fi.nls.oskari.service.UserService;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
+import org.flywaydb.core.api.migration.Context;
 import org.oskari.permissions.PermissionService;
 import org.oskari.permissions.PermissionServiceMybatisImpl;
 import org.oskari.permissions.model.*;
@@ -24,8 +25,9 @@ import java.util.Optional;
  */
 public class V1_1_2__add_permission_for_regionset extends BaseJavaMigration {
 
-    public void migrate(Connection connection)
+    public void migrate(Context context)
             throws SQLException {
+        Connection connection = context.getConnection();
         PermissionService service = new PermissionServiceMybatisImpl();
         for(Resource resToUpdate : getResources()) {
             Optional<Resource> dbRes = service.findResource(ResourceType.maplayer, resToUpdate.getMapping());

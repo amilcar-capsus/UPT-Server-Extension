@@ -12,6 +12,7 @@ public class V1_0_3__initial_db_content extends BaseJavaMigration {
     public void migrate(Context context)
             throws Exception {
         // run setup based on json under /src/main/resources/setup/app-example.json
-        AppSetupHelper.create(context, "app-example");
+        Connection connection = context.getConnection();
+        AppSetupHelper.create(connection, "app-example");
     }
 }
