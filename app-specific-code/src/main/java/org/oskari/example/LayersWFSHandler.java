@@ -24,9 +24,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.springframework.http.ResponseEntity;
 
 import fi.nls.oskari.annotation.OskariActionRoute;
-import fi.nls.oskari.control.ActionException;
-import fi.nls.oskari.control.ActionParameters;
-import fi.nls.oskari.control.RestActionHandler;
+import org.oskari.control.ActionException;
+import org.oskari.control.ActionParameters;
+import org.oskari.control.RestActionHandler;
 import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
