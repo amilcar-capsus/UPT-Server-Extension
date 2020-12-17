@@ -1,7 +1,7 @@
 package org.oskari.example;
 
 import fi.nls.oskari.control.*;
-import org.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.PropertyUtil;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +9,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import org.oskari.annotation.OskariActionRoute;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.ResponseHelper;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;

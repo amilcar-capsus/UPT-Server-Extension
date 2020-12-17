@@ -18,17 +18,17 @@ import org.oskari.service.wfs.client.OskariWFSClient;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionCommonException;
 import fi.nls.oskari.control.ActionConstants;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.domain.map.OskariLayer;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.service.ServiceRuntimeException;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.util.ResponseHelper;
 
 @OskariActionRoute("GetWFSFeatures")
 public class UPTGetWFSFeaturesHandler extends UPTAbstractWFSFeaturesHandler {

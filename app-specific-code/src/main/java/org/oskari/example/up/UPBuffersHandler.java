@@ -38,7 +38,7 @@ import org.oskari.example.st.STDistanceEvaluationHandler;
 import org.oskari.example.st.STLayersHandler;
 import org.oskari.geojson.GeoJSONReader2;
 import org.oskari.geojson.GeoJSONSchemaDetector;
-import org.oskari.log.AuditLog;
+import fi.nls.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
@@ -49,7 +49,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
@@ -58,11 +58,11 @@ import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.UserDataStyle;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.JSONHelper;
-import org.oskari.util.PropertyUtil;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 import org.oskari.example.UPTRoles;
 
 @OskariActionRoute("scenario_buffers")

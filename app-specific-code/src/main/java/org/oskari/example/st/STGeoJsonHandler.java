@@ -36,13 +36,13 @@ import org.oskari.example.PostStatus;
 import org.oskari.example.UPTDataCleanHandler;
 import org.oskari.geojson.GeoJSONReader2;
 import org.oskari.geojson.GeoJSONSchemaDetector;
-import org.oskari.log.AuditLog;
+import fi.nls.oskari.log.AuditLog;
 import org.oskari.map.userlayer.service.UserLayerDataService;
 import org.oskari.map.userlayer.service.UserLayerDbService;
 import org.oskari.map.userlayer.service.UserLayerDbServiceMybatisImpl;
 import org.oskari.map.userlayer.service.UserLayerException;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionConstants;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
@@ -51,11 +51,11 @@ import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
 import fi.nls.oskari.domain.map.UserDataStyle;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.JSONHelper;
-import org.oskari.util.PropertyUtil;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 import org.oskari.example.UPTRoles;
 
 

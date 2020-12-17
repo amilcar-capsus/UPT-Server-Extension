@@ -1,14 +1,14 @@
 package org.oskari.example;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.*;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.RestActionHandler;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.ResponseHelper;
 
 /**
  * Dummy Rest action route

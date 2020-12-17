@@ -18,16 +18,16 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionDeniedException;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.RestActionHandler;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.JSONHelper;
-import org.oskari.util.PropertyUtil;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 import java.util.ArrayList;
 import org.oskari.example.UPTRoles;
 

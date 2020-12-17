@@ -15,15 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import org.oskari.annotation.OskariActionRoute;
+import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.RestActionHandler;
-import org.oskari.log.LogFactory;
-import org.oskari.log.Logger;
-import org.oskari.util.JSONHelper;
-import org.oskari.util.PropertyUtil;
-import org.oskari.util.ResponseHelper;
+import fi.nls.oskari.log.LogFactory;
+import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.util.JSONHelper;
+import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.ResponseHelper;
 
 @OskariActionRoute("study_area")
 public class StudyAreaHandler extends RestActionHandler {
