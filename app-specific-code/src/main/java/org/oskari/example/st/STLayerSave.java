@@ -13,7 +13,7 @@ import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.log.LogFactory;
 import org.oskari.log.Logger;
 import org.oskari.map.layer.DataProviderService;
-import org.oskari.map.layer.OskariLayerService;
+import fi.nls.oskari.map.layer.OskariLayerService;
 import org.oskari.map.layer.group.link.OskariLayerGroupLink;
 import org.oskari.map.layer.group.link.OskariLayerGroupLinkService;
 import org.oskari.map.view.ViewService;

@@ -3,7 +3,7 @@ package flyway.example;
 import fi.nls.oskari.domain.Role;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.OskariLayer;
-import org.oskari.map.layer.OskariLayerService;
+import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.service.OskariComponentManager;
 import fi.nls.oskari.service.ServiceException;
 import org.oskari.ServiceRuntimeException;

@@ -14,12 +14,12 @@ public class V1_1_3__add_download_basket implements BaseJavaMigration {
 
     public void migrate(Connection connection) throws Exception {
 
-        final List<Long> views = FlywayHelper.getUserAndDefaultViewIds(connection);
+        final List<Long> views = AppSetupHelper.getSetupsForUserAndDefaultType(connection);
         for(Long viewId : views){
-            if (FlywayHelper.viewContainsBundle(connection, BUNDLE_ID, viewId)) {
+            if (AppSetupHelper.appContainsBundle(connection, BUNDLE_ID, viewId)) {
                 continue;
             }
-            FlywayHelper.addBundleWithDefaults(connection, viewId, BUNDLE_ID);
+            AppSetupHelper.addBundleToApp(connection, viewId, BUNDLE_ID);
         }
     }
 } 
