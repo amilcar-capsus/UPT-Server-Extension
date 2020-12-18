@@ -254,7 +254,8 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
 
      private UserLayer store(SimpleFeatureCollection fc, String uuid, ActionParameters formParams)
             throws UserLayerException, ActionException {
-            UserLayer userLayer = createUserLayer(fc, uuid, formParams);
+            //UserLayer userLayer = createUserLayer(fc);
+            OskariLayer userLayer = createUserLayer(fc, uuid, formParams);
 
             userLayer.setStyle(createUserLayerStyle(formParams));
 

@@ -56,6 +56,7 @@ import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.UserDataStyle;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
+import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
@@ -332,7 +333,8 @@ public class STDistancesGeoJsonHandler extends AbstractLayerAdminHandler {
 
     private UserLayer store(SimpleFeatureCollection fc)
             throws UserLayerException, ActionException {
-        UserLayer userLayer = createUserLayer(fc);
+        //UserLayer userLayer = createUserLayer(fc);
+        OskariLayer userLayer = createUserLayer(fc);
         userLayer.setStyle(createUserLayerStyle());
         List<UserLayerData> userLayerDataList = UserLayerDataService.createUserLayerData(fc, uuid);
         userLayer.setFeatures_count(userLayerDataList.size());
