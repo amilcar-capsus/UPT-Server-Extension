@@ -337,7 +337,7 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
     private UserLayer store(SimpleFeatureCollection fc)
             throws UserLayerException, ActionException {
         //UserLayer userLayer = createUserLayer(fc);
-        OskariLayer userLayer = createUserLayer(fc);
+        UserLayer userLayer = createUserLayer(fc);
         
         userLayer.setStyle(createUserLayerStyle());
         

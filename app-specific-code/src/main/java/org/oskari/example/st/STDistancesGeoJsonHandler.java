@@ -334,7 +334,7 @@ public class STDistancesGeoJsonHandler extends AbstractLayerAdminHandler {
     private UserLayer store(SimpleFeatureCollection fc)
             throws UserLayerException, ActionException {
         //UserLayer userLayer = createUserLayer(fc);
-        OskariLayer userLayer = createUserLayer(fc);
+        UserLayer userLayer = createUserLayer(fc);
         userLayer.setStyle(createUserLayerStyle());
         List<UserLayerData> userLayerDataList = UserLayerDataService.createUserLayerData(fc, uuid);
         userLayer.setFeatures_count(userLayerDataList.size());
