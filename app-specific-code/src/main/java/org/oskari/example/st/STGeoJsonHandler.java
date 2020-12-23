@@ -48,7 +48,7 @@ import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
-import fi.nls.oskari.domain.map.UserDataStyle;
+import fi.nls.oskari.domain.map.wfs.WFSLayerOptions;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
 import fi.nls.oskari.domain.map.OskariLayer;
@@ -258,7 +258,7 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
             //UserLayer userLayer = createUserLayer(fc);
             UserLayer userLayer = createUserLayer(fc, uuid, formParams);
 
-            userLayer.setStyle(createUserLayerStyle(formParams));
+            userLayer.setOptions(createUserLayerStyle(formParams));
 
             List<UserLayerData> userLayerDataList = UserLayerDataService.createUserLayerData(fc, uuid);
 
@@ -266,7 +266,7 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
 
             userLayer.setFeatures_skipped(fc.size() - userLayerDataList.size());
 
-            userLayerService.insertUserLayer(userLayer, userLayerDataList);
+            userLayerService.insertUserLayerAndData(userLayer, userLayerDataList);
 
             return userLayer;
     }
@@ -275,13 +275,14 @@ public class STGeoJsonHandler extends AbstractLayerAdminHandler {
         String name = params.getRequiredParam(KEY_NAME);
         String desc = params.getRequiredParam(KEY_DESC);
         String source = params.getRequiredParam(KEY_SOURCE);
-        return UserLayerDataService.createUserLayer(fc, uuid, name, desc, source);
+        String style = params.getRequiredParam(KEY_STYLE);
+        return UserLayerDataService.createUserLayer(fc, uuid, name, desc, source, style);
     }
 
-    private UserDataStyle createUserLayerStyle(ActionParameters params)
+    private JSONObject createUserLayerStyle(ActionParameters params)
             throws UserLayerException, ActionParamsException {
-        final UserDataStyle style = new UserDataStyle();
-        style.initDefaultStyle();
+        final WFSLayerOptions layerOptions = new WFSLayerOptions();
+        final JSONObject style = layerOptions.getDefaultStyle();
         return style;
     }
 

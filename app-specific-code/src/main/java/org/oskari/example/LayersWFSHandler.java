@@ -209,8 +209,8 @@ public class LayersWFSHandler extends RestActionHandler {
         layer.setName(name);
         CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
         PropertyUtil.addProperty("oskari.native.srs", "EPSG:"+upProjection, true);
-        Envelope envelope = new Envelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085);
-        ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
+        //Envelope envelope = new Envelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085);
+        ReferencedEnvelope bbox = new ReferencedEnvelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085, webMercator);
         
         
         SimpleFeatureCollection sfc = handler.featureClient.getFeatures(id, layer, bbox, webMercator, Optional.empty());
