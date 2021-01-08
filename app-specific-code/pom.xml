@@ -95,11 +95,5 @@
             <version>2.1.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>fi.nls.oskari.service</groupId>
-            <artifactId>oskari-base</artifactId>
-            <version>1.56.0</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 </project>
