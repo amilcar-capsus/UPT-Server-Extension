@@ -66,7 +66,7 @@ public class SynchronizeDatabase {
         try {
             if (truncateData) {
                 truncateData(oskariConnection, "oskari_roles");
-                truncateData(oskariConnection, "oskari_role_oskari_user");
+                truncateData(oskariConnection, "oskari_users_roles");
                 addRoles(roles);
             } else {
                 addRoles(roles);
@@ -133,7 +133,7 @@ public class SynchronizeDatabase {
         try {
             if (truncateData) {
                 truncateData(oskariConnection, "oskari_roles");
-                truncateData(oskariConnection, "oskari_role_oskari_user");
+                truncateData(oskariConnection, "oskari_users_roles");
                 systemRoles = addRoles(roles);
                 truncateData(oskariConnection, "oskari_users");
                 addUsers(users, roles);

@@ -63,9 +63,9 @@ public class UPTRoles extends RestActionHandler {
                         upPassword)) {
             PreparedStatement statement = connection.prepareStatement(
                     "select oskari_roles.name from oskari_users\n" +
-                    "inner join oskari_role_oskari_user\n" +
-                    "on oskari_role_oskari_user.user_id=oskari_users.id\n" +
-                    "inner join oskari_roles on oskari_roles.id=oskari_role_oskari_user.role_id\n" +
+                    "inner join oskari_users_roles\n" +
+                    "on oskari_users_roles.user_id=oskari_users.id\n" +
+                    "inner join oskari_roles on oskari_roles.id=oskari_users_roles.role_id\n" +
                     "where oskari_users.id=?");
             statement.setLong(1, user_id);
             ResultSet data=statement.executeQuery();
@@ -94,9 +94,9 @@ public class UPTRoles extends RestActionHandler {
                     upPassword);
         PreparedStatement statement = connection.prepareStatement(
                 "select oskari_roles.name from oskari_users\n" +
-                "inner join oskari_role_oskari_user\n" +
-                "on oskari_role_oskari_user.user_id=oskari_users.id\n" +
-                "inner join oskari_roles on oskari_roles.id=oskari_role_oskari_user.role_id\n" +
+                "inner join oskari_users_roles\n" +
+                "on oskari_users_roles.user_id=oskari_users.id\n" +
+                "inner join oskari_roles on oskari_roles.id=oskari_users_roles.role_id\n" +
                 "where oskari_users.id=?");
         statement.setLong(1, user_id);
         ResultSet data=statement.executeQuery();
