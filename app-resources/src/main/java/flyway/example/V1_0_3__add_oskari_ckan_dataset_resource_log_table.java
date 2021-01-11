@@ -1,13 +1,15 @@
 package flyway.wbidp;
-
-import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
+import org.oskari.helpers.AppSetupHelper;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
+import org.flywaydb.core.api.migration.Context;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class V1_0_3__add_oskari_ckan_dataset_resource_log_table implements JdbcMigration {
-    public void migrate(Connection connection) throws SQLException {
+public class V1_0_3__add_oskari_ckan_dataset_resource_log_table extends BaseJavaMigration {
+    public void migrate(Context context) throws SQLException {
+        Connection connection = context.getConnection();
         PreparedStatement statement = connection.prepareStatement("CREATE SEQUENCE \"public\".\"oskari_ckan_dataset_resource_log_id_seq\" \n" +
                 "INCREMENT 1\n" +
                 "MINVALUE  1\n" +

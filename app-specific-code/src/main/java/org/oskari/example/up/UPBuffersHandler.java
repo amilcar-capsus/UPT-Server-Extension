@@ -55,9 +55,10 @@ import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.layer.AbstractLayerAdminHandler;
 import fi.nls.oskari.domain.User;
-import fi.nls.oskari.domain.map.UserDataStyle;
+import fi.nls.oskari.domain.map.wfs.WFSLayerOptions;
 import fi.nls.oskari.domain.map.userlayer.UserLayer;
 import fi.nls.oskari.domain.map.userlayer.UserLayerData;
+import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
@@ -108,6 +109,7 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
     private String desc;
     private String source;
     private String uuid;
+    private String style;
     private String sourceEPSG;
     private String geojson_in;
     private String ip;
@@ -145,7 +147,7 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
         try ( Connection connection = DriverManager.getConnection(upURL, upUser, upPassword);) {
             params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
-            if (!roles.contains("uptadmin") && !roles.contains("uptuser") ){
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
             }
             
@@ -183,6 +185,7 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
                         desc = "This layer was created by Urban Performance for the scenario " + Layer_name;
                         source = "Urban Performance";
                         uuid = params.getUser().getUuid();
+                        style = createUserLayerStyle().toString();
                         sourceEPSG = "EPSG:" + upProjection;
                         geojson_in = index.buffer;
                         ip = params.getClientIp();
@@ -335,9 +338,10 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
 
     private UserLayer store(SimpleFeatureCollection fc)
             throws UserLayerException, ActionException {
+        //UserLayer userLayer = createUserLayer(fc);
         UserLayer userLayer = createUserLayer(fc);
         
-        userLayer.setStyle(createUserLayerStyle());
+        userLayer.setOptions(createUserLayerStyle());
         
         List<UserLayerData> userLayerDataList = UserLayerDataService.createUserLayerData(fc, uuid);
         
@@ -345,19 +349,19 @@ public class UPBuffersHandler extends AbstractLayerAdminHandler {
         
         userLayer.setFeatures_skipped(fc.size() - userLayerDataList.size());
         
-        userLayerService.insertUserLayer(userLayer, userLayerDataList);
+        userLayerService.insertUserLayerAndData(userLayer, userLayerDataList);
         
         return userLayer;
     }
 
     private UserLayer createUserLayer(SimpleFeatureCollection fc) throws ActionException {
-        return UserLayerDataService.createUserLayer(fc, uuid, name, desc, source);
+        return UserLayerDataService.createUserLayer(fc, uuid, name, desc, source, style);
     }
 
-    private UserDataStyle createUserLayerStyle()
+    private JSONObject createUserLayerStyle()
             throws UserLayerException, ActionParamsException {
-        final UserDataStyle style = new UserDataStyle();
-        style.initDefaultStyle();
+        final WFSLayerOptions layerOptions = new WFSLayerOptions();
+        final JSONObject style = layerOptions.getDefaultStyle();
         return style;
     }
 

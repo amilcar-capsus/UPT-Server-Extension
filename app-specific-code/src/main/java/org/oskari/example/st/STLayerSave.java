@@ -24,6 +24,7 @@ import fi.nls.oskari.service.capabilities.OskariLayerCapabilitiesHelper;
 import fi.nls.oskari.util.*;
 import org.oskari.log.AuditLog;
 import fi.nls.oskari.wfs.GetGtWFSCapabilities;
+import fi.nls.oskari.wfs.WFSCapabilitiesService;
 // import fi.nls.oskari.wfs.WFSLayerConfigurationService;
 // import fi.nls.oskari.wfs.util.WFSParserConfigs;
 import fi.nls.oskari.wmts.WMTSCapabilitiesParser;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import org.oskari.permissions.model.*;
 import org.oskari.service.util.ServiceFactory;
 import org.oskari.service.wfs3.WFS3Service;
+import org.geotools.data.wfs.WFSDataStore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
@@ -630,8 +632,9 @@ public class STLayerSave extends AbstractLayerAdminHandler {
 
         try {
             if (WFS3_0_0_VERSION.equals(ml.getVersion())) {
-                WFS3Service service = WFS3Service.fromURL(ml.getUrl(), ml.getUsername(), ml.getPassword());
-                OskariLayerCapabilitiesHelper.setPropertiesFromCapabilitiesWFS(service, ml, systemCRSs);
+                // WFS3Service service = WFS3Service.fromURL(ml.getUrl(), ml.getUsername(), ml.getPassword());
+                WFSDataStore wfs = WFSCapabilitiesService.getDataStore(ml);
+                OskariLayerCapabilitiesHelper.setPropertiesFromCapabilitiesWFS(wfs, ml, systemCRSs);
             } else {
                 ml.setCapabilities(GetGtWFSCapabilities.getLayerCapabilities(ml, systemCRSs));
             }

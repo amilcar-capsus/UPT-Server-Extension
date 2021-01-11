@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vividsolutions.jts.geom.Envelope;
+//import org.geotools.geometry.jts.Envelope;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -82,7 +82,7 @@ public class LayersWFSHandler extends RestActionHandler {
         try {
             params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles().handleGet(params,params.getUser());
-            if (!roles.contains("uptadmin") && !roles.contains("uptuser") ){
+            if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser") ){
                 throw new Exception("User privilege is not enough for this action");
             }
             
@@ -209,8 +209,8 @@ public class LayersWFSHandler extends RestActionHandler {
         layer.setName(name);
         CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
         PropertyUtil.addProperty("oskari.native.srs", "EPSG:"+upProjection, true);
-        Envelope envelope = new Envelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085);
-        ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
+        //Envelope envelope = new Envelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085);
+        ReferencedEnvelope bbox = new ReferencedEnvelope(-13149614.848125,4383204.949375,-12523442.7125,5009377.085, webMercator);
         
         
         SimpleFeatureCollection sfc = handler.featureClient.getFeatures(id, layer, bbox, webMercator, Optional.empty());

@@ -28,7 +28,7 @@ import org.oskari.permissions.model.Permission;
 import org.oskari.permissions.model.Resource;
 import org.oskari.service.util.ServiceFactory;
 
-import fi.mml.map.mapwindow.service.db.OskariMapLayerGroupService;
+import org.oskari.service.maplayer.OskariMapLayerGroupService;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.domain.Role;
