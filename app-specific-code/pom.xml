@@ -92,8 +92,14 @@
         <dependency>
             <groupId>org.oskari</groupId>
             <artifactId>control-userlayer</artifactId>
-            <version>1.54.1</version>
+            <version>1.56.0</version>
             <type>jar</type>
         </dependency>
+        <!--<dependency>
+            <groupId>org.oskari</groupId>
+            <artifactId>control-base</artifactId>
+            <version>1.56.0</version>
+            <type>jar</type>
+        </dependency>-->
     </dependencies>
 </project>
