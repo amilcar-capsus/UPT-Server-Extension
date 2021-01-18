@@ -131,6 +131,7 @@ public class STOskariLayers extends RestActionHandler {
             statement.setLong(1, studyArea);
             statement.setString(2, user_uuid);
             statement.setInt(3, Integer.parseInt(stProjection));
+            statement.setInt(4, Integer.parseInt(stProjection));
             boolean status = statement.execute();
             if (status) {
                 ResultSet data = statement.getResultSet();
