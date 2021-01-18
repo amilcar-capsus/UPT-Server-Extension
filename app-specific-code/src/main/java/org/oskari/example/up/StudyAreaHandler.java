@@ -73,7 +73,7 @@ public class StudyAreaHandler extends RestActionHandler {
                     "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +
                     "), public_layers as(\n" +
                     "   SELECT id, name as layer_name FROM oskari_maplayer)\n" +
-                    "select id,layer_name from user_layers UNION select id, layer_name from public layers"
+                    "select id,layer_name from user_layers UNION select id, layer_name from public_layers"
                     //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'"
             );
             statement.setString(1, user_uuid);
