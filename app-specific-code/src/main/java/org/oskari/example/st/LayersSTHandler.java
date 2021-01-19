@@ -112,10 +112,19 @@ public class LayersSTHandler extends RestActionHandler {
                 dir.setIcon(null);
                 directories.add(dir);
 
+                Directories pdir = new Directories();
+                dir.setData("public_data");
+                dir.setLabel("Public data");
+                dir.setIcon(null);
+                directories.add(pdir);
+
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting directories"))));
                 //Get layers
                 ArrayList<Directories> layers = getLayers();
                 dir.setChildren(layers);
+
+                ArrayList<Directories> public_layers = getPublicLayers();
+                pdir.setChildren(public_layers);
 
                 JSONArray out = new JSONArray();
                 for (Directories index : directories) {
