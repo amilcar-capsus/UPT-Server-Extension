@@ -123,8 +123,12 @@ public class LayersSTHandler extends RestActionHandler {
                 ArrayList<Directories> layers = getLayers();
                 dir.setChildren(layers);
 
+                System.out.println(dir.toString());
+
                 ArrayList<Directories> public_layers = getPublicLayers();
                 pdir.setChildren(public_layers);
+
+                System.out.println(pdir.toString());
 
                 JSONArray out = new JSONArray();
                 for (Directories index : directories) {
@@ -135,6 +139,7 @@ public class LayersSTHandler extends RestActionHandler {
                 }
 
                 tree.setData(directories);
+                System.out.println(directories.toString());
                 final JSONObject outs = JSONHelper.createJSONObject(Obj.writeValueAsString(tree));
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Listing directories executed"))));
