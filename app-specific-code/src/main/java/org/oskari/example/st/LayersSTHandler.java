@@ -139,10 +139,19 @@ public class LayersSTHandler extends RestActionHandler {
                 dir.setIcon(null);
                 directories.add(dir);
 
+                Directories pdir = new Directories();
+                dir.setData("public_data");
+                dir.setLabel("Public data");
+                dir.setIcon(null);
+                directories.add(pdir);
+
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting Oskari layers "))));
                 //Get layers
                 ArrayList<Directories> layers = getLayers();
                 dir.setChildren(layers);
+
+                ArrayList<Directories> public_layers = getPublicLayers();
+                pdir.setChildren(public_layers);
 
                 JSONArray out = new JSONArray();
                 for (Directories index : directories) {
@@ -569,6 +578,49 @@ public class LayersSTHandler extends RestActionHandler {
                     "select  id,layer_name\n" +
                     "from user_layers");) {
             statement.setString(1, user_uuid);
+            
+            boolean status = statement.execute();
+            if (status) {
+                ResultSet data = statement.getResultSet();
+                while (data.next()) {
+                    Directories child = new Directories();
+                    child.setData(data.getString("id"));
+                    child.setLabel(data.getString("layer_name"));
+                    child.setExpandedIcon(null);
+                    child.setCollapsedIcon(null);
+                    child.setType("layer");
+                    children.add(child);
+                }
+                return children;
+            }
+            return children;
+        } catch (Exception e) {
+            try {
+                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
+                //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+            } catch (JsonProcessingException ex) {
+                java.util.logging.Logger.getLogger(STLayersHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            throw new Exception();
+        }
+    }
+
+    private ArrayList<Directories> getPublicLayers() throws Exception {
+        String errorMsg = "getLayers";
+        ArrayList<Directories> children = new ArrayList<Directories>();
+        try (
+                Connection connection = DriverManager.getConnection(
+                        stURL,
+                        stUser,
+                        stPassword);
+                PreparedStatement statement = connection.prepareStatement("with public_layers as(\n" +
+                    "    select id,\n" +
+                    "    name as layer_name" +
+                    "    from oskari_maplayer\n" +
+                    ")\n" +
+                    "select  id,layer_name\n" +
+                    "from public_layers");) {
+            //statement.setString(1, user_uuid);
             
             boolean status = statement.execute();
             if (status) {
