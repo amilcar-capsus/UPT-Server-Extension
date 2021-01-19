@@ -113,9 +113,9 @@ public class LayersSTHandler extends RestActionHandler {
                 directories.add(dir);
 
                 Directories pdir = new Directories();
-                dir.setData("public_data");
-                dir.setLabel("Public data");
-                dir.setIcon(null);
+                pdir.setData("public_data");
+                pdir.setLabel("Public data");
+                pdir.setIcon(null);
                 directories.add(pdir);
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting directories"))));
@@ -123,12 +123,8 @@ public class LayersSTHandler extends RestActionHandler {
                 ArrayList<Directories> layers = getLayers();
                 dir.setChildren(layers);
 
-                System.out.println(dir.toString());
-
                 ArrayList<Directories> public_layers = getPublicLayers();
                 pdir.setChildren(public_layers);
-
-                System.out.println(pdir.toString());
 
                 JSONArray out = new JSONArray();
                 for (Directories index : directories) {
@@ -139,7 +135,6 @@ public class LayersSTHandler extends RestActionHandler {
                 }
 
                 tree.setData(directories);
-                System.out.println(directories.toString());
                 final JSONObject outs = JSONHelper.createJSONObject(Obj.writeValueAsString(tree));
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Listing directories executed"))));
@@ -154,9 +149,9 @@ public class LayersSTHandler extends RestActionHandler {
                 directories.add(dir);
 
                 Directories pdir = new Directories();
-                dir.setData("public_data");
-                dir.setLabel("Public data");
-                dir.setIcon(null);
+                pdir.setData("public_data");
+                pdir.setLabel("Public data");
+                pdir.setIcon(null);
                 directories.add(pdir);
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting Oskari layers "))));
@@ -164,12 +159,8 @@ public class LayersSTHandler extends RestActionHandler {
                 ArrayList<Directories> layers = getLayers();
                 dir.setChildren(layers);
 
-                System.out.println(dir.toString());
-
                 ArrayList<Directories> public_layers = getPublicLayers();
                 pdir.setChildren(public_layers);
-
-                System.out.println(pdir.toString());
 
                 JSONArray out = new JSONArray();
                 for (Directories index : directories) {
@@ -180,7 +171,6 @@ public class LayersSTHandler extends RestActionHandler {
                 }
 
                 tree.setData(directories);
-                System.out.println(tree.toString());
                 final JSONObject outs = JSONHelper.createJSONObject(Obj.writeValueAsString(tree));
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Listing oskari layers executed"))));
