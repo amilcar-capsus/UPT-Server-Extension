@@ -12,5 +12,6 @@ public class Layers {
 
     public void setColumns(ArrayList<String> columns) {
         this.columns = columns;
+        System.out.println(columns);
     }
 }
