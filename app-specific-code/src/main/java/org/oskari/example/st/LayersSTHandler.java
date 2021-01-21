@@ -51,6 +51,7 @@ import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
 import fi.nls.oskari.control.layer.GetWFSDescribeFeatureHandler;
+import fi.nls.oskari.util.WFSDescribeFeatureHelper;
 import fi.nls.oskari.map.layer.OskariLayerServiceMybatisImpl;
 import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.domain.map.OskariLayer;
@@ -77,6 +78,7 @@ public class LayersSTHandler extends RestActionHandler {
     private static final Logger log = LogFactory.getLogger(LayersSTHandler.class);
 
     private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
+    private static GetWFSDescribeFeatureHandler describeFeature = new GetWFSDescribeFeatureHandler();
 
     public LayersSTHandler() {
         this.stLayers = new TreeMap<>();
@@ -229,6 +231,9 @@ public class LayersSTHandler extends RestActionHandler {
 
                 OskariLayer ml = LAYER_SERVICE.find(Integer.parseInt(params.getRequiredParam("layer_id")));
                 System.out.println(ml.getName());
+
+                JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(ml, params.getRequiredParam("layer_id"));
+                System.out.println(mapFields);
 
                 layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
 
