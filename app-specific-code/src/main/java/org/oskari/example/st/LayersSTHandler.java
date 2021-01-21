@@ -36,6 +36,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import org.oskari.service.util.ServiceFactory;
+
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionDeniedException;
 import fi.nls.oskari.control.ActionException;
@@ -48,6 +50,10 @@ import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import fi.nls.oskari.control.layer.GetWFSDescribeFeatureHandler;
+import fi.nls.oskari.map.layer.OskariLayerServiceMybatisImpl;
+import fi.nls.oskari.map.layer.OskariLayerService;
+import fi.nls.oskari.domain.map.OskariLayer;
 import org.oskari.example.UPTRoles;
 
 
@@ -69,6 +75,8 @@ public class LayersSTHandler extends RestActionHandler {
     String user_uuid;
 
     private static final Logger log = LogFactory.getLogger(LayersSTHandler.class);
+
+    private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
 
     public LayersSTHandler() {
         this.stLayers = new TreeMap<>();
@@ -218,6 +226,9 @@ public class LayersSTHandler extends RestActionHandler {
                 Layers layers = new Layers();
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari columns"))));
+
+                OskariLayer ml = LAYER_SERVICE.find(Integer.parseInt(params.getRequiredParam("layer_id")));
+                System.out.println(ml.getName());
 
                 layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
 
@@ -869,6 +880,25 @@ public class LayersSTHandler extends RestActionHandler {
             throw new Exception();
         }
     }
+
+    /* private void getPublicColumns(String id) throws Exception {
+        String errorMsg = "getLayers";
+        ArrayList<String> layers = new ArrayList<String>();
+        try {
+            JSONObject myJSON = GetWFSDescribeFeatureHandler.getFeatureTypesTextOrNumeric(id);
+            System.out.println(myJSON.toString());
+        } catch (Exception e) {
+            try {
+                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
+                //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+            } catch (JsonProcessingException ex) {
+                java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            errorMsg = errorMsg + e.toString();
+            log.error(e, errorMsg);
+            throw new Exception();
+        }
+    } */
 
     private STFieldsList getSTColumns(String table) throws Exception {
         String errorMsg = "getSTLayers";
