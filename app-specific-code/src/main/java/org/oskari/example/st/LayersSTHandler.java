@@ -243,14 +243,16 @@ public class LayersSTHandler extends RestActionHandler {
                      pt.add(ptArray.getString(i));
                     } 
                 }
-                pt.removeIf(s -> !s.contains("the_geom"));
+                pt.removeIf(s -> s.contains("the_geom"));
                 pt.add("geometry");
                 System.out.println(pt);
 
                 layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
+                layers.setColumns(pt);
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari executed"))));
 
+                // final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));
                 final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));
                 ResponseHelper.writeResponse(params, json);
             } else if ("list_st_columns".equals(params.getRequiredParam("action"))) {
