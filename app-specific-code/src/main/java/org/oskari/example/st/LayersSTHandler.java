@@ -238,12 +238,12 @@ public class LayersSTHandler extends RestActionHandler {
                 
                 System.out.println(ptArray);
                 ArrayList<String> pt = new ArrayList<String>();
-                /* if (ptArray != null) { 
+                if (ptArray != null) { 
                     for (int i=0;i<ptArray.length();i++){ 
                      pt.add(ptArray.getString(i));
                     } 
                 }
-                System.out.println(pt); */
+                System.out.println(pt);
 
                 layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
 
