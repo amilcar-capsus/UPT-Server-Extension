@@ -243,6 +243,8 @@ public class LayersSTHandler extends RestActionHandler {
                      pt.add(ptArray.getString(i));
                     } 
                 }
+                pt.removeIf(s -> !s.contains("the_geom"));
+                pt.add("geometry");
                 System.out.println(pt);
 
                 layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
