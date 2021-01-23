@@ -623,7 +623,7 @@ public class LayersSTHandler extends RestActionHandler {
                 ResultSet data = statement.getResultSet();
                 while (data.next()) {
                     Directories child = new Directories();
-                    child.setData(data.getString("id"));
+                    child.setData("priv_" + data.getString("id"));
                     child.setLabel(data.getString("layer_name"));
                     child.setExpandedIcon(null);
                     child.setCollapsedIcon(null);
@@ -645,7 +645,7 @@ public class LayersSTHandler extends RestActionHandler {
     }
 
     private ArrayList<Directories> getPublicLayers() throws Exception {
-        String errorMsg = "getLayers";
+        String errorMsg = "getPublicLayers";
         ArrayList<Directories> children = new ArrayList<Directories>();
         try (
                 Connection connection = DriverManager.getConnection(
@@ -666,7 +666,7 @@ public class LayersSTHandler extends RestActionHandler {
                 ResultSet data = statement.getResultSet();
                 while (data.next()) {
                     Directories child = new Directories();
-                    child.setData(data.getString("id"));
+                    child.setData("pub_" + data.getString("id"));
                     child.setLabel(data.getString("layer_name"));
                     child.setExpandedIcon(null);
                     child.setCollapsedIcon(null);
