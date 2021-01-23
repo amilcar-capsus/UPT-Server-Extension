@@ -229,14 +229,23 @@ public class LayersSTHandler extends RestActionHandler {
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari columns"))));
 
+                layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
+
+                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari executed"))));
+
+                // final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));
+                final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));
+                ResponseHelper.writeResponse(params, json);
+            } else if ("list_public_columns".equals(params.getRequiredParam("action"))) {
+                Layers layers = new Layers();
+
+                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari columns"))));
+
                 OskariLayer ml = LAYER_SERVICE.find(Integer.parseInt(params.getRequiredParam("layer_id")));
-                System.out.println(ml.getName());
 
                 JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(ml, params.getRequiredParam("layer_id"));
                 JSONObject propertyTypes = mapFields.getJSONObject("propertyTypes");
                 JSONArray ptArray = propertyTypes.names();
-                
-                System.out.println(ptArray);
                 ArrayList<String> pt = new ArrayList<String>();
                 if (ptArray != null) { 
                     for (int i=0;i<ptArray.length();i++){ 
@@ -245,9 +254,7 @@ public class LayersSTHandler extends RestActionHandler {
                 }
                 pt.removeIf(s -> s.contains("the_geom"));
                 pt.add("geometry");
-                System.out.println(pt);
 
-                layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
                 layers.setColumns(pt);
 
                 errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("OK", "Getting oskari executed"))));
