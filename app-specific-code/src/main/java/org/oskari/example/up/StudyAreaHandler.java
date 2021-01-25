@@ -71,9 +71,8 @@ public class StudyAreaHandler extends RestActionHandler {
                     "    from user_layer\n" +
                     "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
                     "    where (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'\n" +
-                    "), public_layers as(\n" +
-                    "   SELECT id, name as layer_name FROM oskari_maplayer)\n" +
-                    "select id,layer_name from user_layers UNION select id, layer_name from public_layers"
+                    ")\n" +
+                    "select id,layer_name from user_layers"
                     //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'"
             );
             statement.setString(1, user_uuid);
@@ -81,7 +80,22 @@ public class StudyAreaHandler extends RestActionHandler {
             ResultSet data = statement.getResultSet();
             while (data.next()) {
                 StudyAreaUP child = new StudyAreaUP();
-                child.setId(data.getInt("id"));
+                child.setId("pub_" + data.getString("id"));
+                child.setName(data.getString("layer_name"));
+                layers.add(child);
+            }
+
+            PreparedStatement statementPublic = connection.prepareStatement(
+                    "with public_layers as(\n" +
+                    "   SELECT id, name as layer_name FROM oskari_maplayer)\n" +
+                    "select id, layer_name from public_layers"
+                    //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'"
+            );
+            statementPublic.execute();
+            ResultSet dataPublic = statementPublic.getResultSet();
+            while (dataPublic.next()) {
+                StudyAreaUP child = new StudyAreaUP();
+                child.setId(data.getString("priv_" + "id"));
                 child.setName(data.getString("layer_name"));
                 layers.add(child);
             }

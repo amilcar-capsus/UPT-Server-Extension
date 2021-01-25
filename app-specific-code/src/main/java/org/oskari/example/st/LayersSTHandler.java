@@ -1059,7 +1059,7 @@ public class LayersSTHandler extends RestActionHandler {
 
             while (data.next()) {
                 StudyAreaUP child = new StudyAreaUP();
-                child.setId(data.getInt("id"));
+                child.setId(data.getString("id"));
                 child.setName(data.getString("layer_name"));
                 layers.add(child);
             }
