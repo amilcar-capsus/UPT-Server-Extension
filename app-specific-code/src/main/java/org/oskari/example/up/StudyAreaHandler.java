@@ -95,7 +95,7 @@ public class StudyAreaHandler extends RestActionHandler {
             ResultSet dataPublic = statementPublic.getResultSet();
             while (dataPublic.next()) {
                 StudyAreaUP child = new StudyAreaUP();
-                child.setId(data.getString("priv_" + "id"));
+                child.setId("priv_" + data.getString("id"));
                 child.setName(data.getString("layer_name"));
                 layers.add(child);
             }
