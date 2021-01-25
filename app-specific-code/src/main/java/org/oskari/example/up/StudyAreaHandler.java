@@ -80,7 +80,7 @@ public class StudyAreaHandler extends RestActionHandler {
             ResultSet data = statement.getResultSet();
             while (data.next()) {
                 StudyAreaUP child = new StudyAreaUP();
-                child.setId("pub_" + data.getString("id"));
+                child.setId("pub_" + data.getInt("id"));
                 child.setName(data.getString("layer_name"));
                 layers.add(child);
             }
@@ -95,7 +95,7 @@ public class StudyAreaHandler extends RestActionHandler {
             ResultSet dataPublic = statementPublic.getResultSet();
             while (dataPublic.next()) {
                 StudyAreaUP child = new StudyAreaUP();
-                child.setId("priv_" + data.getString("id"));
+                child.setId("priv_" + data.getInt("id"));
                 child.setName(data.getString("layer_name"));
                 layers.add(child);
             }
