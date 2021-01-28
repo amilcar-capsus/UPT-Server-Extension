@@ -83,8 +83,8 @@ public class STLayersHandler extends RestActionHandler {
         "    where\n" +
         "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         ")\n" +
-        "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from user_layers\n" +
-        "union select id, st_layer_label, label ,public_layer_id as user_layer_id, layer_field,layer_mmu_code from public_layers"
+        "select CONCAT('priv_',id) as id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code from user_layers\n" +
+        "union select CONCAT('pub_',id) as id, st_layer_label, label ,public_layer_id as user_layer_id, layer_field,layer_mmu_code from public_layers"
       );
     ) {
       params.requireLoggedInUser();
