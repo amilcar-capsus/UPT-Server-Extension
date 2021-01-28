@@ -54,7 +54,7 @@ public class STLayersHandler extends RestActionHandler {
     String errorMsg = "Layers get";
     Long user_id = params.getUser().getId();
     String study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseString(params.getRequiredParam("study_area"));
     ArrayList<STLayers> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
