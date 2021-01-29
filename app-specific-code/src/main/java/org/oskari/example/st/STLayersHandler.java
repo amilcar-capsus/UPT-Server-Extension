@@ -53,8 +53,8 @@ public class STLayersHandler extends RestActionHandler {
   public void handleGet(ActionParameters params) throws ActionException {
     String errorMsg = "Layers get";
     Long user_id = params.getUser().getId();
-    String study_area;
-    study_area = params.getRequiredParam("study_area");
+    Long study_area;
+    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     ArrayList<STLayers> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
@@ -64,7 +64,7 @@ public class STLayersHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "    select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer\n" +
+        "    select geometry from user_layer_data where user_layer_id=?\n" +
         "), user_layers as(\n" +
         "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code,is_public\n" +
         "    from st_layers\n" +
@@ -78,7 +78,7 @@ public class STLayersHandler extends RestActionHandler {
         "), public_layers as(\n" +
         "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
         "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.user_layer_id\n" +
+        "    inner join oskari_maplayer on oskari_maplayer.id = st_layers.user_layer_id\n" +
         "    , study_area\n" +
         "    where\n" +
         "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
@@ -93,7 +93,7 @@ public class STLayersHandler extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      statement.setString(1, study_area);
+      statement.setLong(1, study_area);
       statement.setString(2, user_uuid);
 
       errors.put(
