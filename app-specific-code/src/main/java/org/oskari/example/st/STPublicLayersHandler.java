@@ -201,7 +201,9 @@ public class STPublicLayersHandler extends RestActionHandler {
     String layerLabel = params.getRequiredParam("layerLabel");
     String field = params.getRequiredParam("field");
     String mmu_code = params.getRequiredParam("mmuCode");
-    Boolean isPublic = params.getRequiredParam("isPublic");
+    Boolean isPublic = Boolean.parseBoolean(
+      params.getRequiredParam("isPublic")
+    );
 
     PostStatus status = new PostStatus();
     String query = "";

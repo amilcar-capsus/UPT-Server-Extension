@@ -119,7 +119,7 @@ public class STLayersHandler extends RestActionHandler {
           modules.add(layer);
         }
       } else {
-        STLayers layer = new STPublicLayers();
+        STLayers layer = new STLayers();
         layer.id = -1L;
         layer.label = statement.toString();
         modules.add(layer);
@@ -201,7 +201,9 @@ public class STLayersHandler extends RestActionHandler {
     String layerLabel = params.getRequiredParam("layerLabel");
     String field = params.getRequiredParam("field");
     String mmu_code = params.getRequiredParam("mmuCode");
-    Boolean isPublic = params.getRequiredParam("isPublic");
+    Boolean isPublic = Boolean.parseBoolean(
+      params.getRequiredParam("isPublic")
+    );
 
     PostStatus status = new PostStatus();
     String query = "";
