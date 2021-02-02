@@ -2233,21 +2233,21 @@ begin;
         st_tables_id, name, label, language
     )
     values(
-        1, "location","Location","english"
+        1, 'location','Location','english'
     )
     on conflict(id, language) do nothing;
     insert into st_tables_fields(
         st_tables_id, name, label, language
     )
     values(
-        2, "fclass","Fclass","english"
+        2, 'fclass','Fclass','english'
     )
     on conflict(id, language) do nothing;
     insert into st_tables_fields(
         st_tables_id, name, label, language
     )
     values(
-        2, "location","Location","english"
+        2, 'location','Location','english'
     )
     on conflict(id, language) do nothing;
 end;

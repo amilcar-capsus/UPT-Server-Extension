@@ -1937,42 +1937,42 @@ begin;
         "table", name, label, language
     )
     values(
-        "st_layers", "user_layer_id", "Layer ID", "english"
+        'st_layers', 'user_layer_id', 'Layer ID', 'english'
     )
     on conflict(id, language) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
-        "st_filters", "user_layer_id", "Layer ID", "english"
+        'st_filters', 'user_layer_id', 'Layer ID', 'english'
     )
     on conflict(id, language) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
-        "st_layers", "layer_field", "Layer value", "english"
+        'st_layers', 'layer_field', 'Layer value', 'english'
     )
     on conflict(id, language) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
-        "st_filters", "st_filter_label", "Filter label", "english"
+        'st_filters', 'st_filter_label', 'Filter label', 'english'
     )
     on conflict(id, language) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
-        "st_layers", "layer_mmu_code", "Minimal mapping unit ID", "english"
+        'st_layers', 'layer_mmu_code', 'Minimal mapping unit ID', 'english'
     )
     on conflict(id, language) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
-        "st_layers", "st_layer_label", "Layer label", "english"
+        'st_layers', 'st_layer_label', 'Layer label', 'english'
     )
     on conflict(id, language) do nothing;
     
