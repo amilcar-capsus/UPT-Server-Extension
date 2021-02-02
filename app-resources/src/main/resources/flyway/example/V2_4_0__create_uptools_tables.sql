@@ -1923,7 +1923,7 @@ begin;
     );
 
     create table if not exists st_table_fields(
-        id serial,
+        id serial NOT NULL,
         "table" character varying(45) COLLATE pg_catalog."default" NOT NULL,
         name character varying(45) COLLATE pg_catalog."default" NOT NULL,
         label character varying(45) COLLATE pg_catalog."default" NOT NULL,
@@ -1939,42 +1939,42 @@ begin;
     values(
         'st_layers', 'user_layer_id', 'Layer ID', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
         'st_filters', 'user_layer_id', 'Layer ID', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
         'st_layers', 'layer_field', 'Layer value', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
         'st_filters', 'st_filter_label', 'Filter label', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
         'st_layers', 'layer_mmu_code', 'Minimal mapping unit ID', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     insert into st_table_fields(
         "table", name, label, language
     )
     values(
         'st_layers', 'st_layer_label', 'Layer label', 'english'
     )
-    on conflict(id, language) do nothing;
+    on conflict(id) do nothing;
     
     create table if not exists up_scenario_modules(
         id serial NOT NULL,
