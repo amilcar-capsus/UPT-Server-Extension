@@ -2203,14 +2203,14 @@ begin;
         language,name, label
     )
     values(
-        "english","mmu","Source layer"
+        'english','mmu','Source layer'
     )
     on conflict(id, language) do nothing;
     insert into st_tables(
         language,name, label
     )
     values(
-        "english","amenities","Target features"
+        'english','amenities','Target features'
     )
     on conflict(id, language) do nothing;
     CREATE TABLE if not exists st_tables_fields
