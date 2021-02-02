@@ -2204,15 +2204,13 @@ begin;
     )
     values(
         'english','mmu','Source layer'
-    )
-    on conflict(id, language) do nothing;
+    );
     insert into st_tables(
         language,name, label
     )
     values(
         'english','amenities','Target features'
-    )
-    on conflict(id, language) do nothing;
+    );
     CREATE TABLE if not exists st_tables_fields
     (
         id serial,
@@ -2234,21 +2232,18 @@ begin;
     )
     values(
         1, 'location','Location','english'
-    )
-    on conflict(id, language) do nothing;
+    );
     insert into st_tables_fields(
         st_tables_id, name, label, language
     )
     values(
         2, 'fclass','Fclass','english'
-    )
-    on conflict(id, language) do nothing;
+    );
     insert into st_tables_fields(
         st_tables_id, name, label, language
     )
     values(
         2, 'location','Location','english'
-    )
-    on conflict(id, language) do nothing;
+    );
 end;
 

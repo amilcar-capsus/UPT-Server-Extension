@@ -1933,48 +1933,6 @@ begin;
         CONSTRAINT st_layers_fields_pkey PRIMARY KEY (id),
         CONSTRAINT st_table_fields_language_name_key UNIQUE ("table", name, language)
     );
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_layers', 'user_layer_id', 'Layer ID', 'english'
-    )
-    on conflict(id) do nothing;
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_filters', 'user_layer_id', 'Layer ID', 'english'
-    )
-    on conflict(id) do nothing;
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_layers', 'layer_field', 'Layer value', 'english'
-    )
-    on conflict(id) do nothing;
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_filters', 'st_filter_label', 'Filter label', 'english'
-    )
-    on conflict(id) do nothing;
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_layers', 'layer_mmu_code', 'Minimal mapping unit ID', 'english'
-    )
-    on conflict(id) do nothing;
-    insert into st_table_fields(
-        "table", name, label, language
-    )
-    values(
-        'st_layers', 'st_layer_label', 'Layer label', 'english'
-    )
-    on conflict(id) do nothing;
     
     create table if not exists up_scenario_modules(
         id serial NOT NULL,
