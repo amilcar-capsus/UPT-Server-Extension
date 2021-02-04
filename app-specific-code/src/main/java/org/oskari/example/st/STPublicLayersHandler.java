@@ -75,13 +75,6 @@ public class STPublicLayersHandler extends RestActionHandler {
         "    where \n" +
         "    (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and\n" +
         "    st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
-        "), public_layers as(\n" +
-        "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
-        "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_layers.user_layer_id\n" +
-        "    , study_area\n" +
-        "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         ")\n" +
         "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code,is_public from user_layers, public_layers"
       );
@@ -115,7 +108,6 @@ public class STPublicLayersHandler extends RestActionHandler {
           layer.public_layer_id = data.getLong("user_layer_id");
           layer.layer_field = data.getString("layer_field");
           layer.layer_mmu_code = data.getString("layer_mmu_code");
-          layer.is_public = data.getBoolean("is_public");
           modules.add(layer);
         }
       } else {

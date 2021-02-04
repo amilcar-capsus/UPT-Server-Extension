@@ -2179,6 +2179,24 @@ begin;
     (user_layer_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
+    create table if not exists st_public_filters(
+        id bigserial not null,
+        public_layer_id bigint not null,
+        st_filter_label text NOT NULL,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT st_public_filters_pkey PRIMARY KEY (id),
+        CONSTRAINT st_public_filters_user_layer_id_fkey FOREIGN KEY (public_layer_id) REFERENCES oskari_maplayer (id)
+            MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+        CONSTRAINT st_public_filters_public_layer_id_key UNIQUE (public_layer_id)
+    );
+    CREATE INDEX  if not exists st_public_filters_public_layer_id_idx
+    ON public.st_public_filters USING btree
+    (public_layer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
     create table if not exists institutions(
         id bigserial not null,
         members integer,

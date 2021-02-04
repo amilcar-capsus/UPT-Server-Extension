@@ -24,8 +24,8 @@ import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
 
-@OskariActionRoute("st_layers")
-public class STLayersHandler extends RestActionHandler {
+@OskariActionRoute("st_public_layers_pub_lyr")
+public class STPublicLayersPubLyrHandler extends RestActionHandler {
   private static String stURL;
   private static String stUser;
   private static String stPassword;
@@ -55,7 +55,7 @@ public class STLayersHandler extends RestActionHandler {
     Long user_id = params.getUser().getId();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STLayers> modules = new ArrayList<>();
+    ArrayList<STPublicLayers> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -64,19 +64,16 @@ public class STLayersHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "    select geometry from user_layer_data where user_layer_id=?\n" +
-        "), user_layers as(\n" +
-        "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code,is_public\n" +
-        "    from st_layers\n" +
-        "    inner join user_layer_data on user_layer_data.user_layer_id = st_layers.user_layer_id\n" +
-        "    inner join user_layer on user_layer.id = user_layer_data.user_layer_id\n" +
-        "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+        "    select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
+        "), public_layers as(\n" +
+        "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
+        "    from st_public_layers\n" +
+        "    inner join oskari_maplayer on oskari_maplayer.id = st_layers.user_layer_id\n" +
         "    , study_area\n" +
-        "    where \n" +
-        "    (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and\n" +
-        "    st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
+        "    where\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         ")\n" +
-        "select id, st_layer_label, label,user_layer_id,layer_field,layer_mmu_code,is_public from user_layers"
+        "select id, st_layer_label, label ,public_layer_id,layer_field,layer_mmu_code,is_public from public_layers"
       );
     ) {
       params.requireLoggedInUser();
@@ -101,24 +98,24 @@ public class STLayersHandler extends RestActionHandler {
       if (status) {
         ResultSet data = statement.getResultSet();
         while (data.next()) {
-          STLayers layer = new STLayers();
+          STPublicLayers layer = new STPublicLayers();
           layer.id = data.getLong("id");
           layer.label = data.getString("label");
           layer.st_layer_label = data.getString("st_layer_label");
-          layer.user_layer_id = data.getLong("user_layer_id");
+          layer.public_layer_id = data.getLong("user_layer_id");
           layer.layer_field = data.getString("layer_field");
           layer.layer_mmu_code = data.getString("layer_mmu_code");
           modules.add(layer);
         }
       } else {
-        STLayers layer = new STLayers();
+        STPublicLayers layer = new STPublicLayers();
         layer.id = -1L;
         layer.label = statement.toString();
         modules.add(layer);
       }
 
       JSONArray out = new JSONArray();
-      for (STLayers index : modules) {
+      for (STPublicLayers index : modules) {
         //Convert to Json Object
         ObjectMapper Obj = new ObjectMapper();
         final JSONObject json = JSONHelper.createJSONObject(
@@ -206,7 +203,7 @@ public class STLayersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.st_layers(user_layer_id, layer_field, st_layer_label,layer_mmu_code, is_public)VALUES ( ?, ?, ?,?,?);"
+        "INSERT INTO public.st_public_layers(public_layer_id, layer_field, st_layer_label,layer_mmu_code, is_public)VALUES ( ?, ?, ?,?,?);"
       );
     ) {
       params.requireLoggedInUser();
@@ -311,7 +308,7 @@ public class STLayersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "update public.st_layers set(layer_field, st_layer_label,layer_mmu_code)=(?,?,?) where id=?;"
+        "update public.st_public_layers set(layer_field, st_layer_label,layer_mmu_code)=(?,?,?) where id=?;"
       );
     ) {
       params.requireLoggedInUser();
@@ -416,7 +413,7 @@ public class STLayersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "delete from public.st_layers where  id = ?;"
+        "delete from public.st_public_layers where  id = ?;"
       );
     ) {
       params.requireLoggedInUser();
