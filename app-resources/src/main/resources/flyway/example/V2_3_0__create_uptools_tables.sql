@@ -2028,6 +2028,20 @@ begin;
                 ON UPDATE NO ACTION
                 ON DELETE CASCADE
     );
+
+    create table if not exists public_layers_space(
+        id bigserial not null,
+        user_layer_id int not null,
+        space VARCHAR(50),-- allowed values public, suitability, urbanperformance
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+        CONSTRAINT layers_space_pkey PRIMARY KEY (id),
+        CONSTRAINT layers_space_public_layer_id_fkey FOREIGN KEY (public_layer_id)
+                REFERENCES public.oskari_maplayer(id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+    );
+
     create table if not exists st_layers(
         id bigserial not null,
         user_layer_id bigint not null,

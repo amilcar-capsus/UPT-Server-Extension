@@ -24,8 +24,8 @@ import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
 
-@OskariActionRoute("st_layers_pub_lyr")
-public class STLayersPubLyrHandler extends RestActionHandler {
+@OskariActionRoute("st_public_filters_pub_lyr")
+public class STPublicFiltersHandlerPubLyr extends RestActionHandler {
   private static String stURL;
   private static String stUser;
   private static String stPassword;
@@ -33,7 +33,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
 
   private JSONArray errors;
   private ObjectMapper Obj;
-  private String user_uuid;
 
   @Override
   public void preProcess(ActionParameters params) throws ActionException {
@@ -44,18 +43,17 @@ public class STLayersPubLyrHandler extends RestActionHandler {
     stUser = PropertyUtil.get("db.username");
     stPassword = PropertyUtil.get("db.password");
 
-    user_uuid = params.getUser().getUuid();
     errors = new JSONArray();
     Obj = new ObjectMapper();
   }
 
   @Override
   public void handleGet(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
+    String errorMsg = "Filters get";
     Long user_id = params.getUser().getId();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STPublicLayers> modules = new ArrayList<>();
+    ArrayList<STFilters> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -64,16 +62,30 @@ public class STLayersPubLyrHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "    select geometry from user_layer_data where user_layer_id=?\n" +
+        "	select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
+        "), user_layers as(\n" +
+        "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
+        "	from st_public_filters\n" +
+        "		inner join oskari_maplayer on oskari_maplayer.id = st_public_filters.public_layer_id\n" +
+        "		, study_area\n" +
+        "	where \n" +
+        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "		--and oskari_maplayer.id=?\n" +
         "), public_layers as(\n" +
-        "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
-        "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
-        "    , study_area\n" +
-        "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
-        ")\n" +
-        "select id, st_layer_label, label,public_layer_id, layer_field,layer_mmu_code,is_public from public_layers"
+        "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
+        "	from st_public_filters\n" +
+        "		inner join oskari_maplayer on oskari_maplayer.id = st_publicfilters.public_layer_id\n" +
+        "		inner join public_layers_space on public_layers_space.public_layer_id = st_public_filters.public_layer_id\n" +
+        "		, study_area\n" +
+        "	where \n" +
+        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "		and public_layers_space.space in ('public','suitability')\n" +
+        "), all_layers as(\n" +
+        "	select id,public_layer_id,st_filter_label,label from user_layers\n" +
+        "	union all \n" +
+        "	select id,public_layer_id,st_filter_label,label from public_layers	\n" +
+        ") \n" +
+        "select distinct id,public_layer_id,st_filter_label,label from all_layers  order by label "
       );
     ) {
       params.requireLoggedInUser();
@@ -84,8 +96,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
       }
 
       statement.setLong(1, study_area);
-      statement.setString(2, user_uuid);
-
       errors.put(
         JSONHelper.createJSONObject(
           Obj.writeValueAsString(
@@ -93,32 +103,22 @@ public class STLayersPubLyrHandler extends RestActionHandler {
           )
         )
       );
-      //statement.setLong(2, user_id);
-      boolean status = statement.execute();
-      if (status) {
-        ResultSet data = statement.getResultSet();
-        while (data.next()) {
-          STPublicLayers layer = new STPublicLayers();
-          layer.id = data.getLong("id");
-          layer.label = data.getString("label");
-          layer.st_layer_label = data.getString("st_layer_label");
-          layer.public_layer_id = data.getLong("user_layer_id");
-          layer.layer_field = data.getString("layer_field");
-          layer.layer_mmu_code = data.getString("layer_mmu_code");
-          modules.add(layer);
-        }
-      } else {
-        STPublicLayers layer = new STPublicLayers();
-        layer.id = -1L;
-        layer.label = statement.toString();
+
+      ResultSet data = statement.executeQuery();
+
+      while (data.next()) {
+        STFilters layer = new STFilters();
+        layer.id = data.getLong("id");
+        layer.user_layer_id = data.getLong("public_layer_id");
+        layer.st_filter_label = data.getString("st_filter_label");
+        layer.label = data.getString("label");
         modules.add(layer);
       }
 
       JSONArray out = new JSONArray();
-      for (STPublicLayers index : modules) {
+      for (STFilters index : modules) {
         //Convert to Json Object
-        ObjectMapper Obj = new ObjectMapper();
-        final JSONObject json = JSONHelper.createJSONObject(
+        JSONObject json = JSONHelper.createJSONObject(
           Obj.writeValueAsString(index)
         );
         out.put(json);
@@ -126,40 +126,17 @@ public class STLayersPubLyrHandler extends RestActionHandler {
 
       errors.put(
         JSONHelper.createJSONObject(
-          Obj.writeValueAsString(new PostStatus("OK", "Layers executed"))
+          Obj.writeValueAsString(
+            new PostStatus("OK", "Filters getter executed")
+          )
         )
       );
 
       ResponseHelper.writeResponse(params, out);
     } catch (SQLException e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
       errorMsg = errorMsg + e.toString();
       log.error(e, errorMsg);
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (Exception e) {
+
       try {
         errors.put(
           JSONHelper.createJSONObject(
@@ -174,11 +151,40 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         );
       } catch (JsonProcessingException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       } catch (JSONException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    } catch (JsonProcessingException ex) {
+      java
+        .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+        .log(Level.SEVERE, null, ex);
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       }
     }
@@ -186,13 +192,8 @@ public class STLayersPubLyrHandler extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
-    String layerLabel = params.getRequiredParam("layerLabel");
-    String field = params.getRequiredParam("field");
-    String mmu_code = params.getRequiredParam("mmuCode");
-    Boolean isPublic = Boolean.parseBoolean(
-      params.getRequiredParam("isPublic")
-    );
+    Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
+    String filterLabel = params.getRequiredParam("filterLabel");
 
     PostStatus status = new PostStatus();
     String query = "";
@@ -203,7 +204,7 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.st_public_layers(public_layer_id, layer_field, st_layer_label,layer_mmu_code, is_public)VALUES ( ?, ?, ?,?,?);"
+        "INSERT INTO public.st_public_filters( public_layer_id, st_filter_label)VALUES ( ?, ?);"
       );
     ) {
       params.requireLoggedInUser();
@@ -213,11 +214,8 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      statement.setLong(1, layerId);
-      statement.setString(2, field);
-      statement.setString(3, layerLabel);
-      statement.setString(4, mmu_code);
-      statement.setBoolean(5, isPublic);
+      statement.setInt(1, filterID);
+      statement.setString(2, filterLabel);
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -227,49 +225,17 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         )
       );
 
-      status.message = statement.toString();
       statement.execute();
 
       errors.put(
         JSONHelper.createJSONObject(
-          Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
+          Obj.writeValueAsString(new PostStatus("OK", "Filter registered"))
         )
       );
       ResponseHelper.writeResponse(
         params,
         new JSONObject().put("Errors", errors)
       );
-    } catch (SQLException e) {
-      log.error(e);
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (JSONException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
     } catch (Exception e) {
       try {
         errors.put(
@@ -285,11 +251,11 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         );
       } catch (JsonProcessingException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       } catch (JSONException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       }
     }
@@ -297,112 +263,8 @@ public class STLayersPubLyrHandler extends RestActionHandler {
 
   @Override
   public void handlePut(ActionParameters params) throws ActionException {
-    Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
-    String layerLabel = params.getRequiredParam("layerLabel");
-    String field = params.getRequiredParam("field");
-    String mmu_code = params.getRequiredParam("mmuCode");
-    try (
-      Connection connection = DriverManager.getConnection(
-        stURL,
-        stUser,
-        stPassword
-      );
-      PreparedStatement statement = connection.prepareStatement(
-        "update public.st_public_layers set(layer_field, st_layer_label,layer_mmu_code)=(?,?,?) where id=?;"
-      );
-    ) {
-      params.requireLoggedInUser();
-      ArrayList<String> roles = new UPTRoles()
-      .handleGet(params, params.getUser());
-      if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
-        throw new Exception("User privilege is not enough for this action");
-      }
-
-      statement.setString(1, field);
-      statement.setString(2, layerLabel);
-      statement.setString(3, mmu_code);
-      statement.setLong(4, layerId);
-
-      errors.put(
-        JSONHelper.createJSONObject(
-          Obj.writeValueAsString(
-            new PostStatus("OK", "Executing query: " + statement.toString())
-          )
-        )
-      );
-
-      statement.execute();
-
-      errors.put(
-        JSONHelper.createJSONObject(
-          Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
-        )
-      );
-      ResponseHelper.writeResponse(
-        params,
-        new JSONObject().put("Errors", errors)
-      );
-    } catch (SQLException e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-      log.error(e);
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (JSONException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (Exception e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-    }
-  }
-
-  @Override
-  public void handleDelete(ActionParameters params) throws ActionException {
-    Long layerId = Long.parseLong(params.getRequiredParam("layerId"));
-    String layerLabel = params.getRequiredParam("layerLabel");
-    String field = params.getRequiredParam("field");
+    Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
+    String filterLabel = params.getRequiredParam("filterLabel");
 
     PostStatus status = new PostStatus();
     String query = "";
@@ -413,7 +275,7 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "delete from public.st_public_layers where  id = ?;"
+        "update public.st_public_filters set st_filter_label =? where id=?;"
       );
     ) {
       params.requireLoggedInUser();
@@ -423,7 +285,8 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      statement.setLong(1, layerId);
+      statement.setString(1, filterLabel);
+      statement.setInt(2, filterID);
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -434,46 +297,16 @@ public class STLayersPubLyrHandler extends RestActionHandler {
       );
 
       statement.execute();
+
       errors.put(
         JSONHelper.createJSONObject(
-          Obj.writeValueAsString(new PostStatus("OK", "Filter deleted"))
+          Obj.writeValueAsString(new PostStatus("OK", "filter updated"))
         )
       );
       ResponseHelper.writeResponse(
         params,
         new JSONObject().put("Errors", errors)
       );
-    } catch (SQLException e) {
-      log.error(e);
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (JSONException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
     } catch (Exception e) {
       try {
         errors.put(
@@ -489,11 +322,82 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         );
       } catch (JsonProcessingException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       } catch (JSONException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+      log.error(e);
+    }
+  }
+
+  @Override
+  public void handleDelete(ActionParameters params) throws ActionException {
+    Integer filterID = Integer.parseInt(params.getRequiredParam("filterId"));
+    String filterLabel = params.getRequiredParam("filterLabel");
+
+    PostStatus status = new PostStatus();
+    String query = "";
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+      PreparedStatement statement = connection.prepareStatement(
+        "delete from public.st_public_filters where id = ?;"
+      );
+    ) {
+      params.requireLoggedInUser();
+      ArrayList<String> roles = new UPTRoles()
+      .handleGet(params, params.getUser());
+      if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
+        throw new Exception("User privilege is not enough for this action");
+      }
+
+      statement.setInt(1, filterID);
+
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(
+            new PostStatus("OK", "Executing query: " + statement.toString())
+          )
+        )
+      );
+
+      statement.execute();
+
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("OK", "Filter delete"))
+        )
+      );
+      ResponseHelper.writeResponse(
+        params,
+        new JSONObject().put("Errors", errors)
+      );
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       }
     }
