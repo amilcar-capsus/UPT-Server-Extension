@@ -190,9 +190,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
     String layerLabel = params.getRequiredParam("layerLabel");
     String field = params.getRequiredParam("field");
     String mmu_code = params.getRequiredParam("mmuCode");
-    Boolean isPublic = Boolean.parseBoolean(
-      params.getRequiredParam("isPublic")
-    );
 
     PostStatus status = new PostStatus();
     String query = "";
@@ -217,7 +214,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
       statement.setString(2, field);
       statement.setString(3, layerLabel);
       statement.setString(4, mmu_code);
-      statement.setBoolean(5, isPublic);
 
       errors.put(
         JSONHelper.createJSONObject(

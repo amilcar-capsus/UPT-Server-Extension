@@ -7,5 +7,4 @@ public class STPublicLayers {
   public String layer_mmu_code;
   public String label;
   public String st_layer_label;
-  public Boolean is_public;
 }
