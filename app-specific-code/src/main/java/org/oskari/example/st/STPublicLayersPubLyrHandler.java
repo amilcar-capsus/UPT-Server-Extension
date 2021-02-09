@@ -66,9 +66,9 @@ public class STPublicLayersPubLyrHandler extends RestActionHandler {
         "with study_area as(\n" +
         "    select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
         "), public_layers as(\n" +
-        "    select distinct st_layers.id as id, st_layers.st_layer_label, st_layer_label as label ,st_layers.user_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
+        "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
         "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_layers.user_layer_id\n" +
+        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
         "    where\n" +
         "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
@@ -84,7 +84,6 @@ public class STPublicLayersPubLyrHandler extends RestActionHandler {
       }
 
       statement.setLong(1, study_area);
-      statement.setString(2, user_uuid);
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -102,7 +101,7 @@ public class STPublicLayersPubLyrHandler extends RestActionHandler {
           layer.id = data.getLong("id");
           layer.label = data.getString("label");
           layer.st_layer_label = data.getString("st_layer_label");
-          layer.public_layer_id = data.getLong("user_layer_id");
+          layer.public_layer_id = data.getLong("public_layer_id");
           layer.layer_field = data.getString("layer_field");
           layer.layer_mmu_code = data.getString("layer_mmu_code");
           modules.add(layer);
