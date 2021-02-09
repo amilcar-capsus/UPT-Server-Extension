@@ -203,7 +203,7 @@ public class STLayersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.st_layers(user_layer_id, layer_field, st_layer_label,layer_mmu_code, is_public)VALUES ( ?, ?, ?,?,?);"
+        "INSERT INTO public.st_layers(user_layer_id, layer_field, st_layer_label,layer_mmu_code)VALUES ( ?, ?, ?,?);"
       );
     ) {
       params.requireLoggedInUser();
