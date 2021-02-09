@@ -2070,7 +2070,7 @@ begin;
         st_layer_label text NOT NULL,
         created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated timestamp with time zone,
-        CONSTRAINT st_layers_pkey PRIMARY KEY (id),
+        CONSTRAINT st_public_layers_pkey PRIMARY KEY (id),
         CONSTRAINT st_layers_public_layer_id_fkey FOREIGN KEY (public_layer_id) REFERENCES oskari_maplayer (id)
             MATCH SIMPLE
                 ON UPDATE NO ACTION
