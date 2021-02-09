@@ -1989,7 +1989,7 @@ begin;
 
     create table if not exists public_layers_space(
         id bigserial not null,
-        user_layer_id int not null,
+        public_layer_id int not null,
         space VARCHAR(50),-- allowed values public, suitability, urbanperformance
         created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated timestamp with time zone,
