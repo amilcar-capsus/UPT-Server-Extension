@@ -76,7 +76,7 @@ public class STPublicLayersHandler extends RestActionHandler {
         "    (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and\n" +
         "    st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
         ")\n" +
-        "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code,is_public from user_layers, public_layers"
+        "select id, st_layer_label, label ,user_layer_id,layer_field,layer_mmu_code,from user_layers"
       );
     ) {
       params.requireLoggedInUser();

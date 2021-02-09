@@ -73,7 +73,7 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         "    where\n" +
         "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         ")\n" +
-        "select id, st_layer_label, label,public_layer_id, layer_field,layer_mmu_code,is_public from public_layers"
+        "select id, st_layer_label, label,public_layer_id, layer_field,layer_mmu_code from public_layers"
       );
     ) {
       params.requireLoggedInUser();
