@@ -109,14 +109,14 @@ public class STFiltersHandlerPubLyr extends RestActionHandler {
       while (data.next()) {
         STPublicFilters layer = new STPublicFilters();
         layer.id = data.getLong("id");
-        layer.user_layer_id = data.getLong("public_layer_id");
+        layer.public_layer_id = data.getLong("public_layer_id");
         layer.st_filter_label = data.getString("st_filter_label");
         layer.label = data.getString("label");
         modules.add(layer);
       }
 
       JSONArray out = new JSONArray();
-      for (STFilters index : modules) {
+      for (STPublicFilters index : modules) {
         //Convert to Json Object
         JSONObject json = JSONHelper.createJSONObject(
           Obj.writeValueAsString(index)
