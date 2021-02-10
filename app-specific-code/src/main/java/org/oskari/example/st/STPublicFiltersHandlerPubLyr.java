@@ -116,7 +116,7 @@ public class STPublicFiltersHandlerPubLyr extends RestActionHandler {
       }
 
       JSONArray out = new JSONArray();
-      for (STFilters index : modules) {
+      for (STPublicFilters index : modules) {
         //Convert to Json Object
         JSONObject json = JSONHelper.createJSONObject(
           Obj.writeValueAsString(index)
