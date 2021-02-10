@@ -84,7 +84,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
       }
 
       statement.setLong(1, study_area);
-      statement.setString(2, user_uuid);
 
       errors.put(
         JSONHelper.createJSONObject(
