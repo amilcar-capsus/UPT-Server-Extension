@@ -53,7 +53,7 @@ public class STPublicFiltersHandlerPubLyr extends RestActionHandler {
     Long user_id = params.getUser().getId();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STFilters> modules = new ArrayList<>();
+    ArrayList<STPublicFilters> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -107,9 +107,9 @@ public class STPublicFiltersHandlerPubLyr extends RestActionHandler {
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
-        STFilters layer = new STFilters();
+        STPublicFilters layer = new STPublicFilters();
         layer.id = data.getLong("id");
-        layer.user_layer_id = data.getLong("public_layer_id");
+        layer.public_layer_id = data.getLong("public_layer_id");
         layer.st_filter_label = data.getString("st_filter_label");
         layer.label = data.getString("label");
         modules.add(layer);

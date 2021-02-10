@@ -53,7 +53,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
     Long user_id = params.getUser().getId();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STPublicFilters> modules = new ArrayList<>();
+    ArrayList<STFilters> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -64,28 +64,28 @@ public class STPublicFiltersHandler extends RestActionHandler {
         "with study_area as(\n" +
         "	select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
         "), user_layers as(\n" +
-        "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
-        "	from st_public_filters\n" +
-        "		inner join oskari_maplayer on oskari_maplayer.id = st_public_filters.public_layer_id\n" +
+        "	select distinct st_filters.id,st_filters.user_layer_id,st_filter_label,st_filter_label as label\n" +
+        "	from st_filters\n" +
+        "		inner join user_layer_data on user_layer_data.user_layer_id = st_filters.user_layer_id\n" +
         "		, study_area\n" +
         "	where \n" +
         "		st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
-        "		--and oskari_maplayer.id=?\n" +
+        "		--and user_layer_data.user_layer_id=?\n" +
         "), public_layers as(\n" +
-        "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
-        "	from st_public_filters\n" +
-        "		inner join oskari_maplayer on oskari_maplayer.public_layer_id = st_public_filters.public_layer_id\n" +
-        "		inner join public_layers_space on public_layers_space.public_layer_id = st_public_filters.public_layer_id\n" +
+        "	select distinct st_filters.id,st_filters.user_layer_id,st_filter_label,st_filter_label as label\n" +
+        "	from st_filters\n" +
+        "		inner join user_layer_data on user_layer_data.user_layer_id = st_filters.user_layer_id\n" +
+        "		inner join layers_space on layers_space.user_layer_id = st_filters.user_layer_id\n" +
         "		, study_area\n" +
         "	where \n" +
         "		st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
-        "		and public_layers_space.space in ('public','suitability')\n" +
+        "		and layers_space.space in ('public','suitability')\n" +
         "), all_layers as(\n" +
-        "	select id,public_layer_id,st_filter_label,label from user_layers\n" +
+        "	select id,user_layer_id,st_filter_label,label from user_layers\n" +
         "	union all \n" +
-        "	select id,public_layer_id,st_filter_label,label from public_layers	\n" +
+        "	select id,user_layer_id,st_filter_label,label from public_layers	\n" +
         ") \n" +
-        "select distinct id,public_layer_id,st_filter_label,label from all_layers  order by label "
+        "select distinct id,user_layer_id,st_filter_label,label from all_layers  order by label "
       );
     ) {
       params.requireLoggedInUser();
@@ -107,16 +107,16 @@ public class STPublicFiltersHandler extends RestActionHandler {
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
-        STPublicFilters layer = new STPublicFilters();
+        STFilters layer = new STFilters();
         layer.id = data.getLong("id");
-        layer.public_layer_id = data.getLong("public_layer_id");
+        layer.user_layer_id = data.getLong("user_layer_id");
         layer.st_filter_label = data.getString("st_filter_label");
         layer.label = data.getString("label");
         modules.add(layer);
       }
 
       JSONArray out = new JSONArray();
-      for (STPublicFilters index : modules) {
+      for (STFilters index : modules) {
         //Convert to Json Object
         JSONObject json = JSONHelper.createJSONObject(
           Obj.writeValueAsString(index)
@@ -204,7 +204,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.st_public_filters( public_layer_id, st_filter_label)VALUES ( ?, ?);"
+        "INSERT INTO public.st_filters( user_layer_id, st_filter_label)VALUES ( ?, ?);"
       );
     ) {
       params.requireLoggedInUser();
@@ -275,7 +275,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "update public.st_public_filters set st_filter_label =? where id=?;"
+        "update public.st_filters set st_filter_label =? where id=?;"
       );
     ) {
       params.requireLoggedInUser();
@@ -347,7 +347,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "delete from public.st_public_filters where id = ?;"
+        "delete from public.st_filters where id = ?;"
       );
     ) {
       params.requireLoggedInUser();
