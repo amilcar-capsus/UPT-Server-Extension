@@ -53,7 +53,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
     Long user_id = params.getUser().getId();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STFilters> modules = new ArrayList<>();
+    ArrayList<STPublicFilters> modules = new ArrayList<>();
     try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -85,7 +85,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         "	union all \n" +
         "	select id,public_layer_id,st_filter_label,label from public_layers	\n" +
         ") \n" +
-        "select distinct id,user_layer_id,st_filter_label,label from all_layers  order by label "
+        "select distinct id,public_layer_id,st_filter_label,label from all_layers  order by label "
       );
     ) {
       params.requireLoggedInUser();
@@ -107,9 +107,9 @@ public class STPublicFiltersHandler extends RestActionHandler {
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
-        STFilters layer = new STFilters();
+        STPublicFilters layer = new STPublicFilters();
         layer.id = data.getLong("id");
-        layer.user_layer_id = data.getLong("user_layer_id");
+        layer.user_layer_id = data.getLong("public_layer_id");
         layer.st_filter_label = data.getString("st_filter_label");
         layer.label = data.getString("label");
         modules.add(layer);
@@ -204,7 +204,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.st_filters( user_layer_id, st_filter_label)VALUES ( ?, ?);"
+        "INSERT INTO public.st_public_filters( public_layer_id, st_filter_label)VALUES ( ?, ?);"
       );
     ) {
       params.requireLoggedInUser();
@@ -275,7 +275,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "update public.st_filters set st_filter_label =? where id=?;"
+        "update public.st_public_filters set st_filter_label =? where id=?;"
       );
     ) {
       params.requireLoggedInUser();
@@ -347,7 +347,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "delete from public.st_filters where id = ?;"
+        "delete from public.st_public_filters where id = ?;"
       );
     ) {
       params.requireLoggedInUser();
