@@ -74,7 +74,7 @@ public class STFiltersHandlerPubLyr extends RestActionHandler {
         "), public_layers as(\n" +
         "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
         "	from st_public_filters\n" +
-        "		inner join oskari_maplayer on oskari_maplayer.public_layer_id = st_public_filters.public_layer_id\n" +
+        "		inner join oskari_maplayer on oskari_maplayer.id = st_public_filters.public_layer_id\n" +
         "		inner join public_layers_space on public_layers_space.public_layer_id = st_public_filters.public_layer_id\n" +
         "		, study_area\n" +
         "	where \n" +
