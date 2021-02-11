@@ -69,7 +69,7 @@ public class STFiltersHandlerPubLyr extends RestActionHandler {
         "		inner join oskari_maplayer on oskari_maplayer.id = st_public_filters.public_layer_id\n" +
         "		, study_area\n" +
         "	where \n" +
-        "		st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
+        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         "		--and oskari_maplayer.id=?\n" +
         "), public_layers as(\n" +
         "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
@@ -78,7 +78,7 @@ public class STFiltersHandlerPubLyr extends RestActionHandler {
         "		inner join public_layers_space on public_layers_space.public_layer_id = st_public_filters.public_layer_id\n" +
         "		, study_area\n" +
         "	where \n" +
-        "		st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
+        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         "		and public_layers_space.space in ('public','suitability')\n" +
         "), all_layers as(\n" +
         "	select id,public_layer_id,st_filter_label,label from user_layers\n" +
