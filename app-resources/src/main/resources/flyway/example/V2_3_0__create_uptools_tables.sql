@@ -2103,6 +2103,27 @@ begin;
     (st_layers_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
+    create table if not exists st_public_settings(
+        id bigserial not null,
+	st_layers_id BIGINT not null,
+	normalization_method  int not null,
+	range_min double PRECISION not null,
+	range_max double PRECISION not null,
+	smaller_better integer not null,
+	weight double PRECISION not null,
+        created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated timestamp with time zone,
+	CONSTRAINT st_public_settings_pkey PRIMARY KEY (id),
+	CONSTRAINT st_public_settings_st_layers_id_fkey FOREIGN KEY (st_layers_id)
+            REFERENCES public.st_public_layers(id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE
+    );
+    CREATE INDEX  if not exists  st_public_settings_st_layers_id_idx
+    ON public.st_public_settings USING btree
+    (st_layers_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
     CREATE TABLE if not exists st_operation(
         id serial,
         name character varying(20),
