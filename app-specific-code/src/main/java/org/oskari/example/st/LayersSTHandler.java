@@ -1132,6 +1132,7 @@ public class LayersSTHandler extends RestActionHandler {
         "where st_public_layers.id=?"
       );
       statement.setInt(1, layerId.intValue());
+      statement.setInt(2, layerId.intValue());
       ResultSet data = statement.executeQuery();
       while (data.next()) {
         STSettings layer = new STSettings(layerId);
