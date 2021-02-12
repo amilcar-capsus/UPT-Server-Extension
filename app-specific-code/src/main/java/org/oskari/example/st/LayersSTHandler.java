@@ -94,7 +94,7 @@ public class LayersSTHandler extends RestActionHandler {
       PropertyUtil
         .get("oskari.native.srs")
         .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
-
+    System.out.println(stProjection);
     errors = new JSONArray();
     Obj = new ObjectMapper();
   }
