@@ -1054,10 +1054,10 @@ public class LayersSTHandler extends RestActionHandler {
         "    where\n" +
         "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
         ")\n" +
-        "select st_layers.id, st_layer_label as label \n" +
+        "select st_layers.id, st_layers.st_layer_label as label \n" +
         "from st_layers,layers\n" +
         "where st_layers.user_layer_id in(layers.id)\n" +
-        "union select st_public_layers.id, st_layer_label as label from st_public_layers, public_layers\n" +
+        "union select st_public_layers.id, st_public_layer.st_layer_label as label from st_public_layers, public_layers\n" +
         "where st_public_layers.public_layer_id in(public_layers.id)\n"
       );
       statement.setInt(1, Integer.parseInt(stProjection));
