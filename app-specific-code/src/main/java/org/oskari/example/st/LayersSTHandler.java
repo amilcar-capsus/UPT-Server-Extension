@@ -1064,6 +1064,8 @@ public class LayersSTHandler extends RestActionHandler {
       statement.setLong(2, study_area);
       statement.setString(3, user_uuid);
 
+      System.out.println(statement.toString());
+
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
