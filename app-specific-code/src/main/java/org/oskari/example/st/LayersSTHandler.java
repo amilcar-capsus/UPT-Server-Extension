@@ -1085,6 +1085,7 @@ public class LayersSTHandler extends RestActionHandler {
         "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
         "    ,study_area \n" +
         "    where  (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n" +
+        ")\n" +
         "select st_layers.id, st_layers.st_layer_label as label \n" +
         "from st_layers,layers\n" +
         "where st_layers.user_layer_id in(layers.id)\n"
