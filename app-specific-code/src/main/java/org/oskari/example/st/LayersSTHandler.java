@@ -251,6 +251,45 @@ public class LayersSTHandler extends RestActionHandler {
         );
 
         ResponseHelper.writeResponse(params, out);
+      } else if (
+        "list_st_public_layers".equals(params.getRequiredParam("action"))
+      ) {
+        ArrayList<STPublicSettings> settingsList = new ArrayList<>();
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting suitability layers")
+            )
+          )
+        );
+        //Get layers
+        ArrayList<STPublicLayers> layers = getSTPublicLayers(
+          user_id,
+          Long.parseLong(params.getRequiredParam("study_area"))
+        );
+        for (STPublicLayers index : layers) {
+          settingsList.addAll(getPublicSettings(user_id, index.id));
+        }
+
+        JSONArray out = new JSONArray();
+        for (STPublicSettings index : settingsList) {
+          //Convert to Json Object
+          final JSONObject json = JSONHelper.createJSONObject(
+            Obj.writeValueAsString(index)
+          );
+          out.put(json);
+        }
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Listing suitability layers executed")
+            )
+          )
+        );
+
+        ResponseHelper.writeResponse(params, out);
       } else if ("list_st_filters".equals(params.getRequiredParam("action"))) {
         errors.put(
           JSONHelper.createJSONObject(
@@ -1046,18 +1085,9 @@ public class LayersSTHandler extends RestActionHandler {
         "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
         "    ,study_area \n" +
         "    where  (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n" +
-        "), public_layers as(\n" +
-        "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
-        "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
-        "    , study_area\n" +
-        "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
-        ")\n" +
         "select st_layers.id, st_layers.st_layer_label as label \n" +
         "from st_layers,layers\n" +
-        "where st_layers.user_layer_id in(layers.id)\n" +
-        "union select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
+        "where st_layers.user_layer_id in(layers.id)\n"
         //"where st_public_layers.public_layer_id in(public_layers.id)\n"
       );
       statement.setInt(1, Integer.parseInt(stProjection));
@@ -1070,6 +1100,69 @@ public class LayersSTHandler extends RestActionHandler {
 
       while (data.next()) {
         STLayers layer = new STLayers();
+        layer.id = data.getLong("id");
+        layer.label = data.getString("label");
+        modules.add(layer);
+      }
+      return modules;
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(
+            STStandardizationMethodHandler.class.getName()
+          )
+          .log(Level.SEVERE, null, ex);
+      }
+      throw new Exception();
+    }
+  }
+
+  private ArrayList<STPublicLayers> getSTPublicLayers(
+    Long user_id,
+    Long study_area
+  )
+    throws Exception {
+    String errorMsg = "getSTPublicLayers";
+    ArrayList<STPublicLayers> modules = new ArrayList<>();
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+    ) {
+      PreparedStatement statement = connection.prepareStatement(
+        "with study_area as(\n" +
+        "	select st_transform(st_setsrid(geometry,?),4326) as geometry from user_layer_data where user_layer_id=?\n" +
+        "), public_layers as(\n" +
+        "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
+        "    from st_public_layers\n" +
+        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
+        "    , study_area\n" +
+        "    where\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        ")\n" +
+        "select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
+        //"where st_public_layers.public_layer_id in(public_layers.id)\n"
+      );
+      statement.setInt(1, Integer.parseInt(stProjection));
+      statement.setLong(2, study_area);
+
+      System.out.println(statement.toString());
+
+      ResultSet data = statement.executeQuery();
+
+      while (data.next()) {
+        STPublicLayers layer = new STPublicLayers();
         layer.id = data.getLong("id");
         layer.label = data.getString("label");
         modules.add(layer);
@@ -1119,22 +1212,9 @@ public class LayersSTHandler extends RestActionHandler {
         "	st_layers.st_layer_label as label\n" +
         "FROM public.st_settings\n" +
         "right join st_layers on st_layers.id=st_settings.st_layers_id\n" +
-        "where st_layers.id=?\n" +
-        "UNION SELECT \n" +
-        "	st_public_settings.id, \n" +
-        "	st_layers_id as st_layer_id, \n" +
-        "	normalization_method, \n" +
-        "	range_min, \n" +
-        "	range_max, \n" +
-        "	smaller_better, \n" +
-        "	weight,\n" +
-        "	st_public_layers.st_layer_label as label\n" +
-        "FROM public.st_public_settings\n" +
-        "right join st_public_layers on st_public_layers.id=st_public_settings.st_layers_id\n" +
-        "where st_public_layers.id=?"
+        "where st_layers.id=?\n"
       );
       statement.setInt(1, layerId.intValue());
-      statement.setInt(2, layerId.intValue());
       System.out.println(statement.toString());
       ResultSet data = statement.executeQuery();
       while (data.next()) {
@@ -1159,6 +1239,83 @@ public class LayersSTHandler extends RestActionHandler {
       }
       if (modules.isEmpty()) {
         STSettings layer = new STSettings(layerId);
+        modules.add(layer);
+      }
+      return modules;
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(
+            STStandardizationMethodHandler.class.getName()
+          )
+          .log(Level.SEVERE, null, ex);
+      }
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+      throw new Exception();
+    }
+  }
+
+  private ArrayList<STPublicSettings> getPublicSettings(
+    Long user_id,
+    Long layerId
+  )
+    throws Exception {
+    String errorMsg = "getSTSettings";
+    ArrayList<STPublicSettings> modules = new ArrayList<>();
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+    ) {
+      PreparedStatement statement = connection.prepareStatement(
+        "SELECT \n" +
+        "	st_public_settings.id, \n" +
+        "	st_public_layers_id as st_public_layer_id, \n" +
+        "	normalization_method, \n" +
+        "	range_min, \n" +
+        "	range_max, \n" +
+        "	smaller_better, \n" +
+        "	weight,\n" +
+        "	st_public_layers.st_layer_label as label\n" +
+        "FROM public.st_public_settings\n" +
+        "right join st_public_layers on st_public_layers.id=st_public_settings.st_layers_id\n" +
+        "where st_public_layers.id=?"
+      );
+      statement.setInt(1, layerId.intValue());
+      System.out.println(statement.toString());
+      ResultSet data = statement.executeQuery();
+      while (data.next()) {
+        STPublicSettings layer = new STPublicSettings(layerId);
+        layer.id = data.getLong("id");
+        layer.normalization_method =
+          data.getInt("normalization_method") != 0
+            ? data.getInt("normalization_method")
+            : 1;
+        layer.range_min =
+          data.getDouble("range_min") != 0 ? data.getDouble("range_min") : 0;
+        layer.range_max =
+          data.getDouble("range_max") != 0 ? data.getDouble("range_max") : 1;
+        layer.smaller_better =
+          data.getInt("smaller_better") != 0
+            ? data.getInt("smaller_better")
+            : 0;
+        layer.weight =
+          data.getDouble("weight") != 0 ? data.getDouble("weight") : 1;
+        layer.label = data.getString("label");
+        modules.add(layer);
+      }
+      if (modules.isEmpty()) {
+        STPublicSettings layer = new STPublicSettings(layerId);
         modules.add(layer);
       }
       return modules;
