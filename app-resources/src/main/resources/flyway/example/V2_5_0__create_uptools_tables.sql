@@ -2086,7 +2086,7 @@ begin;
 
     create table if not exists st_settings(
         id bigserial not null,
-	st_public_layers_id BIGINT not null,
+	st_layers_id BIGINT not null,
 	normalization_method  int not null,
 	range_min double PRECISION not null,
 	range_max double PRECISION not null,
