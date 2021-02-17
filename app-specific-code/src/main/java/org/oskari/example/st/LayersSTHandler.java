@@ -365,6 +365,8 @@ public class LayersSTHandler extends RestActionHandler {
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
 
+        JSONObject json = WFSDescribeFeatureHelper.getWFSFeaturePropertyTypes();
+        System.out.println("wfsFeaturePropertyTypes: " + mapFields.toString());
         JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
           ml,
           params.getRequiredParam("layer_id")
