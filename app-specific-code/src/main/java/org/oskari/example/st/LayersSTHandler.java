@@ -94,7 +94,6 @@ public class LayersSTHandler extends RestActionHandler {
       PropertyUtil
         .get("oskari.native.srs")
         .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
-    System.out.println(stProjection);
     errors = new JSONArray();
     Obj = new ObjectMapper();
   }
@@ -370,8 +369,11 @@ public class LayersSTHandler extends RestActionHandler {
           ml,
           params.getRequiredParam("layer_id")
         );
+        System.out.println("mapFields: " + mapFields.toString());
         JSONObject propertyTypes = mapFields.getJSONObject("propertyTypes");
+        System.out.println("propertyTypes: " + propertyTypes.toString());
         JSONArray ptArray = propertyTypes.names();
+        System.out.println("ptArray: " + ptArray.toString());
         ArrayList<String> pt = new ArrayList<String>();
         if (ptArray != null) {
           for (int i = 0; i < ptArray.length(); i++) {
@@ -1095,8 +1097,6 @@ public class LayersSTHandler extends RestActionHandler {
       statement.setLong(2, study_area);
       statement.setString(3, user_uuid);
 
-      System.out.println(statement.toString());
-
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
@@ -1158,8 +1158,6 @@ public class LayersSTHandler extends RestActionHandler {
       statement.setInt(1, Integer.parseInt(stProjection));
       statement.setLong(2, study_area);
 
-      System.out.println(statement.toString());
-
       ResultSet data = statement.executeQuery();
 
       while (data.next()) {
@@ -1216,7 +1214,6 @@ public class LayersSTHandler extends RestActionHandler {
         "where st_layers.id=?\n"
       );
       statement.setInt(1, layerId.intValue());
-      System.out.println(statement.toString());
       ResultSet data = statement.executeQuery();
       while (data.next()) {
         STSettings layer = new STSettings(layerId);
@@ -1293,7 +1290,6 @@ public class LayersSTHandler extends RestActionHandler {
         "where st_public_layers.id=?"
       );
       statement.setInt(1, layerId.intValue());
-      System.out.println(statement.toString());
       ResultSet data = statement.executeQuery();
       while (data.next()) {
         STPublicSettings layer = new STPublicSettings(layerId);
