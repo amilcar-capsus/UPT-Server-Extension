@@ -365,7 +365,6 @@ public class LayersSTHandler extends RestActionHandler {
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
         String layerUrl = ml.getUrl();
-        System.out.println("URL!!!!!!!!!! " + layerUrl);
         String layerVersion = ml.getVersion();
         String layerTypename = ml.getName();
         String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
@@ -373,6 +372,8 @@ public class LayersSTHandler extends RestActionHandler {
           layerVersion,
           layerTypename
         );
+
+        System.out.println("URL!!!!!!!!!! " + parsedLayerUrl);
         String responseFeature = WFSDescribeFeatureHelper.getResponse(
           parsedLayerUrl,
           stUser,
