@@ -365,12 +365,13 @@ public class LayersSTHandler extends RestActionHandler {
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
         String layerUrl = ml.getUrl();
+        System.out.println("URL!!!!!!!!!! " + layerUrl);
         String responseFeature = WFSDescribeFeatureHelper.getResponse(
           layerUrl,
           stUser,
           stPassword
         );
-        System.out.println("RESPONSE!!!!!!!!!!" + responseFeature);
+        System.out.println("RESPONSE!!!!!!!!!! " + responseFeature);
         JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
           ml,
           params.getRequiredParam("layer_id")
