@@ -364,10 +364,11 @@ public class LayersSTHandler extends RestActionHandler {
         OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
-
-        JSONObject responseFeature = describeFeature.getResponse(
-          Integer.parseInt(params.getRequiredParam("layer_id")),
-          true
+        String layerUrl = ml.getUrl();
+        JSONObject responseFeature = WFSDescribeFeatureHelper.getResponse(
+          layerUrl,
+          stUser,
+          stPassword
         );
         System.out.println("response!!!!!:" + responseFeature.toString());
         JSONObject featurePropertyTypes = WFSDescribeFeatureHelper.getWFSFeaturePropertyTypes(
