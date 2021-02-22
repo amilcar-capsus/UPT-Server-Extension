@@ -47,6 +47,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.example.Amenities;
 import org.oskari.example.Data;
 import org.oskari.example.Directories;
+import org.oskari.example.GetWFSFeaturesHandlerTest;
 import org.oskari.example.Layers;
 import org.oskari.example.MmuUP;
 import org.oskari.example.PostStatus;
