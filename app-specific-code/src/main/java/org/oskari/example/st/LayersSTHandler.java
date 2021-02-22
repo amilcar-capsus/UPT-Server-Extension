@@ -9,6 +9,7 @@ import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
 import fi.nls.oskari.control.layer.GetWFSDescribeFeatureHandler;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.domain.map.OskariLayer;
@@ -82,6 +83,7 @@ public class LayersSTHandler extends RestActionHandler {
 
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
   private static GetWFSDescribeFeatureHandler describeFeature = new GetWFSDescribeFeatureHandler();
+  private static GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
 
   public LayersSTHandler() {
     this.stLayers = new TreeMap<>();
@@ -116,6 +118,7 @@ public class LayersSTHandler extends RestActionHandler {
     try {
       params.requireLoggedInUser();
       describeFeature.init();
+      featuresList.init();
       ArrayList<String> roles = new UPTRoles()
       .handleGet(params, params.getUser());
       if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
@@ -387,7 +390,7 @@ public class LayersSTHandler extends RestActionHandler {
         );
         ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-        SimpleFeatureCollection sfc = describeFeature.getFeatures(
+        SimpleFeatureCollection sfc = featuresList.featureClient.getFeatures(
           Integer.parseInt(params.getRequiredParam("layer_id")),
           ml,
           bbox,
@@ -395,7 +398,7 @@ public class LayersSTHandler extends RestActionHandler {
           Optional.empty()
         );
         System.out.println(
-          "FEATURES!!!!!!!!!!!!!!!! " + describeFeature.toString()
+          "FEATURES!!!!!!!!!!!!!!!! " + featuresList.toString()
         );
 
         String layerUrl = ml.getUrl();
