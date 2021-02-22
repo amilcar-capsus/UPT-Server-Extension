@@ -25,7 +25,7 @@ public class GetWFSFeaturesHandlerTest {
 
   @Before
   public void init() {
-    handler = new GetWFSFeaturesHandler();
+    handler = new UPTGetWFSFeaturesHandler();
     handler.init();
     stProjection =
       PropertyUtil
