@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
+import org.geotools.referencing.CRS;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -352,7 +353,6 @@ public class LayersSTHandler extends RestActionHandler {
         "list_public_columns".equals(params.getRequiredParam("action"))
       ) {
         Layers layers = new Layers();
-        testGetFeatures();
         errors.put(
           JSONHelper.createJSONObject(
             Obj.writeValueAsString(
@@ -378,39 +378,23 @@ public class LayersSTHandler extends RestActionHandler {
         );
         ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-        SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
+        SimpleFeatureCollection sfc = describeFeature.featureClient.getFeatures(
           Integer.parseInt(params.getRequiredParam("layer_id")),
           ml,
           bbox,
           webMercator,
           Optional.empty()
         );
-
-        String layerUrl = ml.getUrl();
+        System.out.println("FEATTURES!!!!!!!!!! " + describeFeature);
+        /* String layerUrl = ml.getUrl();
         String layerVersion = ml.getVersion();
         String layerTypename = ml.getName();
         String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
           layerUrl,
           layerVersion,
           layerTypename
-        );
+        ); */
 
-        System.out.println("URL!!!!!!!!!! " + parsedLayerUrl);
-        String responseFeature = WFSDescribeFeatureHelper.getResponse(
-          parsedLayerUrl,
-          stUser,
-          stPassword
-        );
-        System.out.println("RESPONSE!!!!!!!!!! " + responseFeature);
-        JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
-          ml,
-          params.getRequiredParam("layer_id")
-        );
-        System.out.println("mapFields: " + mapFields.toString());
-        JSONObject propertyTypes = mapFields.getJSONObject("propertyTypes");
-        System.out.println("propertyTypes: " + propertyTypes.toString());
-        JSONArray ptArray = propertyTypes.names();
-        System.out.println("ptArray: " + ptArray.toString());
         ArrayList<String> pt = new ArrayList<String>();
         if (ptArray != null) {
           for (int i = 0; i < ptArray.length(); i++) {
