@@ -387,7 +387,7 @@ public class LayersSTHandler extends RestActionHandler {
         );
         ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-        SimpleFeatureCollection sfc = describeFeature.featureClient.getFeatures(
+        SimpleFeatureCollection sfc = describeFeature.getFeatures(
           Integer.parseInt(params.getRequiredParam("layer_id")),
           ml,
           bbox,
