@@ -3,6 +3,7 @@ package org.oskari.example;
 import static org.junit.Assert.assertTrue;
 
 import com.vividsolutions.jts.geom.Envelope;
+import fi.nls.oskari.control.feature.AbstractWFSFeaturesHandler;
 import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
 import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.map.layer.OskariLayerService;
@@ -17,7 +18,7 @@ import org.junit.Test;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.service.util.ServiceFactory;
 
-public class GetWFSFeaturesHandlerTest extends GetWFSFeatureHandler {
+public class GetWFSFeaturesHandlerTest extends AbstractWFSFeatureHandler {
   private GetWFSFeaturesHandler handler;
   private static String stProjection;
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
