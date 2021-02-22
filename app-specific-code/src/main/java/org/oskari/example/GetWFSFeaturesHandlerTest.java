@@ -47,7 +47,7 @@ public class GetWFSFeaturesHandlerTest {
     );
     ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-    SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
+    SimpleFeatureCollection sfc = handler.getFeatures(
       "6",
       ml,
       bbox,
