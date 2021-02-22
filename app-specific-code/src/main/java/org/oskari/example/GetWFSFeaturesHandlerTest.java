@@ -54,7 +54,7 @@ public class GetWFSFeaturesHandlerTest {
       webMercator,
       Optional.empty()
     );
-    System.out.println("FEATURES!!!!!!!!!!!!!!!! " + handler.toString());
+    System.out.println("FEATURES!!!!!!!!!!!!!!!! " + sfc.toString());
 
     CoordinateReferenceSystem actualCRS = sfc
       .getSchema()
