@@ -14,14 +14,21 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.oskari.service.util.ServiceFactory;
 
 public class GetWFSFeaturesHandlerTest {
   private GetWFSFeaturesHandler handler;
+  private static String stProjection;
+  private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
 
   @Before
   public void init() {
     handler = new GetWFSFeaturesHandler();
     handler.init();
+    stProjection =
+      PropertyUtil
+        .get("oskari.native.srs")
+        .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
   }
 
   @Test
