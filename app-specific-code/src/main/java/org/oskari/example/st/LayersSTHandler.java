@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.CRS;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +56,7 @@ import org.oskari.example.up.UPFieldsList;
 import org.oskari.service.util.ServiceFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -390,16 +392,25 @@ public class LayersSTHandler extends RestActionHandler {
           webMercator,
           Optional.empty()
         );
-        System.out.println("FEATTURES!!!!!!!!!! " + describeFeature);
-        /* String layerUrl = ml.getUrl();
+        System.out.println(
+          "FEATURES!!!!!!!!!!!!!!!! " + describeFeature.toString()
+        );
+
+        String layerUrl = ml.getUrl();
         String layerVersion = ml.getVersion();
         String layerTypename = ml.getName();
         String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
           layerUrl,
           layerVersion,
           layerTypename
-        ); */
+        );
 
+        JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
+          ml,
+          params.getRequiredParam("layer_id")
+        );
+        JSONObject propertyTypes = mapFields.getJSONObject("propertyTypes");
+        JSONArray ptArray = propertyTypes.names();
         ArrayList<String> pt = new ArrayList<String>();
         if (ptArray != null) {
           for (int i = 0; i < ptArray.length(); i++) {
