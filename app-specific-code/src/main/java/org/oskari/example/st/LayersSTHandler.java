@@ -31,6 +31,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -114,6 +115,7 @@ public class LayersSTHandler extends RestActionHandler {
     Long user_id = params.getUser().getId();
     try {
       params.requireLoggedInUser();
+      describeFeature.init();
       ArrayList<String> roles = new UPTRoles()
       .handleGet(params, params.getUser());
       if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
