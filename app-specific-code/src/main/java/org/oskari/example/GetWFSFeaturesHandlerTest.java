@@ -56,7 +56,7 @@ public class GetWFSFeaturesHandlerTest {
       webMercator,
       Optional.empty()
     );
-    SimpleFeatureIterator iterator = simpleFeatureCollection.features();
+    SimpleFeatureIterator iterator = sfc.features();
     try {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
