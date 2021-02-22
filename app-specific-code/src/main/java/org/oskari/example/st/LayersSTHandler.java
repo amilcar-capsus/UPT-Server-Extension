@@ -83,7 +83,8 @@ public class LayersSTHandler extends RestActionHandler {
 
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
   private static GetWFSDescribeFeatureHandler describeFeature = new GetWFSDescribeFeatureHandler();
-  private GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
+  private static GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
+  private static GetWFSFeaturesHandlerTest testFeatures = new GetWFSFeaturesHandlerTest();
 
   public LayersSTHandler() {
     this.stLayers = new TreeMap<>();
@@ -107,6 +108,9 @@ public class LayersSTHandler extends RestActionHandler {
         .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
     errors = new JSONArray();
     Obj = new ObjectMapper();
+    describeFeature.init();
+    featuresList.init();
+    testFeatures.init();
   }
 
   @Override
@@ -117,8 +121,6 @@ public class LayersSTHandler extends RestActionHandler {
     Long user_id = params.getUser().getId();
     try {
       params.requireLoggedInUser();
-      describeFeature.init();
-      featuresList.init();
       ArrayList<String> roles = new UPTRoles()
       .handleGet(params, params.getUser());
       if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
@@ -373,7 +375,7 @@ public class LayersSTHandler extends RestActionHandler {
           )
         );
 
-        testGetFeatures();
+        testFeatures.testGetFeatures();
         OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
