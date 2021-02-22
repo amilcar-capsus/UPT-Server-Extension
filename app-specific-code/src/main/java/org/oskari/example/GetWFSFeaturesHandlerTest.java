@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import com.vividsolutions.jts.geom.Envelope;
 import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
 import fi.nls.oskari.domain.map.OskariLayer;
+import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.util.PropertyUtil;
 import java.util.Optional;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -46,7 +47,7 @@ public class GetWFSFeaturesHandlerTest {
     ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
     SimpleFeatureCollection sfc = featuresList.featureClient.getFeatures(
-      params.getRequiredParam("layer_id"),
+      "6",
       ml,
       bbox,
       webMercator,
