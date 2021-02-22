@@ -374,10 +374,10 @@ public class LayersSTHandler extends RestActionHandler {
         );
 
         testGetFeatures();
-        /* OskariLayer ml = LAYER_SERVICE.find(
+        OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
-        CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
+        /*CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
         PropertyUtil.addProperty(
           "oskari.native.srs",
           "EPSG:" + stProjection,
