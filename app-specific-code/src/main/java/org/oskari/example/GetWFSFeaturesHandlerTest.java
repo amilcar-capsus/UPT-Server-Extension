@@ -46,14 +46,14 @@ public class GetWFSFeaturesHandlerTest {
     );
     ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-    SimpleFeatureCollection sfc = featuresList.featureClient.getFeatures(
+    SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
       "6",
       ml,
       bbox,
       webMercator,
       Optional.empty()
     );
-    System.out.println("FEATURES!!!!!!!!!!!!!!!! " + featuresList.toString());
+    System.out.println("FEATURES!!!!!!!!!!!!!!!! " + handler.toString());
 
     CoordinateReferenceSystem actualCRS = sfc
       .getSchema()
