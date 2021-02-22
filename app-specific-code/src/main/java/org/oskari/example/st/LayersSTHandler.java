@@ -374,7 +374,7 @@ public class LayersSTHandler extends RestActionHandler {
         CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
         PropertyUtil.addProperty(
           "oskari.native.srs",
-          "EPSG:" + upProjection,
+          "EPSG:" + stProjection,
           true
         );
         Envelope envelope = new Envelope(
