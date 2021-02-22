@@ -83,7 +83,7 @@ public class LayersSTHandler extends RestActionHandler {
 
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
   private static GetWFSDescribeFeatureHandler describeFeature = new GetWFSDescribeFeatureHandler();
-  private static GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
+  private GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
 
   public LayersSTHandler() {
     this.stLayers = new TreeMap<>();
@@ -373,7 +373,8 @@ public class LayersSTHandler extends RestActionHandler {
           )
         );
 
-        OskariLayer ml = LAYER_SERVICE.find(
+        testGetFeatures();
+        /* OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
         CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
@@ -390,7 +391,7 @@ public class LayersSTHandler extends RestActionHandler {
         );
         ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-        SimpleFeatureCollection sfc = featuresList.getFeatures(
+        SimpleFeatureCollection sfc = featuresList.featureClient.getFeatures(
           params.getRequiredParam("layer_id"),
           ml,
           bbox,
@@ -399,7 +400,7 @@ public class LayersSTHandler extends RestActionHandler {
         );
         System.out.println(
           "FEATURES!!!!!!!!!!!!!!!! " + featuresList.toString()
-        );
+        ); */
 
         String layerUrl = ml.getUrl();
         String layerVersion = ml.getVersion();
