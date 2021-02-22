@@ -9,6 +9,7 @@ import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.util.PropertyUtil;
 import java.util.Optional;
+import org.geotools.data.simple.SimpleFeature;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -54,7 +55,16 @@ public class GetWFSFeaturesHandlerTest {
       webMercator,
       Optional.empty()
     );
-    System.out.println("FEATURES!!!!!!!!!!!!!!!! " + sfc.toString());
+    SimpleFeatureIterator iterator = simpleFeatureCollection.features();
+    try {
+      while (iterator.hasNext()) {
+        SimpleFeature feature = iterator.next();
+        System.out.println("ID: " + feature.getID());
+      }
+    } finally {
+      iterator.close();
+    }
+    //System.out.println("FEATURES!!!!!!!!!!!!!!!! " + sfc.toString());
 
     CoordinateReferenceSystem actualCRS = sfc
       .getSchema()
