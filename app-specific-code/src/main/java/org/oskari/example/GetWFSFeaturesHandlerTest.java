@@ -19,7 +19,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.service.util.ServiceFactory;
 
 public class GetWFSFeaturesHandlerTest {
-  private GetWFSFeaturesHandler handler;
+  private UPTGetWFSFeaturesHandler handler;
   private static String stProjection;
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
 
