@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.service.util.ServiceFactory;
 
-public class GetWFSFeaturesHandlerTest extends AbstractWFSFeaturesHandler {
+public class GetWFSFeaturesHandlerTest {
   private GetWFSFeaturesHandler handler;
   private static String stProjection;
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
