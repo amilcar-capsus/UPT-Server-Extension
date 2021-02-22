@@ -352,7 +352,7 @@ public class LayersSTHandler extends RestActionHandler {
         "list_public_columns".equals(params.getRequiredParam("action"))
       ) {
         Layers layers = new Layers();
-
+        testGetFeatures();
         errors.put(
           JSONHelper.createJSONObject(
             Obj.writeValueAsString(
@@ -364,6 +364,28 @@ public class LayersSTHandler extends RestActionHandler {
         OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
+        CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
+        PropertyUtil.addProperty(
+          "oskari.native.srs",
+          "EPSG:" + upProjection,
+          true
+        );
+        Envelope envelope = new Envelope(
+          -13149614.848125,
+          4383204.949375,
+          -12523442.7125,
+          5009377.085
+        );
+        ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
+
+        SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
+          Integer.parseInt(params.getRequiredParam("layer_id")),
+          ml,
+          bbox,
+          webMercator,
+          Optional.empty()
+        );
+
         String layerUrl = ml.getUrl();
         String layerVersion = ml.getVersion();
         String layerTypename = ml.getName();
