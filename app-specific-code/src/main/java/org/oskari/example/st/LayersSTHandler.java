@@ -376,8 +376,8 @@ public class LayersSTHandler extends RestActionHandler {
           )
         );
 
-        //testFeatures.testGetFeatures();
-        testFeatures.testGetExternalFeatures();
+        testFeatures.testGetFeatures();
+        //testFeatures.testGetExternalFeatures();
         OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );

@@ -53,17 +53,24 @@ public class GetWFSFeaturesHandlerTest {
     String layerUrl = ml.getUrl();
     String layerVersion = ml.getVersion();
     String layerTypename = ml.getName();
-    String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
+
+    String id = "1000";
+    OskariLayer layer = new OskariLayer();
+    layer.setId(Integer.parseInt(id));
+    layer.setType(OskariLayer.TYPE_WFS);
+    layer.setUrl(layerUrl);
+    layer.setName(layerTypename);
+    /* String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
       layerUrl,
       layerVersion,
       layerTypename
     );
 
-    System.out.println("LAYER URL!!!!!!! " + parsedLayerUrl);
+    System.out.println("LAYER URL!!!!!!! " + parsedLayerUrl); */
 
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
-      "6",
-      ml,
+      id,
+      layer,
       bbox,
       webMercator,
       Optional.empty()
