@@ -49,7 +49,18 @@ public class GetWFSFeaturesHandlerTest {
     );
     ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-    SimpleFeatureCollection sfc = handler.getFeatures(
+    String layerUrl = ml.getUrl();
+    String layerVersion = ml.getVersion();
+    String layerTypename = ml.getName();
+    String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
+      layerUrl,
+      layerVersion,
+      layerTypename
+    );
+
+    System.out.println("LAYER URL!!!!!!! " + parsedLayerUrl);
+
+    SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
       "6",
       ml,
       bbox,
