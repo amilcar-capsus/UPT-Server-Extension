@@ -8,6 +8,7 @@ import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
 import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.util.PropertyUtil;
+import fi.nls.oskari.util.WFSDescribeFeatureHelper;
 import java.util.Optional;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
