@@ -58,11 +58,14 @@ public class GetWFSFeaturesHandlerTest {
     );
     SimpleFeatureIterator iterator = sfc.features();
     try {
+      System.out.println("Entering try section!!!!!!!!!");
       while (iterator.hasNext()) {
+        System.out.println("While section!!!!!!!!!");
         SimpleFeature feature = iterator.next();
         System.out.println("ID: " + feature.getID());
       }
     } finally {
+      System.out.println("Finally section!!!!!!!!!");
       iterator.close();
     }
     //System.out.println("FEATURES!!!!!!!!!!!!!!!! " + sfc.toString());
