@@ -68,6 +68,8 @@ public class GetWFSFeaturesHandlerTest {
 
     System.out.println("LAYER URL!!!!!!! " + parsedLayerUrl); */
 
+    System.out.println("LAYER URL!!!!!!! " + layer.getUrl());
+
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
       id,
       layer,
