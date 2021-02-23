@@ -54,7 +54,7 @@ public class GetWFSFeaturesHandlerTest {
     String layerVersion = ml.getVersion();
     String layerTypename = ml.getName();
 
-    String id = "1000";
+    String id = "10";
     OskariLayer layer = new OskariLayer();
     layer.setId(Integer.parseInt(id));
     layer.setType(OskariLayer.TYPE_WFS);
