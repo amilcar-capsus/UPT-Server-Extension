@@ -43,8 +43,13 @@ public class GetWFSFeaturesHandlerTest {
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
     PropertyUtil.addProperty("oskari.native.srs", "EPSG:3857", true);
-    Envelope envelope = new Envelope();
-    ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
+    Envelope envelope = new Envelope(
+      -13149614.848125,
+      4383204.949375,
+      -12523442.7125,
+      5009377.085
+    );
+    ReferencedEnvelope bbox = new ReferencedEnvelope(webMercator);
 
     String layerUrl = ml.getUrl();
     String layerVersion = ml.getVersion();
