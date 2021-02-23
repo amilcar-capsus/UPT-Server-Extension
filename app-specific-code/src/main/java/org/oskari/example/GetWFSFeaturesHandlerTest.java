@@ -88,4 +88,44 @@ public class GetWFSFeaturesHandlerTest {
       .getCoordinateReferenceSystem();
     assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS)); */
   }
+
+  public void testGetExternalFeatures() throws Exception {
+    String id = "10";
+    OskariLayer layer = new OskariLayer();
+    layer.setId(Integer.parseInt(id));
+    layer.setType(OskariLayer.TYPE_WFS);
+    layer.setUrl("https://geo.stat.fi/geoserver/tilastointialueet/wfs");
+    layer.setName("tilastointialueet:kunta1000k");
+    CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
+    PropertyUtil.addProperty("oskari.native.srs", "EPSG:3067", true);
+    Envelope envelope = new Envelope(2775356, 2875356, 8441866, 8541866);
+    ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
+
+    SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
+      id,
+      layer,
+      bbox,
+      webMercator,
+      Optional.empty()
+    );
+
+    SimpleFeatureIterator iterator = sfc.features();
+    try {
+      System.out.println("Entering try section!!!!!!!!!");
+      while (iterator.hasNext()) {
+        System.out.println("While section!!!!!!!!!");
+        SimpleFeature feature = iterator.next();
+        System.out.println("ID: " + feature.getID());
+      }
+    } finally {
+      System.out.println("Finally section!!!!!!!!!");
+      iterator.close();
+    }
+
+    CoordinateReferenceSystem actualCRS = sfc
+      .getSchema()
+      .getGeometryDescriptor()
+      .getCoordinateReferenceSystem();
+    assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
+  }
 }
