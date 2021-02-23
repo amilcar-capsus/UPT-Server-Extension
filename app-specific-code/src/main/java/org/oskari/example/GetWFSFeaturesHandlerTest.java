@@ -83,8 +83,9 @@ public class GetWFSFeaturesHandlerTest {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
         System.out.println("ID: " + feature.getID());
-        System.out.println("Attributes: " + feature.getAttributes());
+        //System.out.println("Attributes: " + feature.getAttributes());
         System.out.println("Geom: " + feature.getDefaultGeometry());
+        System.out.println("FeatureType: " + feature.getFeatureType());
       }
     } finally {
       iterator.close();
