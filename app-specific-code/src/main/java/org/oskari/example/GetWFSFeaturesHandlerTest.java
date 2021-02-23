@@ -84,6 +84,7 @@ public class GetWFSFeaturesHandlerTest {
         SimpleFeature feature = iterator.next();
         System.out.println("ID: " + feature.getID());
         System.out.println("Attributes: " + feature.getAttributes());
+        System.out.println("Geom: " + feature.getDefaultGeometry());
       }
     } finally {
       iterator.close();
