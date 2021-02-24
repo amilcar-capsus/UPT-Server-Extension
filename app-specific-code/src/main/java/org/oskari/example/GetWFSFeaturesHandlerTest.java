@@ -90,9 +90,8 @@ public class GetWFSFeaturesHandlerTest {
           .getAttributeDescriptors();
         Iterator<AttributeDescriptor> attrIterator = list.iterator();
         try {
-          AttributeDescriptor attr = attrIterator.next();
           while (attr.hasNext()) {
-            attr.next();
+            AttributeDescriptor attr = attrIterator.next();
             System.out.println("" + attr.getLocalName());
           }
         } finally {
