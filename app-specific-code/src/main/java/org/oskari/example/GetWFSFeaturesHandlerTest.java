@@ -85,11 +85,12 @@ public class GetWFSFeaturesHandlerTest {
     try {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
-        Iterator<AttributeDescriptor> list = feature
+        List<AttributeDescriptor> list = feature
           .getType()
           .getAttributeDescriptors();
-        while (list.hasNext()) {
-          System.out.println("" + list.getLocalName());
+        Iterator<AttributeDescriptor> attrIterator = list.getIterator();
+        while (attrIterator.hasNext()) {
+          System.out.println("" + attrIterator.getLocalName());
         }
         System.out.println("ID: " + feature.getID());
         System.out.println("Attributes: " + feature.getAttributes());
