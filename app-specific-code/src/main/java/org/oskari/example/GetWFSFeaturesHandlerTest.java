@@ -85,13 +85,12 @@ public class GetWFSFeaturesHandlerTest {
         System.out.println("ID: " + feature.getID());
         System.out.println("Attributes: " + feature.getAttributes());
         //System.out.println("Geom: " + feature.getDefaultGeometry());
-        System.out.println("FeatureType: " + feature.getFeatureTypes())
+        System.out.println("FeatureType: " + feature.getFeatureTypes());
         System.out.println(
-          "Attribute descriptors: " + feature.getType().getAttributeDescriptors()
+          "Attribute descriptors: " +
+          feature.getType().getAttributeDescriptors()
         );
-        System.out.println(
-          "TypeName: " + feature.getType().getTypeName()
-        );
+        System.out.println("TypeName: " + feature.getType().getTypeName());
       }
     } finally {
       iterator.close();
