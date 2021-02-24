@@ -85,6 +85,7 @@ public class GetWFSFeaturesHandlerTest {
     try {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
+        JSONArray names = new JSONArray();
         List<AttributeDescriptor> list = feature
           .getType()
           .getAttributeDescriptors();
@@ -92,31 +93,22 @@ public class GetWFSFeaturesHandlerTest {
         try {
           while (attrIterator.hasNext()) {
             AttributeDescriptor attr = attrIterator.next();
-            System.out.println("" + attr.getLocalName());
+            names.put(attr.getLocalName());
           }
         } finally {
-          //ttrIterator.close();
+          System.out.println("ARRAY: " + names);
         }
         System.out.println("ID: " + feature.getID());
         System.out.println("Attributes: " + feature.getAttributes());
-        //System.out.println("Geom: " + feature.getDefaultGeometry());
-        System.out.println("FeatureType: " + feature.getFeatureType());
-        System.out.println(
-          "Attribute descriptors: " +
-          feature.getType().getAttributeDescriptors()
-        );
-        System.out.println("TypeName: " + feature.getType().getTypeName());
       }
     } finally {
       iterator.close();
     }
-    //System.out.println("FEATURES!!!!!!!!!!!!!!!! " + sfc.toString());
-
-    /* CoordinateReferenceSystem actualCRS = sfc
+    CoordinateReferenceSystem actualCRS = sfc
       .getSchema()
       .getGeometryDescriptor()
       .getCoordinateReferenceSystem();
-    assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS)); */
+    assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
   }
 
   public void testGetExternalFeatures() throws Exception {
