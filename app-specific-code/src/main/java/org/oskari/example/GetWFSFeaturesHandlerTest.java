@@ -90,7 +90,7 @@ public class GetWFSFeaturesHandlerTest {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
         JSONArray names = new JSONArray();
-        String attributes = feature.getAttributes().toString();
+        JSONArray attributes = new JSONArray(feature.getAttributes());
         JSONObject fullFeature = new JSONObject();
         List<AttributeDescriptor> list = feature
           .getType()
@@ -104,7 +104,7 @@ public class GetWFSFeaturesHandlerTest {
         } finally {
           System.out.println("ARRAY: " + names);
         }
-        attributes.put(attributes);
+        //attributes.put(attributes);
         System.out.println("ID: " + feature.getID());
         System.out.println("Names: " + names);
         System.out.println("Attributes: " + attributes);
