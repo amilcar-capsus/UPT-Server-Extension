@@ -109,8 +109,8 @@ public class GetWFSFeaturesHandlerTest {
         System.out.println("Names: " + names);
         System.out.println("Attributes: " + attributes);
         for (int i = 0; i < names.length(); i++) {
-          System.out.println("Names: " + names - get(i));
-          System.out.println("Attributes: " + attributes - get(i));
+          System.out.println("Names: " + names.get(i));
+          System.out.println("Attributes: " + attributes.get(i));
           //fullFeature.put(names.get(i), attributes.get(i));
         }
         System.out.println("Full Feature: " + fullFeature);
