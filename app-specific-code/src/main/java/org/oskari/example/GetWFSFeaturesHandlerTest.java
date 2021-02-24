@@ -95,7 +95,7 @@ public class GetWFSFeaturesHandlerTest {
             System.out.println("" + attr.getLocalName());
           }
         } finally {
-          attrIterator.close();
+          //ttrIterator.close();
         }
         System.out.println("ID: " + feature.getID());
         System.out.println("Attributes: " + feature.getAttributes());
