@@ -90,7 +90,7 @@ public class GetWFSFeaturesHandlerTest {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
         JSONArray names = new JSONArray();
-        JSONArray attributes = feature.getAttributes().toString();
+        JSONArray attributes = new JSONArray(feature.getAttributes());
         JSONObject fullFeature = new JSONObject();
         List<AttributeDescriptor> list = feature
           .getType()
