@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.service.util.ServiceFactory;
 
@@ -84,7 +85,7 @@ public class GetWFSFeaturesHandlerTest {
     try {
       while (iterator.hasNext()) {
         SimpleFeature feature = iterator.next();
-        ListIterator list = feature.listIterator();
+        Iterator<AttributeDescriptor> list = feature.listIterator();
         while (list.hasNext()) {
           System.out.println("" + list.getLocalName());
         }
