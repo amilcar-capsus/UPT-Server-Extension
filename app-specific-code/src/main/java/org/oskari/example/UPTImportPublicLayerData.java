@@ -58,7 +58,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STLayers> modules = new ArrayList<>();
+    //ArrayList<STLayers> modules = new ArrayList<>();
     if ("single_layer".equals(params.getRequiredParam("action"))) {
       //testFeatures.testGetFeatures(study_area, user_uuid);
     } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
@@ -200,7 +200,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STLayers> modules = new ArrayList<>();
+    //ArrayList<STLayers> modules = new ArrayList<>();
     if ("single_layer".equals(params.getRequiredParam("action"))) {
       study_area = 6;
       testFeatures.testGetFeatures(study_area);
@@ -214,7 +214,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STLayers> modules = new ArrayList<>();
+    //ArrayList<STLayers> modules = new ArrayList<>();
     if ("single_layer".equals(params.getRequiredParam("action"))) {
       //testFeatures.testGetFeatures(study_area, user_uuid);
     } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
@@ -227,7 +227,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    ArrayList<STLayers> modules = new ArrayList<>();
+    //ArrayList<STLayers> modules = new ArrayList<>();
     if ("single_layer".equals(params.getRequiredParam("action"))) {
       //testFeatures.testGetFeatures(study_area, user_uuid);
     } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
