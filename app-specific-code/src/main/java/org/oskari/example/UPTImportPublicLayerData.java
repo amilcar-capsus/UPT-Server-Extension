@@ -25,6 +25,7 @@ import org.oskari.example.GetWFSFeaturesHandlerTest;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
 import org.oskari.example.st.LayersSTHandler;
+import org.oskari.example.st.STLayersHandler;
 
 @OskariActionRoute("UPTImportPublicLayerData")
 public class UPTImportPublicLayerData extends RestActionHandler {
