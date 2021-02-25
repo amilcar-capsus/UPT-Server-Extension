@@ -202,7 +202,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     //ArrayList<STLayers> modules = new ArrayList<>();
     if ("single_layer".equals(params.getRequiredParam("action"))) {
-      study_area = 6;
+      study_area = "6";
       testFeatures.testGetFeatures(study_area);
     } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
   }
