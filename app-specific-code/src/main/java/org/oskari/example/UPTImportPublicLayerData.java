@@ -231,4 +231,5 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     if ("single_layer".equals(params.getRequiredParam("action"))) {
       //testFeatures.testGetFeatures(study_area, user_uuid);
     } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+  }
 }
