@@ -375,36 +375,10 @@ public class LayersSTHandler extends RestActionHandler {
             )
           )
         );
-
-        testFeatures.testGetFeatures();
         //testFeatures.testGetExternalFeatures();
         OskariLayer ml = LAYER_SERVICE.find(
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
-        /*CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
-        PropertyUtil.addProperty(
-          "oskari.native.srs",
-          "EPSG:" + stProjection,
-          true
-        );
-        Envelope envelope = new Envelope(
-          -13149614.848125,
-          4383204.949375,
-          -12523442.7125,
-          5009377.085
-        );
-        ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
-
-        SimpleFeatureCollection sfc = featuresList.featureClient.getFeatures(
-          params.getRequiredParam("layer_id"),
-          ml,
-          bbox,
-          webMercator,
-          Optional.empty()
-        );
-        System.out.println(
-          "FEATURES!!!!!!!!!!!!!!!! " + featuresList.toString()
-        ); */
 
         String layerUrl = ml.getUrl();
         String layerVersion = ml.getVersion();
