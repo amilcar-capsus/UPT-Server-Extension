@@ -22,9 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.GetWFSFeaturesHandlerTest;
-import org.oskari.example.st.LayersSTHandler;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
+import org.oskari.example.st.LayersSTHandler;
 
 @OskariActionRoute("UPTImportPublicLayerData")
 public class UPTImportPublicLayerData extends RestActionHandler {
@@ -54,15 +54,18 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handleGet(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    //ArrayList<STLayers> modules = new ArrayList<>();
-    if ("single_layer".equals(params.getRequiredParam("action"))) {
-      //testFeatures.testGetFeatures(study_area, user_uuid);
-    } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    try {
+      String errorMsg = "Layers get";
+      Long user_id = params.getUser().getId();
+      user_uuid = params.getUser().getUuid();
+      Long study_area;
+      study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      if ("single_layer".equals(params.getRequiredParam("action"))) {
+        study_area = Long.parseLong("6");
+        testFeatures.testGetFeatures(study_area);
+      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    } finally {}
     /* try (
       Connection connection = DriverManager.getConnection(
         stURL,
@@ -196,41 +199,49 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    //ArrayList<STLayers> modules = new ArrayList<>();
-    if ("single_layer".equals(params.getRequiredParam("action"))) {
-      study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area);
-    } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    try {
+      String errorMsg = "Layers get";
+      Long user_id = params.getUser().getId();
+      user_uuid = params.getUser().getUuid();
+      Long study_area;
+      study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      if ("single_layer".equals(params.getRequiredParam("action"))) {
+        study_area = Long.parseLong("6");
+        testFeatures.testGetFeatures(study_area);
+      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    } finally {}
   }
 
   @Override
   public void handlePut(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    //ArrayList<STLayers> modules = new ArrayList<>();
-    if ("single_layer".equals(params.getRequiredParam("action"))) {
-      //testFeatures.testGetFeatures(study_area, user_uuid);
-    } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    try {
+      String errorMsg = "Layers get";
+      Long user_id = params.getUser().getId();
+      user_uuid = params.getUser().getUuid();
+      Long study_area;
+      study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      if ("single_layer".equals(params.getRequiredParam("action"))) {
+        study_area = Long.parseLong("6");
+        testFeatures.testGetFeatures(study_area);
+      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    } finally {}
   }
 
   @Override
   public void handleDelete(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    //ArrayList<STLayers> modules = new ArrayList<>();
-    if ("single_layer".equals(params.getRequiredParam("action"))) {
-      //testFeatures.testGetFeatures(study_area, user_uuid);
-    } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    try {
+      String errorMsg = "Layers get";
+      Long user_id = params.getUser().getId();
+      user_uuid = params.getUser().getUuid();
+      Long study_area;
+      study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      if ("single_layer".equals(params.getRequiredParam("action"))) {
+        study_area = Long.parseLong("6");
+        testFeatures.testGetFeatures(study_area);
+      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+    } finally {}
   }
 }
