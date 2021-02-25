@@ -70,7 +70,7 @@ public class GetWFSFeaturesHandlerTest {
     layer.setName(layerTypename); */
 
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
-      studyArea,
+      studyArea.toString(),
       ml,
       bbox,
       webMercator,
