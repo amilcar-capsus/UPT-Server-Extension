@@ -59,8 +59,9 @@ public class GetWFSFeaturesHandlerTest {
   private JSONArray errors;
   private ObjectMapper Obj;
 
-  @Before
-  public void init() {
+  @Override
+  public void preProcess(ActionParameters params) throws ActionException {
+    // common method called for all request methods
     log.info(params.getUser(), "accessing route", getName());
     PropertyUtil.loadProperties("/oskari-ext.properties");
     stURL = PropertyUtil.get("db.url");
@@ -70,6 +71,10 @@ public class GetWFSFeaturesHandlerTest {
     user_uuid = params.getUser().getUuid();
     errors = new JSONArray();
     Obj = new ObjectMapper();
+  }
+
+  @Before
+  public void init() {
     handler = new UPTGetWFSFeaturesHandler();
     handler.init();
     stProjection =
