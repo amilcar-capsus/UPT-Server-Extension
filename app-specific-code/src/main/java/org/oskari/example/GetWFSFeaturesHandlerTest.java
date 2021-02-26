@@ -158,7 +158,7 @@ public class GetWFSFeaturesHandlerTest {
               )
             )
           );
-
+          System.out.println("QUERY!!!!!" + statement.toString());
           status.message = statement.toString();
           statement.execute();
 
