@@ -71,7 +71,7 @@ public class GetWFSFeaturesHandlerTest {
 
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
       studyArea.toString(),
-      ml,
+      layer,
       bbox,
       webMercator,
       Optional.empty()
