@@ -62,10 +62,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
-      if ("single_layer".equals(params.getRequiredParam("action"))) {
-        study_area = Long.parseLong("6");
-        testFeatures.testGetFeatures(study_area);
-      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -257,10 +255,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
-      if ("single_layer".equals(params.getRequiredParam("action"))) {
-        study_area = Long.parseLong("6");
-        testFeatures.testGetFeatures(study_area);
-      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -323,10 +319,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
-      if ("single_layer".equals(params.getRequiredParam("action"))) {
-        study_area = Long.parseLong("6");
-        testFeatures.testGetFeatures(study_area);
-      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -389,10 +383,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
-      if ("single_layer".equals(params.getRequiredParam("action"))) {
-        study_area = Long.parseLong("6");
-        testFeatures.testGetFeatures(study_area);
-      } else if ("all_layers".equals(params.getRequiredParam("action"))) {}
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area);
     } catch (SQLException e) {
       try {
         errors.put(
