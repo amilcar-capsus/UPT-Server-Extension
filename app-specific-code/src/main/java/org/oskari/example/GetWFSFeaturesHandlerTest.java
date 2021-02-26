@@ -46,7 +46,6 @@ public class GetWFSFeaturesHandlerTest {
   @Test
   @Ignore("Depends on an outside resource")
   public void testGetFeatures(Long studyArea) throws Exception {
-    System.out.println("VALUE!!!" + studyArea);
     OskariLayer ml = LAYER_SERVICE.find(studyArea.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
@@ -59,16 +58,16 @@ public class GetWFSFeaturesHandlerTest {
     );
     ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
-    /* String layerUrl = ml.getUrl();
+    String layerUrl = ml.getUrl();
     String layerVersion = ml.getVersion();
     String layerTypename = ml.getName();
 
-    String id = "10";
+    String id = studyArea.toString();
     OskariLayer layer = new OskariLayer();
     layer.setId(Integer.parseInt(id));
     layer.setType(OskariLayer.TYPE_WFS);
     layer.setUrl(layerUrl);
-    layer.setName(layerTypename); */
+    layer.setName(layerTypename);
 
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
       studyArea.toString(),
