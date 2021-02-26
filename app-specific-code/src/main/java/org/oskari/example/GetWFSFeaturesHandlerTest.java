@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -40,9 +41,15 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.oskari.example.st.LayersSTHandler;
+import org.oskari.example.st.STLayersHandler;
 import org.oskari.service.util.ServiceFactory;
 
 public class GetWFSFeaturesHandlerTest {
+  private static String stURL;
+  private static String stUser;
+  private static String stPassword;
+  private static final Logger log = LogFactory.getLogger(LayersSTHandler.class);
   private UPTGetWFSFeaturesHandler handler;
   private static String stProjection;
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
@@ -51,6 +58,15 @@ public class GetWFSFeaturesHandlerTest {
 
   @Before
   public void init() {
+    log.info(params.getUser(), "accessing route", getName());
+    PropertyUtil.loadProperties("/oskari-ext.properties");
+    stURL = PropertyUtil.get("db.url");
+    stUser = PropertyUtil.get("db.username");
+    stPassword = PropertyUtil.get("db.password");
+
+    user_uuid = params.getUser().getUuid();
+    errors = new JSONArray();
+    Obj = new ObjectMapper();
     handler = new UPTGetWFSFeaturesHandler();
     handler.init();
     stProjection =
