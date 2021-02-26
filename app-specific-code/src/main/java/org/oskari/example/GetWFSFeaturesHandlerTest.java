@@ -106,14 +106,14 @@ public class GetWFSFeaturesHandlerTest {
           }
         } finally {}
         //attributes.put(attributes);
-        System.out.println("ID: " + feature.getID());
+        //System.out.println("ID: " + feature.getID());
         for (int i = 0; i < names.length(); i++) {
           fullFeature.put(
             names.get(i).toString(),
             attributes.get(i).toString()
           );
         }
-        System.out.println("Full Feature: " + fullFeature);
+        //System.out.println("Full Feature: " + fullFeature);
         Iterator<String> featureKeys = fullFeature.keys();
         String geomKey = "";
         try {
@@ -124,9 +124,9 @@ public class GetWFSFeaturesHandlerTest {
             }
           }
         } finally {
-          System.out.println("NECESSARY KEY!!!!!!!!!! " + geomKey);
+          //System.out.println("NECESSARY KEY!!!!!!!!!! " + geomKey);
         }
-        /* PostStatus status = new PostStatus();
+        PostStatus status = new PostStatus();
         String query = "";
         try (
           Connection connection = DriverManager.getConnection(
@@ -135,7 +135,7 @@ public class GetWFSFeaturesHandlerTest {
             stPassword
           );
           PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,?);"
+            "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,ST_GeomFromText(?));"
           );
         ) {
           params.requireLoggedInUser();
@@ -149,7 +149,7 @@ public class GetWFSFeaturesHandlerTest {
           statement.setString(2, uuid);
           statement.setString(3, feature.getID());
           statement.setString(4, fullFeature);
-          statement.setString(5, fullFeature.get(Str.matches("(.*)geom(.*)")));
+          statement.setString(5, fullFeature.get(geomKey));
 
           errors.put(
             JSONHelper.createJSONObject(
@@ -158,9 +158,9 @@ public class GetWFSFeaturesHandlerTest {
               )
             )
           );
-
+          System.out.println("QUERY!!!!!" + statement.toString());
           status.message = statement.toString();
-          statement.execute();
+          //statement.execute();
 
           errors.put(
             JSONHelper.createJSONObject(
@@ -224,7 +224,7 @@ public class GetWFSFeaturesHandlerTest {
               .util.logging.Logger.getLogger(STLayersHandler.class.getName())
               .log(Level.SEVERE, null, ex);
           }
-        } */
+        }
       }
     } finally {
       iterator.close();
