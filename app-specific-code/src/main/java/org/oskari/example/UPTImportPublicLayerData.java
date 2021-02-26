@@ -388,7 +388,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     study_area = Long.parseLong("6");
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
-      //study_area = Long.parseLong("6");
+      study_area = Long.parseLong("6");
       //testFeatures.testGetFeatures(study_area, user_uuid);
     } catch (SQLException e) {
       try {
