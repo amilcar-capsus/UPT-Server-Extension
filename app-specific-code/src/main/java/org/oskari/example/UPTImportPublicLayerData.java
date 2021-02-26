@@ -51,6 +51,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     errors = new JSONArray();
     Obj = new ObjectMapper();
+    testFeatures.init();
   }
 
   @Override
