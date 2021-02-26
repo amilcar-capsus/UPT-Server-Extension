@@ -389,6 +389,10 @@ public class LayersSTHandler extends RestActionHandler {
           layerTypename
         );
 
+        testFeatures.testGetFeatures(
+          Long.parseLong(params.getRequiredParam("layer_id"))
+        );
+
         JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
           ml,
           params.getRequiredParam("layer_id")
