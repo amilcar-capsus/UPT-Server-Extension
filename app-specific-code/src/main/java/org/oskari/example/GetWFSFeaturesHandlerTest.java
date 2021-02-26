@@ -21,6 +21,7 @@ import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
