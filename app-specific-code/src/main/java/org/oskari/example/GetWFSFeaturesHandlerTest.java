@@ -106,14 +106,14 @@ public class GetWFSFeaturesHandlerTest {
           }
         } finally {}
         //attributes.put(attributes);
-        //System.out.println("ID: " + feature.getID());
+        System.out.println("ID: " + feature.getID());
         for (int i = 0; i < names.length(); i++) {
           fullFeature.put(
             names.get(i).toString(),
             attributes.get(i).toString()
           );
         }
-        //System.out.println("Full Feature: " + fullFeature);
+        System.out.println("Full Feature: " + fullFeature);
         Iterator<String> featureKeys = fullFeature.keys();
         String geomKey = "";
         try {
@@ -124,7 +124,7 @@ public class GetWFSFeaturesHandlerTest {
             }
           }
         } finally {
-          //System.out.println("NECESSARY KEY!!!!!!!!!! " + geomKey);
+          System.out.println("NECESSARY KEY!!!!!!!!!! " + geomKey);
         }
         PostStatus status = new PostStatus();
         String query = "";
@@ -158,9 +158,9 @@ public class GetWFSFeaturesHandlerTest {
               )
             )
           );
-          System.out.println("QUERY!!!!!" + statement.toString());
+
           status.message = statement.toString();
-          //statement.execute();
+          statement.execute();
 
           errors.put(
             JSONHelper.createJSONObject(
