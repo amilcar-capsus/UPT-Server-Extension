@@ -55,12 +55,12 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handleGet(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
-      String errorMsg = "Layers get";
-      Long user_id = params.getUser().getId();
-      user_uuid = params.getUser().getUuid();
-      Long study_area;
-      study_area = Long.parseLong(params.getRequiredParam("study_area"));
       //ArrayList<STLayers> modules = new ArrayList<>();
       if ("single_layer".equals(params.getRequiredParam("action"))) {
         study_area = Long.parseLong("6");
@@ -250,12 +250,12 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
-      String errorMsg = "Layers get";
-      Long user_id = params.getUser().getId();
-      user_uuid = params.getUser().getUuid();
-      Long study_area;
-      study_area = Long.parseLong(params.getRequiredParam("study_area"));
       //ArrayList<STLayers> modules = new ArrayList<>();
       if ("single_layer".equals(params.getRequiredParam("action"))) {
         study_area = Long.parseLong("6");
@@ -316,12 +316,12 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePut(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
-      String errorMsg = "Layers get";
-      Long user_id = params.getUser().getId();
-      user_uuid = params.getUser().getUuid();
-      Long study_area;
-      study_area = Long.parseLong(params.getRequiredParam("study_area"));
       //ArrayList<STLayers> modules = new ArrayList<>();
       if ("single_layer".equals(params.getRequiredParam("action"))) {
         study_area = Long.parseLong("6");
@@ -382,12 +382,12 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handleDelete(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
-      String errorMsg = "Layers get";
-      Long user_id = params.getUser().getId();
-      user_uuid = params.getUser().getUuid();
-      Long study_area;
-      study_area = Long.parseLong(params.getRequiredParam("study_area"));
       //ArrayList<STLayers> modules = new ArrayList<>();
       if ("single_layer".equals(params.getRequiredParam("action"))) {
         study_area = Long.parseLong("6");
