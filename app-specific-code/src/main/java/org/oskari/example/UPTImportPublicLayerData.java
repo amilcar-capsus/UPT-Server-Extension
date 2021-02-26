@@ -377,8 +377,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       }
     }
   }
-
-  @Override
+  /* @Override
   public void handleDelete(ActionParameters params) throws ActionException {
     String errorMsg = "Layers get";
     Long user_id = params.getUser().getId();
@@ -441,5 +440,5 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           .log(Level.SEVERE, null, ex);
       }
     }
-  }
+  } */
 }
