@@ -46,6 +46,7 @@ public class GetWFSFeaturesHandlerTest {
   @Test
   @Ignore("Depends on an outside resource")
   public void testGetFeatures(Long studyArea) throws Exception {
+    System.out.println("VALUE!!!" + studyArea)
     OskariLayer ml = LAYER_SERVICE.find(studyArea.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
