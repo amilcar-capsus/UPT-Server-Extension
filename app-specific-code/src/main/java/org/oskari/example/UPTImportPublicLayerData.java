@@ -59,7 +59,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long user_id = params.getUser().getId();
     user_uuid = params.getUser().getUuid();
     Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseLong("6");
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
@@ -252,7 +253,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long user_id = params.getUser().getId();
     user_uuid = params.getUser().getUuid();
     Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseLong("6");
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
@@ -316,7 +318,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long user_id = params.getUser().getId();
     user_uuid = params.getUser().getUuid();
     Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseLong("6");
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
@@ -380,7 +383,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long user_id = params.getUser().getId();
     user_uuid = params.getUser().getUuid();
     Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseLong("6");
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
