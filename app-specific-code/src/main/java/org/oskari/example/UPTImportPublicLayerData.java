@@ -377,7 +377,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       }
     }
   }
-  /* @Override
+
+  @Override
   public void handleDelete(ActionParameters params) throws ActionException {
     String errorMsg = "Layers get";
     Long user_id = params.getUser().getId();
@@ -388,7 +389,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      //testFeatures.testGetFeatures(study_area, user_uuid);
+      testFeatures.testGetFeatures(study_area, user_uuid);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -440,5 +441,5 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           .log(Level.SEVERE, null, ex);
       }
     }
-  } */
+  }
 }
