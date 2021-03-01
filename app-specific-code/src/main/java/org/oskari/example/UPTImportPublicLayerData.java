@@ -368,7 +368,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           }
 
           statement.setLong(1, study_area);
-          statement.setString(2, uuid);
+          statement.setString(2, user_uuid);
           statement.setString(3, feature.getID());
           statement.setString(4, fullFeature.toString());
           statement.setString(5, fullFeature.get(geomKey).toString());
