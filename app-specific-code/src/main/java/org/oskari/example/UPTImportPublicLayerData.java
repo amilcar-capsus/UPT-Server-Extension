@@ -286,7 +286,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
     } catch (Exception e) {
-      try {
+      /* try {
         errors.put(
           JSONHelper.createJSONObject(
             Obj.writeValueAsString(new PostStatus("Error", e.toString()))
@@ -334,7 +334,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         java
           .util.logging.Logger.getLogger(STLayersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
-      }
+      } */
     }
     /* PostStatus status = new PostStatus();
     String query = "";
