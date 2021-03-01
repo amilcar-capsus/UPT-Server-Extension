@@ -349,7 +349,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
               }
             }
           } finally {}
-          featureArray.put(fullFeature);
+          //featureArray.put(fullFeature);
           PostStatus status = new PostStatus();
           String query = "";
           try (
@@ -387,9 +387,9 @@ public class UPTImportPublicLayerData extends RestActionHandler {
                 )
               )
             );
-            System.out.println("QUERY!!!!!" + statement.toString());
+            //System.out.println("QUERY!!!!!" + statement.toString());
             status.message = statement.toString();
-            //statement.execute();
+            statement.execute();
 
             errors.put(
               JSONHelper.createJSONObject(
