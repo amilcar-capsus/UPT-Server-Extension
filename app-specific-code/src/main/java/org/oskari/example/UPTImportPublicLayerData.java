@@ -279,7 +279,142 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     user_uuid = params.getUser().getUuid();
     Long study_area;
     study_area = Long.parseLong("6");
+    testGetFeatures();
     //study_area = Long.parseLong(params.getRequiredParam("study_area"));
+
+  }
+
+  @Override
+  public void handlePut(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    study_area = Long.parseLong("6");
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    try {
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
+    } catch (SQLException e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+    } catch (JsonProcessingException ex) {
+      java
+        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+        .log(Level.SEVERE, null, ex);
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  @Override
+  public void handleDelete(ActionParameters params) throws ActionException {
+    String errorMsg = "Layers get";
+    Long user_id = params.getUser().getId();
+    user_uuid = params.getUser().getUuid();
+    Long study_area;
+    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
+    study_area = Long.parseLong("6");
+    try {
+      //ArrayList<STLayers> modules = new ArrayList<>();
+      study_area = Long.parseLong("6");
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
+    } catch (SQLException e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+    } catch (JsonProcessingException ex) {
+      java
+        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+        .log(Level.SEVERE, null, ex);
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  public void testGeatFeatures() throws Exception {
     OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
@@ -456,135 +591,5 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       .getGeometryDescriptor()
       .getCoordinateReferenceSystem();
     assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
-  }
-
-  @Override
-  public void handlePut(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    study_area = Long.parseLong("6");
-    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    try {
-      //ArrayList<STLayers> modules = new ArrayList<>();
-      study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid, params);
-    } catch (SQLException e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-      errorMsg = errorMsg + e.toString();
-      log.error(e, errorMsg);
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (Exception e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-    }
-  }
-
-  @Override
-  public void handleDelete(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    study_area = Long.parseLong("6");
-    try {
-      //ArrayList<STLayers> modules = new ArrayList<>();
-      study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid, params);
-    } catch (SQLException e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-      errorMsg = errorMsg + e.toString();
-      log.error(e, errorMsg);
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
-    } catch (Exception e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
-    }
   }
 }
