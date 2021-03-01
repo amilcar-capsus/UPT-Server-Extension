@@ -85,7 +85,12 @@ public class GetWFSFeaturesHandlerTest {
 
   @Test
   @Ignore("Depends on an outside resource")
-  public void testGetFeatures(Long studyArea, String uuid) throws Exception {
+  public void testGetFeatures(
+    Long studyArea,
+    String uuid,
+    ActionParameters params
+  )
+    throws Exception {
     String errorMsg = "Layers get";
     OskariLayer ml = LAYER_SERVICE.find(studyArea.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
