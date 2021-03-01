@@ -75,7 +75,7 @@ public class GetWFSFeaturesHandlerTest extends RestActionHandler {
   } */
 
   @Before
-  public void init() {
+  public void init(ActionParameters params) {
     log.info(params.getUser(), "accessing route", getName());
     PropertyUtil.loadProperties("/oskari-ext.properties");
     stURL = PropertyUtil.get("db.url");
