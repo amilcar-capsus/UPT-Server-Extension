@@ -282,6 +282,57 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     testGetFeatures(study_area);
     //study_area = Long.parseLong(params.getRequiredParam("study_area"));
 
+    try {} catch (SQLException e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+    } catch (JsonProcessingException ex) {
+      java
+        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+        .log(Level.SEVERE, null, ex);
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
     /* PostStatus status = new PostStatus();
     String query = "";
     try (
