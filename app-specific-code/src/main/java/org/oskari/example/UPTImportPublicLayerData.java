@@ -567,7 +567,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     }
   }
 
-  public void testGetFeatures(Long study_area) throws Exception {
+  public void testGetFeatures(Long study_area) {
     try {
       OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
       JSONArray featureArray = new JSONArray();
