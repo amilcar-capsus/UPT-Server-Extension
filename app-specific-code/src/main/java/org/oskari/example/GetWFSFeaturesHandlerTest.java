@@ -68,7 +68,7 @@ public class GetWFSFeaturesHandlerTest {
     stUser = PropertyUtil.get("db.username");
     stPassword = PropertyUtil.get("db.password");
 
-    user_uuid = params.getUser().getUuid();
+    //user_uuid = params.getUser().getUuid();
     errors = new JSONArray();
     Obj = new ObjectMapper();
   }
