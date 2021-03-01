@@ -390,7 +390,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             //System.out.println("QUERY!!!!!" + statement.toString());
             status.message = statement.toString();
             statement.execute();
-
+            statement.close();
             errors.put(
               JSONHelper.createJSONObject(
                 Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
