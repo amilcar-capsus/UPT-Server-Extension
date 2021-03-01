@@ -14,7 +14,7 @@ CREATE TABLE public.public_layer_data
     updated timestamp with time zone,
     CONSTRAINT "public_layer_data_pKey" PRIMARY KEY (id),
     CONSTRAINT public_layer_data_user_layer_fkey FOREIGN KEY (public_layer_id)
-        REFERENCES public.user_layer (id) MATCH SIMPLE
+        REFERENCES public.oskari_maplayer (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 )
