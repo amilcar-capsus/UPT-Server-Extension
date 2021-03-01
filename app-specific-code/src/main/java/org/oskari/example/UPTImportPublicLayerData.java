@@ -65,7 +65,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -259,7 +259,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -324,7 +324,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -389,7 +389,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
