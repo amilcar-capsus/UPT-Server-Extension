@@ -57,7 +57,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
   private static String user_uuid;
   private static final Logger log = LogFactory.getLogger(LayersSTHandler.class);
   private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
-  private UPTGetWFSFeaturesHandler handler;
+  private UPTGetWFSFeaturesHandler handler = new UPTGetWFSFeaturesHandler();
 
   private JSONArray errors;
   private ObjectMapper Obj;
