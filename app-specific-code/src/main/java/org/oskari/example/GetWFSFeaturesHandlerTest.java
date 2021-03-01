@@ -8,6 +8,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
+import fi.nls.oskari.control.RestActionHandler;
 import fi.nls.oskari.control.feature.AbstractWFSFeaturesHandler;
 import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
 import fi.nls.oskari.domain.map.OskariLayer;
@@ -59,7 +60,7 @@ public class GetWFSFeaturesHandlerTest {
   private JSONArray errors;
   private ObjectMapper Obj;
 
-  @Override
+  /* @Override
   public void preProcess(ActionParameters params) throws ActionException {
     // common method called for all request methods
     log.info(params.getUser(), "accessing route", getName());
@@ -71,10 +72,19 @@ public class GetWFSFeaturesHandlerTest {
     //user_uuid = params.getUser().getUuid();
     errors = new JSONArray();
     Obj = new ObjectMapper();
-  }
+  } */
 
   @Before
   public void init() {
+    log.info(params.getUser(), "accessing route", getName());
+    PropertyUtil.loadProperties("/oskari-ext.properties");
+    stURL = PropertyUtil.get("db.url");
+    stUser = PropertyUtil.get("db.username");
+    stPassword = PropertyUtil.get("db.password");
+
+    //user_uuid = params.getUser().getUuid();
+    errors = new JSONArray();
+    Obj = new ObjectMapper();
     handler = new UPTGetWFSFeaturesHandler();
     handler.init();
     stProjection =
