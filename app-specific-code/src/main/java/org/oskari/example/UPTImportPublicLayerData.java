@@ -345,8 +345,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           }
         } finally {}
         featureArray.put(fullFeature);
-      }
-      PostStatus status = new PostStatus();
+        PostStatus status = new PostStatus();
       String query = "";
       try (
         Connection connection = DriverManager.getConnection(
@@ -391,6 +390,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           params,
           new JSONObject().put("Errors", errors)
         );
+      }
       } catch (SQLException e) {
         log.error(e);
         try {
