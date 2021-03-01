@@ -346,65 +346,73 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         } finally {}
         featureArray.put(fullFeature);
         PostStatus status = new PostStatus();
-      String query = "";
-      try (
-        Connection connection = DriverManager.getConnection(
-          stURL,
-          stUser,
-          stPassword
-        );
-        PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,ST_GeomFromText(?));"
-        );
-      ) {
-        params.requireLoggedInUser();
-        ArrayList<String> roles = new UPTRoles()
-        .handleGet(params, params.getUser());
-        if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
-          throw new Exception("User privilege is not enough for this action");
-        }
+        String query = "";
+        try (
+          Connection connection = DriverManager.getConnection(
+            stURL,
+            stUser,
+            stPassword
+          );
+          PreparedStatement statement = connection.prepareStatement(
+            "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,ST_GeomFromText(?));"
+          );
+        ) {
+          params.requireLoggedInUser();
+          ArrayList<String> roles = new UPTRoles()
+          .handleGet(params, params.getUser());
+          if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
+            throw new Exception("User privilege is not enough for this action");
+          }
 
-        statement.setLong(1, study_area);
-        statement.setString(2, user_uuid);
-        statement.setString(3, feature.getID());
-        statement.setString(4, fullFeature.toString());
-        statement.setString(5, fullFeature.get(geomKey).toString());
+          statement.setLong(1, study_area);
+          statement.setString(2, user_uuid);
+          statement.setString(3, feature.getID());
+          statement.setString(4, fullFeature.toString());
+          statement.setString(5, fullFeature.get(geomKey).toString());
 
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(
-              new PostStatus("OK", "Executing query: " + statement.toString())
-            )
-          )
-        );
-        System.out.println("QUERY!!!!!" + statement.toString());
-        status.message = statement.toString();
-        //statement.execute();
-
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
-          )
-        );
-        ResponseHelper.writeResponse(
-          params,
-          new JSONObject().put("Errors", errors)
-        );
-      }
-      } catch (SQLException e) {
-        log.error(e);
-        try {
           errors.put(
             JSONHelper.createJSONObject(
-              Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+              Obj.writeValueAsString(
+                new PostStatus("OK", "Executing query: " + statement.toString())
+              )
             )
           );
-          ResponseHelper.writeError(
+          System.out.println("QUERY!!!!!" + statement.toString());
+          status.message = statement.toString();
+          //statement.execute();
+
+          errors.put(
+            JSONHelper.createJSONObject(
+              Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
+            )
+          );
+          ResponseHelper.writeResponse(
             params,
-            "",
-            500,
             new JSONObject().put("Errors", errors)
           );
+        } catch (SQLException e) {
+          log.error(e);
+          try {
+            errors.put(
+              JSONHelper.createJSONObject(
+                Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+              )
+            );
+            ResponseHelper.writeError(
+              params,
+              "",
+              500,
+              new JSONObject().put("Errors", errors)
+            );
+          } catch (JsonProcessingException ex) {
+            java
+              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+              .log(Level.SEVERE, null, ex);
+          } catch (JSONException ex) {
+            java
+              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+              .log(Level.SEVERE, null, ex);
+          }
         } catch (JsonProcessingException ex) {
           java
             .util.logging.Logger.getLogger(STLayersHandler.class.getName())
@@ -413,36 +421,28 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           java
             .util.logging.Logger.getLogger(STLayersHandler.class.getName())
             .log(Level.SEVERE, null, ex);
-        }
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (Exception e) {
-        try {
-          errors.put(
-            JSONHelper.createJSONObject(
-              Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-            )
-          );
-          ResponseHelper.writeError(
-            params,
-            "",
-            500,
-            new JSONObject().put("Errors", errors)
-          );
-        } catch (JsonProcessingException ex) {
-          java
-            .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-            .log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-          java
-            .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-            .log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+          try {
+            errors.put(
+              JSONHelper.createJSONObject(
+                Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+              )
+            );
+            ResponseHelper.writeError(
+              params,
+              "",
+              500,
+              new JSONObject().put("Errors", errors)
+            );
+          } catch (JsonProcessingException ex) {
+            java
+              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+              .log(Level.SEVERE, null, ex);
+          } catch (JSONException ex) {
+            java
+              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+              .log(Level.SEVERE, null, ex);
+          }
         }
       }
     } finally {
