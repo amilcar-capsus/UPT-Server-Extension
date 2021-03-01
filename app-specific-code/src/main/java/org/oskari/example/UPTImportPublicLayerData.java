@@ -414,7 +414,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     }
   }
 
-  public void testGeatFeatures() throws Exception {
+  public void testGetFeatures() throws Exception {
     OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
