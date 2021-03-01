@@ -182,8 +182,8 @@ public class GetWFSFeaturesHandlerTest {
           statement.setLong(1, studyArea);
           statement.setString(2, uuid);
           statement.setString(3, feature.getID());
-          statement.setString(4, fullFeature);
-          statement.setString(5, fullFeature.get(geomKey));
+          statement.setString(4, fullFeature.toString());
+          statement.setString(5, fullFeature.get(geomKey).toString());
 
           errors.put(
             JSONHelper.createJSONObject(
