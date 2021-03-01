@@ -278,7 +278,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long study_area;
     study_area = Long.parseLong("6");
     //study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    OskariLayer ml = LAYER_SERVICE.find(studyArea.intValue());
+    OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
     CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
     // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
     PropertyUtil.addProperty("oskari.native.srs", "EPSG:3857", true);
@@ -294,7 +294,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     String layerVersion = ml.getVersion();
     String layerTypename = ml.getName();
 
-    String id = studyArea.toString();
+    String id = study_area.toString();
     OskariLayer layer = new OskariLayer();
     layer.setId(Integer.parseInt(id));
     layer.setType(OskariLayer.TYPE_WFS);
@@ -302,7 +302,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     layer.setName(layerTypename);
 
     SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
-      studyArea.toString(),
+      study_area.toString(),
       layer,
       bbox,
       webMercator,
@@ -365,7 +365,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             throw new Exception("User privilege is not enough for this action");
           }
 
-          statement.setLong(1, studyArea);
+          statement.setLong(1, study_area);
           statement.setString(2, uuid);
           statement.setString(3, feature.getID());
           statement.setString(4, fullFeature.toString());
