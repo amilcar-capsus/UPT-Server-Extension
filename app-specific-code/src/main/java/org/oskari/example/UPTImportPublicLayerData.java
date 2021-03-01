@@ -359,7 +359,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
               stPassword
             );
             PreparedStatement statement = connection.prepareStatement(
-              "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,ST_GeomFromText(?));"
+              "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
             );
           ) {
             params.requireLoggedInUser();
