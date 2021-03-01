@@ -49,7 +49,7 @@ import org.oskari.example.st.LayersSTHandler;
 import org.oskari.example.st.STLayersHandler;
 import org.oskari.service.util.ServiceFactory;
 
-public class GetWFSFeaturesHandlerTest {
+public class GetWFSFeaturesHandlerTest extends RestActionHandler {
   private static String stURL;
   private static String stUser;
   private static String stPassword;
