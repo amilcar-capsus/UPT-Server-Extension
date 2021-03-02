@@ -89,7 +89,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid, params);
+      testFeatures.getFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -274,7 +274,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    //testGetFeatures(study_area);
+    //getFeatures(study_area);
     //study_area = Long.parseLong(params.getRequiredParam("study_area"));
 
     try {
@@ -627,7 +627,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid, params);
+      testFeatures.getFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -684,43 +684,48 @@ public class UPTImportPublicLayerData extends RestActionHandler {
   @Override
   public void handleDelete(ActionParameters params) throws ActionException {
     String errorMsg = "Layers get";
-    Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-    Long study_area;
-    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
-    study_area = Long.parseLong("6");
-    try {
-      //ArrayList<STLayers> modules = new ArrayList<>();
-      study_area = Long.parseLong("6");
-      testFeatures.testGetFeatures(study_area, user_uuid, params);
-    } catch (SQLException e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
+    Long id;
+    id = Long.parseLong(params.getRequiredParam("id"));
+    PostStatus status = new PostStatus();
+    String query = "";
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+      PreparedStatement statement = connection.prepareStatement(
+        "delete from public.public_layer_data where public_layer_id = ?;"
+      );
+    ) {
+      params.requireLoggedInUser();
+      ArrayList<String> roles = new UPTRoles()
+      .handleGet(params, params.getUser());
+      if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
+        throw new Exception("User privilege is not enough for this action");
       }
-      errorMsg = errorMsg + e.toString();
-      log.error(e, errorMsg);
-    } catch (JsonProcessingException ex) {
-      java
-        .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-        .log(Level.SEVERE, null, ex);
+
+      statement.setInt(1, id);
+
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(
+            new PostStatus("OK", "Executing query: " + statement.toString())
+          )
+        )
+      );
+
+      statement.execute();
+
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("OK", "Filter delete"))
+        )
+      );
+      ResponseHelper.writeResponse(
+        params,
+        new JSONObject().put("Errors", errors)
+      );
     } catch (Exception e) {
       try {
         errors.put(
@@ -736,17 +741,17 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         );
       } catch (JsonProcessingException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       } catch (JSONException ex) {
         java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       }
     }
   }
 
-  public void testGetFeatures(Long study_area) {
+  public void getFeatures(Long study_area) {
     try {
       OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
       JSONArray featureArray = new JSONArray();
