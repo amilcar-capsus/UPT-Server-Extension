@@ -279,6 +279,11 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
       String errorMsg = "Layers get";
       Long user_id = params.getUser().getId();
       user_uuid = params.getUser().getUuid();
@@ -353,11 +358,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           PostStatus status = new PostStatus();
           String query = "";
           try (
-            Connection connection = DriverManager.getConnection(
-              stURL,
-              stUser,
-              stPassword
-            );
             PreparedStatement statement = connection.prepareStatement(
               "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
             );
