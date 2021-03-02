@@ -89,7 +89,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.getFeatures(study_area, user_uuid, params);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
@@ -274,7 +274,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    //getFeatures(study_area);
+    //testGetFeatures(study_area);
     //study_area = Long.parseLong(params.getRequiredParam("study_area"));
 
     try {
@@ -627,7 +627,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
       study_area = Long.parseLong("6");
-      testFeatures.getFeatures(study_area, user_uuid, params);
+      testFeatures.testGetFeatures(study_area, user_uuid, params);
     } catch (SQLException e) {
       try {
         errors.put(
