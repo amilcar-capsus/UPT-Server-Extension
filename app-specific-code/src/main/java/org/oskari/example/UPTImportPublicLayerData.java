@@ -275,7 +275,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
     //testGetFeatures(study_area);
-    //study_area = Long.parseLong(params.getRequiredParam("study_area"));
 
     try {
       //ArrayList<STLayers> modules = new ArrayList<>();
@@ -288,7 +287,10 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       Long user_id = params.getUser().getId();
       user_uuid = params.getUser().getUuid();
       Long study_area;
-      study_area = Long.parseLong("6");
+      study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      PreparedStatement statement = connection.prepareStatement(
+        "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
+      );
       OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
       JSONArray featureArray = new JSONArray();
       CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
@@ -357,11 +359,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           //featureArray.put(fullFeature);
           PostStatus status = new PostStatus();
           String query = "";
-          try (
-            PreparedStatement statement = connection.prepareStatement(
-              "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
-            );
-          ) {
+          try {
             params.requireLoggedInUser();
             ArrayList<String> roles = new UPTRoles()
             .handleGet(params, params.getUser());
@@ -389,8 +387,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             );
             //System.out.println("QUERY!!!!!" + statement.toString());
             status.message = statement.toString();
-            statement.execute();
-            statement.close();
+            statement.addBatch();
+
             errors.put(
               JSONHelper.createJSONObject(
                 Obj.writeValueAsString(new PostStatus("OK", "Layer registered"))
@@ -464,6 +462,9 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         .getGeometryDescriptor()
         .getCoordinateReferenceSystem();
       assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
+      int[] count = statement.executeBatch();
+      connection.commit();
+      statement.close();
     } catch (Exception e) {
       /* try {
         errors.put(
