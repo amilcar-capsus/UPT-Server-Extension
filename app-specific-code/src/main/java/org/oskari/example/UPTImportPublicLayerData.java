@@ -705,7 +705,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      statement.setInt(1, id);
+      statement.setLong(1, id);
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -741,11 +741,11 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         );
       } catch (JsonProcessingException ex) {
         java
-          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       } catch (JSONException ex) {
         java
-          .util.logging.Logger.getLogger(STFiltersHandler.class.getName())
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
           .log(Level.SEVERE, null, ex);
       }
     }
