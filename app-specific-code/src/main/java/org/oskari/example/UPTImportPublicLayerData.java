@@ -375,7 +375,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
                 )
               )
             );
-            System.out.println("QUERY!!!!!" + statement.toString());
+            //System.out.println("QUERY!!!!!" + statement.toString());
             status.message = statement.toString();
 
             errors.put(
@@ -451,13 +451,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         .getGeometryDescriptor()
         .getCoordinateReferenceSystem();
       assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
-      Long start = System.currentTimeMillis();
       int[] inserted = statement.executeBatch();
-      Long end = System.currentTimeMillis();
-
-      System.out.println(
-        "total time taken to insert the batch = " + (end - start) + " ms"
-      );
       connection.commit();
       statement.close();
     } catch (Exception e) {
