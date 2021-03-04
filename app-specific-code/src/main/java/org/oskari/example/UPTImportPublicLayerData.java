@@ -374,6 +374,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             statement.setString(3, feature.getID());
             statement.setString(4, fullFeature.toString());
             statement.setString(5, fullFeature.get(geomKey).toString());
+            statement.addBatch();
 
             errors.put(
               JSONHelper.createJSONObject(
@@ -387,7 +388,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             );
             //System.out.println("QUERY!!!!!" + statement.toString());
             status.message = statement.toString();
-            statement.addBatch();
 
             errors.put(
               JSONHelper.createJSONObject(
@@ -462,9 +462,15 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         .getGeometryDescriptor()
         .getCoordinateReferenceSystem();
       assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
-      int[] count = statement.executeBatch();
-      connection.commit();
+      Long start = System.currentTimeMillis();
+      int[] inserted = statement.executeBatch();
+      Long end = System.currentTimeMillis();
+
+      System.out.println(
+        "total time taken to insert the batch = " + (end - start) + " ms"
+      );
       statement.close();
+      connection.close();
     } catch (Exception e) {
       /* try {
         errors.put(
