@@ -290,6 +290,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       PreparedStatement statement = connection.prepareStatement(
         "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
       );
+      connection.setAutoCommit(false);
       OskariLayer ml = LAYER_SERVICE.find(study_area.intValue());
       JSONArray featureArray = new JSONArray();
       CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
