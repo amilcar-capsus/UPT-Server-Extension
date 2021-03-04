@@ -487,28 +487,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       java
         .util.logging.Logger.getLogger(STLayersHandler.class.getName())
         .log(Level.SEVERE, null, ex);
-    } catch (Exception e) {
-      try {
-        errors.put(
-          JSONHelper.createJSONObject(
-            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-          )
-        );
-        ResponseHelper.writeError(
-          params,
-          "",
-          500,
-          new JSONObject().put("Errors", errors)
-        );
-      } catch (JsonProcessingException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      } catch (JSONException ex) {
-        java
-          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-          .log(Level.SEVERE, null, ex);
-      }
     }
   }
 
