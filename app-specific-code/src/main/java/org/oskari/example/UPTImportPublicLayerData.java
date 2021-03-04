@@ -288,6 +288,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       user_uuid = params.getUser().getUuid();
       Long study_area;
       study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      System.out.println("STUDYAREA!!!! " + study_area);
       PreparedStatement statement = connection.prepareStatement(
         "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
       );
@@ -317,7 +318,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
       SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
         study_area.toString(),
-        layer,
+        ml,
         bbox,
         webMercator,
         Optional.empty()
@@ -469,8 +470,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       System.out.println(
         "total time taken to insert the batch = " + (end - start) + " ms"
       );
+      connection.commit();
       statement.close();
-      connection.close();
     } catch (Exception e) {
       /* try {
         errors.put(
