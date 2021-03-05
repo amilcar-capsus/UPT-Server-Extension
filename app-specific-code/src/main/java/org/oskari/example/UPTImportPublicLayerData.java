@@ -274,12 +274,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    params.requireLoggedInUser();
-    ArrayList<String> roles = new UPTRoles()
-    .handleGet(params, params.getUser());
-    if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
-      throw new Exception("User privilege is not enough for this action");
-    }
     String errorMsg = "WFS get";
     PostStatus status = new PostStatus();
     String query = "";
@@ -295,6 +289,12 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         stPassword
       );
     ) {
+      params.requireLoggedInUser();
+      ArrayList<String> roles = new UPTRoles()
+      .handleGet(params, params.getUser());
+      if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
+        throw new Exception("User privilege is not enough for this action");
+      }
       PreparedStatement statement = connection.prepareStatement(
         "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
       );
