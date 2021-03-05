@@ -274,7 +274,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
 
   @Override
   public void handlePost(ActionParameters params) throws ActionException {
-    String errorMsg = "Layers get";
+    String errorMsg = "WFS get";
     Long user_id = params.getUser().getId();
     user_uuid = params.getUser().getUuid();
     Long study_area;
@@ -387,37 +387,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
               params,
               new JSONObject().put("Errors", errors)
             );
-          } catch (SQLException e) {
-            log.error(e);
-            try {
-              errors.put(
-                JSONHelper.createJSONObject(
-                  Obj.writeValueAsString(new PostStatus("Error", e.toString()))
-                )
-              );
-              ResponseHelper.writeError(
-                params,
-                "",
-                500,
-                new JSONObject().put("Errors", errors)
-              );
-            } catch (JsonProcessingException ex) {
-              java
-                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-                .log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
-              java
-                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-                .log(Level.SEVERE, null, ex);
-            }
-          } catch (JsonProcessingException ex) {
-            java
-              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-              .log(Level.SEVERE, null, ex);
-          } catch (JSONException ex) {
-            java
-              .util.logging.Logger.getLogger(STLayersHandler.class.getName())
-              .log(Level.SEVERE, null, ex);
           } catch (Exception e) {
             try {
               errors.put(
@@ -433,13 +402,20 @@ public class UPTImportPublicLayerData extends RestActionHandler {
               );
             } catch (JsonProcessingException ex) {
               java
-                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+                .util.logging.Logger.getLogger(
+                  STSettingsHandler.class.getName()
+                )
                 .log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
               java
-                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+                .util.logging.Logger.getLogger(
+                  STSettingsHandler.class.getName()
+                )
                 .log(Level.SEVERE, null, ex);
             }
+
+            errorMsg = errorMsg + e.toString();
+            log.error(e, errorMsg);
           }
         }
       } finally {
