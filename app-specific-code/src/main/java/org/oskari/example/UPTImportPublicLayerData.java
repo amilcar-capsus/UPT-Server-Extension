@@ -423,9 +423,25 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         .getGeometryDescriptor()
         .getCoordinateReferenceSystem();
       assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(
+            new PostStatus("OK", "Executing query: " + statement.toString())
+          )
+        )
+      );
       int[] inserted = statement.executeBatch();
       connection.commit();
       statement.close();
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("OK", "WFS registered"))
+        )
+      );
+      ResponseHelper.writeResponse(
+        params,
+        new JSONObject().put("Errors", errors)
+      );
     } catch (Exception e) {
       try {
         errors.put(
