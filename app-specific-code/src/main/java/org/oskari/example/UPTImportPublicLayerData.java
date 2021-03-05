@@ -402,15 +402,11 @@ public class UPTImportPublicLayerData extends RestActionHandler {
               );
             } catch (JsonProcessingException ex) {
               java
-                .util.logging.Logger.getLogger(
-                  STSettingsHandler.class.getName()
-                )
+                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
                 .log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
               java
-                .util.logging.Logger.getLogger(
-                  STSettingsHandler.class.getName()
-                )
+                .util.logging.Logger.getLogger(STLayersHandler.class.getName())
                 .log(Level.SEVERE, null, ex);
             }
 
