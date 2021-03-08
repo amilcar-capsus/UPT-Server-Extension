@@ -1009,12 +1009,10 @@ public class LayersSTHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with public_layers as(\n" +
-        "    select id,\n" +
-        "    name as layer_name" +
-        "    from oskari_maplayer\n" +
-        ")\n" +
-        "select  id,layer_name\n" +
-        "from public_layers"
+        "   SELECT distinct oskari_maplayer.id, name as layer_name FROM oskari_maplayer\n" +
+        "   INNER JOIN public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id WHERE type = 'wfslayer' AND public_layer_data.uuid = ?\n" +
+        "   )\n" +
+        "select id, layer_name from public_layers"
       );
     ) {
       //statement.setString(1, user_uuid);
