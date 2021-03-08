@@ -516,6 +516,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     String errorMsg = "Layers get";
     Long id;
     id = Long.parseLong(params.getRequiredParam("id"));
+    user_uuid = params.getUser().getUuid();
     PostStatus status = new PostStatus();
     String query = "";
     try (
@@ -525,7 +526,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "delete from public.public_layer_data where public_layer_id = ?;"
+        "delete from public.public_layer_data where public_layer_id = ? and uuid = ?;"
       );
     ) {
       params.requireLoggedInUser();
@@ -536,6 +537,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       }
 
       statement.setLong(1, id);
+      statement.setString(2, user_uuid);
 
       errors.put(
         JSONHelper.createJSONObject(
