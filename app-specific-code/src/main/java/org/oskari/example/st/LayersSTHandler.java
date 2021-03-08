@@ -1000,7 +1000,6 @@ public class LayersSTHandler extends RestActionHandler {
 
   private ArrayList<Directories> getPublicLayers() throws Exception {
     String errorMsg = "getPublicLayers";
-    user_uuid = params.getUser().getUuid();
     ArrayList<Directories> children = new ArrayList<Directories>();
     try (
       Connection connection = DriverManager.getConnection(
