@@ -1015,7 +1015,7 @@ public class LayersSTHandler extends RestActionHandler {
         "select id, layer_name from public_layers"
       );
     ) {
-      //statement.setString(1, user_uuid);
+      statement.setString(1, user_uuid);
 
       boolean status = statement.execute();
       if (status) {
