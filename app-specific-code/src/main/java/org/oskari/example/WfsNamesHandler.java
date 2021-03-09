@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.oskari.example.*;
+import org.oskari.example.up.LayersUPHandler;
 
 @OskariActionRoute("wfs_listing")
 public class WfsNamesHandler extends RestActionHandler {
