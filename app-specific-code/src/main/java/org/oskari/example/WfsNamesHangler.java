@@ -1,4 +1,4 @@
-package org.oskari.example.up;
+package org.oskari.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
