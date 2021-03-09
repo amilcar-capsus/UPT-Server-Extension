@@ -49,7 +49,6 @@ public class WfsNamesHandler extends RestActionHandler {
   public void handleGet(ActionParameters params) throws ActionException {
     String errorMsg = "getStudyAreas";
     ArrayList<StudyAreaUP> layers = new ArrayList<StudyAreaUP>();
-    user_uuid = params.getUser().getUuid();
     try (
       Connection connection = DriverManager.getConnection(
         upURL,
@@ -72,7 +71,6 @@ public class WfsNamesHandler extends RestActionHandler {
         "select id, layer_name from public_layers"
         //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'"
       );
-      statement.setString(1, user_uuid);
       statement.execute();
       ResultSet data = statement.getResultSet();
       while (data.next()) {
