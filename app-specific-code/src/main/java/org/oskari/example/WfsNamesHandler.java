@@ -23,7 +23,7 @@ import org.json.JSONObject;
 import org.oskari.example.*;
 
 @OskariActionRoute("wfs_listing")
-public class PublicStudyAreaHandler extends RestActionHandler {
+public class WfsNamesHandler extends RestActionHandler {
   private static String upURL;
   private static String upUser;
   private static String upPassword;
