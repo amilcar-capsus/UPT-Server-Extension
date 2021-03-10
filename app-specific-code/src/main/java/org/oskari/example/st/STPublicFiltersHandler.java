@@ -62,7 +62,7 @@ public class STPublicFiltersHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "	select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
+        "	select geometry FROM public_layer_id where public_layer_id = ?\n" +
         "), user_layers as(\n" +
         "	select distinct st_filters.id,st_filters.user_layer_id,st_filter_label,st_filter_label as label\n" +
         "	from st_filters\n" +

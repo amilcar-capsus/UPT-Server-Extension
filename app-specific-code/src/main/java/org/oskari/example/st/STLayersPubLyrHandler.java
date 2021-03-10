@@ -70,8 +70,7 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         "    from st_public_layers\n" +
         "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
-        "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "    where st_intersects(study_area.geometry,public_layer_data.geometry))\n" +
         ")\n" +
         "select id, st_layer_label, label,public_layer_id, layer_field,layer_mmu_code from public_layers"
       );

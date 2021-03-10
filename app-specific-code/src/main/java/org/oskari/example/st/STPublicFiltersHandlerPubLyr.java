@@ -62,23 +62,21 @@ public class STPublicFiltersHandlerPubLyr extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "	select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
+        "	select geometry FROM public_layer_id where public_layer_id = ?\n" +
         "), user_layers as(\n" +
         "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
         "	from st_public_filters\n" +
-        "		inner join oskari_maplayer on oskari_maplayer.id = st_public_filters.public_layer_id\n" +
+        "		inner join public_layer_data on public_layer_data.public_layer_id = st_public_filters.public_layer_id\n" +
         "		, study_area\n" +
-        "	where \n" +
-        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
-        "		--and oskari_maplayer.id=?\n" +
+        "		where st_intersects(study_area.geometry,public_layer_data.geometry)\n" +
+        "		--and user_layer_data.user_layer_id=?\n" +
         "), public_layers as(\n" +
         "	select distinct st_public_filters.id,st_public_filters.public_layer_id,st_filter_label,st_filter_label as label\n" +
         "	from st_public_filters\n" +
-        "		inner join oskari_maplayer on oskari_maplayer.id = st_publicfilters.public_layer_id\n" +
+        "		inner join public_layer_data on public_layer_data.public_layer_id = st_public_filters.public_layer_id\n" +
         "		inner join public_layers_space on public_layers_space.public_layer_id = st_public_filters.public_layer_id\n" +
         "		, study_area\n" +
-        "	where \n" +
-        "		st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "		where st_intersects(study_area.geometry,public_layer_data.geometry)\n" +
         "		and public_layers_space.space in ('public','suitability')\n" +
         "), all_layers as(\n" +
         "	select id,public_layer_id,st_filter_label,label from user_layers\n" +

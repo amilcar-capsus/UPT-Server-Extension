@@ -64,14 +64,13 @@ public class STPublicLayersPubLyrHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "    select st_geomfromtext(capabilities::json->>'geom',4326) as geometry FROM oskari_maplayer where id = ?\n" +
+        "    select geometry FROM public_layer_id where public_layer_id = ?\n" +
         "), public_layers as(\n" +
         "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
         "    from st_public_layers\n" +
         "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
-        "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "    where st_intersects(study_area.geometry,public_layer_data.geometry)\n" +
         ")\n" +
         "select id, st_layer_label, label ,public_layer_id,layer_field,layer_mmu_code from public_layers"
       );
