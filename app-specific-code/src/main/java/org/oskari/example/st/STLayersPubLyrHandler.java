@@ -68,7 +68,7 @@ public class STLayersPubLyrHandler extends RestActionHandler {
         "), public_layers as(\n" +
         "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
         "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
+        "    inner join public_layer_id on public_layer_data.public_layer_id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
         "    where st_intersects(study_area.geometry,public_layer_data.geometry)\n" +
         ")\n" +
