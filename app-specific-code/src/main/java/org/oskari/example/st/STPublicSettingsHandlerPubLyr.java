@@ -77,9 +77,9 @@ public class STPublicSettingsHandlerPubLyr extends RestActionHandler {
 
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "	select st_transform(st_setsrid(st_geomfromtext(capabilities::json->>'geom',4326),?),4326) as geometry from oskari_maplayer where id=?\n" +
+        "	select st_transform(st_setsrid(geometry,?),4326) as geometry from public_layer_data where public_layer_id=?\n" +
         "),layers as(\n" +
-        "	select oskari_maplayer.id from oskari_maplayer,study_area where  st_intersects(st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326),study_area.geometry) \n" +
+        "	select public_layer_data.public_layer_id from public_layer_data,study_area where  st_intersects(public_layer_data.geometry,study_area.geometry) \n" +
         ")\n" +
         "SELECT \n" +
         "	st_public_settings.id, \n" +
@@ -93,7 +93,7 @@ public class STPublicSettingsHandlerPubLyr extends RestActionHandler {
         "FROM public.st_public_settings\n" +
         "right join st_public_layers on st_public_layers.id=st_public_settings.st_layers_id\n" +
         ",layers\n" +
-        "where st_public_layers.public_layer_id in(layers.id)"
+        "where st_public_layers.public_layer_id in(layers.public_layer_id)"
       );
       statement.setInt(1, Integer.parseInt(stProjection));
       statement.setInt(2, layerId.intValue());

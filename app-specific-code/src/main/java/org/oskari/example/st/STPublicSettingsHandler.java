@@ -77,7 +77,7 @@ public class STPublicSettingsHandler extends RestActionHandler {
 
       PreparedStatement statement = connection.prepareStatement(
         "with study_area as(\n" +
-        "	select st_transform(st_setsrid(st_geomfromtext(capabilities::json->>'geom',4326),?),4326) as geometry from oskari_maplayer where id=?\n" +
+        "	select st_transform(st_setsrid(geometry,?),4326) as geometry from public_layer_data where public_layer_id=?\n" +
         "),layers as(\n" +
         "	select user_layer.id from user_layer,study_area where  st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n" +
         ")\n" +
