@@ -305,6 +305,138 @@ public class LayersSTHandler extends RestActionHandler {
         );
 
         ResponseHelper.writeResponse(params, out);
+      } else if ("list_layers".equals(params.getRequiredParam("action"))) {
+        //Get directories
+        Directories dir = new Directories();
+        dir.setData("my_data");
+        dir.setLabel("My Data");
+        dir.setIcon(null);
+        directories.add(dir);
+
+        Directories pdir = new Directories();
+        pdir.setData("public_data");
+        pdir.setLabel("Public data");
+        pdir.setIcon(null);
+        directories.add(pdir);
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting Oskari layers ")
+            )
+          )
+        );
+        //Get layers
+        ArrayList<Directories> layers = getLayers();
+        dir.setChildren(layers);
+
+        ArrayList<Directories> public_layers = getPublicLayers();
+        pdir.setChildren(public_layers);
+
+        JSONArray out = new JSONArray();
+        for (Directories index : directories) {
+          //Convert to Json Object
+
+          final JSONObject json = JSONHelper.createJSONObject(
+            Obj.writeValueAsString(index)
+          );
+          out.put(json);
+        }
+
+        tree.setData(directories);
+        final JSONObject outs = JSONHelper.createJSONObject(
+          Obj.writeValueAsString(tree)
+        );
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Listing oskari layers executed")
+            )
+          )
+        );
+
+        ResponseHelper.writeResponse(params, outs);
+      } else if (
+        "list_st_layers_pub_std_area".equals(params.getRequiredParam("action"))
+      ) {
+        ArrayList<STSettings> settingsList = new ArrayList<>();
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting suitability layers")
+            )
+          )
+        );
+        //Get layers
+        ArrayList<STLayers> layers = getSTLayersPubStdArea(
+          user_id,
+          Long.parseLong(params.getRequiredParam("study_area"))
+        );
+        for (STLayers index : layers) {
+          settingsList.addAll(getSettings(user_id, index.id));
+        }
+
+        JSONArray out = new JSONArray();
+        for (STSettings index : settingsList) {
+          //Convert to Json Object
+          final JSONObject json = JSONHelper.createJSONObject(
+            Obj.writeValueAsString(index)
+          );
+          out.put(json);
+        }
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Listing suitability layers executed")
+            )
+          )
+        );
+
+        ResponseHelper.writeResponse(params, out);
+      } else if (
+        "list_st_public_layers_pub_std_area".equals(
+            params.getRequiredParam("action")
+          )
+      ) {
+        ArrayList<STPublicSettings> settingsList = new ArrayList<>();
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting suitability layers")
+            )
+          )
+        );
+        //Get layers
+        ArrayList<STPublicLayers> layers = getSTPublicLayersPubStdArea(
+          user_id,
+          Long.parseLong(params.getRequiredParam("study_area"))
+        );
+        for (STPublicLayers index : layers) {
+          settingsList.addAll(getPublicSettings(user_id, index.id));
+        }
+
+        JSONArray out = new JSONArray();
+        for (STPublicSettings index : settingsList) {
+          //Convert to Json Object
+          final JSONObject json = JSONHelper.createJSONObject(
+            Obj.writeValueAsString(index)
+          );
+          out.put(json);
+        }
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Listing suitability layers executed")
+            )
+          )
+        );
+
+        ResponseHelper.writeResponse(params, out);
       } else if ("list_st_filters".equals(params.getRequiredParam("action"))) {
         errors.put(
           JSONHelper.createJSONObject(
@@ -1166,10 +1298,133 @@ public class LayersSTHandler extends RestActionHandler {
         "), public_layers as(\n" +
         "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
         "    from st_public_layers\n" +
-        "    inner join oskari_maplayer on oskari_maplayer.id = st_public_layers.public_layer_id\n" +
+        "    inner join public_layer_data on public_layer_data.public_layer_id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
         "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),st_geomfromtext(oskari_maplayer.capabilities::json->>'geom',4326))\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857,4326)))\n" +
+        ")\n" +
+        "select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
+        //"where st_public_layers.public_layer_id in(public_layers.id)\n"
+      );
+      statement.setInt(1, Integer.parseInt(stProjection));
+      statement.setLong(2, study_area);
+
+      ResultSet data = statement.executeQuery();
+
+      while (data.next()) {
+        STPublicLayers layer = new STPublicLayers();
+        layer.id = data.getLong("id");
+        layer.label = data.getString("label");
+        modules.add(layer);
+      }
+      return modules;
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(
+            STStandardizationMethodHandler.class.getName()
+          )
+          .log(Level.SEVERE, null, ex);
+      }
+      throw new Exception();
+    }
+  }
+
+  private ArrayList<STLayers> getSTLayersPubStdArea(
+    Long user_id,
+    Long study_area
+  )
+    throws Exception {
+    String errorMsg = "getSTLayers";
+    ArrayList<STLayers> modules = new ArrayList<>();
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+    ) {
+      PreparedStatement statement = connection.prepareStatement(
+        "with study_area as(\n" +
+        "	select st_transform(st_setsrid(geometry,?),4326) as geometry from public_layer_data where public_layer_id=?\n" +
+        "),layers as(\n" +
+        "	select user_layer.id from user_layer\n" +
+        "    left join upt_user_layer_scope on upt_user_layer_scope.user_layer_id=user_layer.id\n" +
+        "    ,study_area \n" +
+        "    where  (user_layer.uuid=? or upt_user_layer_scope.is_public=1) and st_intersects(st_geomfromtext(user_layer.wkt,4326),study_area.geometry) \n" +
+        ")\n" +
+        "select st_layers.id, st_layers.st_layer_label as label \n" +
+        "from st_layers,layers\n" +
+        "where st_layers.user_layer_id in(layers.id)\n"
+        //"where st_public_layers.public_layer_id in(public_layers.id)\n"
+      );
+      statement.setInt(1, Integer.parseInt(stProjection));
+      statement.setLong(2, study_area);
+      statement.setString(3, user_uuid);
+
+      ResultSet data = statement.executeQuery();
+
+      while (data.next()) {
+        STLayers layer = new STLayers();
+        layer.id = data.getLong("id");
+        layer.label = data.getString("label");
+        modules.add(layer);
+      }
+      return modules;
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(
+            STStandardizationMethodHandler.class.getName()
+          )
+          .log(Level.SEVERE, null, ex);
+      }
+      throw new Exception();
+    }
+  }
+
+  private ArrayList<STPublicLayers> getSTPublicLayersPubStdArea(
+    Long user_id,
+    Long study_area
+  )
+    throws Exception {
+    String errorMsg = "getSTPublicLayers";
+    ArrayList<STPublicLayers> modules = new ArrayList<>();
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+    ) {
+      PreparedStatement statement = connection.prepareStatement(
+        "with study_area as(\n" +
+        "	select st_transform(st_setsrid(geometry,?),4326) as geometry from public_layer_data where public_layer_id=?\n" +
+        "), public_layers as(\n" +
+        "    select distinct st_public_layers.id as id, st_public_layers.st_layer_label, st_layer_label as label ,st_public_layers.public_layer_id,layer_field,layer_mmu_code, ST_AsText(study_area.geometry) as geometry\n" +
+        "    from st_public_layers\n" +
+        "    inner join public_layer_data on public_layer_data.public_layer_id = st_public_layers.public_layer_id\n" +
+        "    , study_area\n" +
+        "    where\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857,4326)))\n" +
         ")\n" +
         "select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
         //"where st_public_layers.public_layer_id in(public_layers.id)\n"
