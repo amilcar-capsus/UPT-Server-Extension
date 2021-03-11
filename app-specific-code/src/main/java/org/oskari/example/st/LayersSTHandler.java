@@ -1301,7 +1301,7 @@ public class LayersSTHandler extends RestActionHandler {
         "    inner join public_layer_data on public_layer_data.public_layer_id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
         "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857,4326)))\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857),4326))\n" +
         ")\n" +
         "select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
         //"where st_public_layers.public_layer_id in(public_layers.id)\n"
@@ -1424,7 +1424,7 @@ public class LayersSTHandler extends RestActionHandler {
         "    inner join public_layer_data on public_layer_data.public_layer_id = st_public_layers.public_layer_id\n" +
         "    , study_area\n" +
         "    where\n" +
-        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857,4326)))\n" +
+        "    st_intersects(ST_Transform(ST_SetSRID(study_area.geometry,3857),4326),ST_Transform(ST_SetSRID(public_layer_data.geometry,3857),4326))\n" +
         ")\n" +
         "select st_public_layers.id, st_public_layers.st_layer_label as label from st_public_layers\n"
         //"where st_public_layers.public_layer_id in(public_layers.id)\n"
