@@ -927,6 +927,9 @@ public class LayersSTHandler extends RestActionHandler {
 
       PostStatus status = null;
       if ("index_values".equals(params.getRequiredParam("action"))) {
+        System.out.println(
+          "STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea")
+        );
         indexSuitability(params);
       } else if ("copy_data".equals(params.getRequiredParam("action"))) {
         if (
@@ -1940,6 +1943,9 @@ public class LayersSTHandler extends RestActionHandler {
 
   private void indexSuitability(ActionParameters params)
     throws ActionParamsException {
+    System.out.println(
+      "STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea")
+    );
     String errorMsg = "getStudyAreas";
     try (
       Connection connection = DriverManager.getConnection(
