@@ -390,7 +390,7 @@ BEGIN
     create temp table vals_public_settings as
     SELECT
                     user_config.public_layer_id,
-                    user_config.st_public_layers_id,
+                    user_config.st_layers_id,
                     user_config.smaller_better,
                     user_config.weight,
                     user_config.normalization_method,
@@ -421,7 +421,7 @@ BEGIN
                             FROM
                                     json_array_elements((SELECT unnest(public_settings_list)::json)) as config
                                     INNER JOIN st_public_layers ON (config.value ->> 'st_layer_id')::bigint = st_public_layers.id
-                    ) as user_config ON st_public_settings.id = user_config.st_public_layers_id
+                    ) as user_config ON st_public_settings.id = user_config.st_layers_id
                     INNER JOIN (
                             SELECT
                                     mmu_public_layers.public_layer_id,
