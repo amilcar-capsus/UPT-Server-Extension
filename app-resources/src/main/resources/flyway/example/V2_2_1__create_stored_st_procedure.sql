@@ -484,7 +484,7 @@ BEGIN
 	-- evaluate index values for all mmu
     create temp table public_mmu_index_adjusted AS (
             SELECT
-                    mmu_public_settings.user_layer_id,
+                    mmu_public_settings.public_layer_id,
                     mmu_code,
                     CASE WHEN mmu_public_settings.normalization_method != 3 THEN
                             weight * (value - range_min) / (range_max - range_min)::double precision
