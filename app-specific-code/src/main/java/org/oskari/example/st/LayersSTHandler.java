@@ -1948,7 +1948,7 @@ public class LayersSTHandler extends RestActionHandler {
         stPassword
       );
       PreparedStatement statement = connection.prepareStatement(
-        "select * from public.suitability_index_values(?,?,?,?,?,?)"
+        "select * from public.suitability_index_values(?,?,?,?,?,?,?,?,?)"
         //PreparedStatement statement = connection.prepareStatement(query
       );
     ) {
@@ -1957,9 +1957,19 @@ public class LayersSTHandler extends RestActionHandler {
         params.getRequest().getParameterValues("layers")
       );
 
+      Array public_layers = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("public_layers")
+      );
+
       Array filters = connection.createArrayOf(
         "INTEGER",
         params.getRequest().getParameterValues("filters")
+      );
+
+      Array public_filters = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("public_filters")
       );
 
       Array settings = connection.createArrayOf(
@@ -1967,12 +1977,20 @@ public class LayersSTHandler extends RestActionHandler {
         params.getRequest().getParameterValues("settings")
       );
 
+      Array public_settings = connection.createArrayOf(
+        "TEXT",
+        params.getRequest().getParameterValues("public_settings")
+      );
+
       statement.setArray(1, layers);
-      statement.setArray(2, filters);
-      statement.setArray(3, settings);
-      statement.setLong(4, params.getRequiredParamLong("studyArea"));
-      statement.setInt(5, params.getRequiredParamInt("joinMethod"));
-      statement.setInt(6, Integer.parseInt(stProjection));
+      statement.setArray(2, public_layers);
+      statement.setArray(3, filters);
+      statement.setArray(4, public_filters);
+      statement.setArray(5, settings);
+      statement.setArray(6, public_settings);
+      statement.setLong(7, params.getRequiredParamLong("studyArea"));
+      statement.setInt(8, params.getRequiredParamInt("joinMethod"));
+      statement.setInt(9, Integer.parseInt(stProjection));
       errors.put(
         JSONHelper.createJSONObject(
           Obj.writeValueAsString(new PostStatus("OK", statement.toString()))
