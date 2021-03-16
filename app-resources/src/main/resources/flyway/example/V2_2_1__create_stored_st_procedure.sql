@@ -579,7 +579,7 @@ BEGIN
                                     public_mmu_index_resutls
                                     INNER JOIN unique_public_mmu ON unique_public_mmu.mmu_code = public_mmu_index_resutls.mmu_code
                             GROUP BY
-                                    public_mmu_index_resutls.value,unique_mmu.public_geometry
+                                    public_mmu_index_resutls.value,unique_public_mmu.public_geometry
                     ) as public_mmu_geometries
     );
 
