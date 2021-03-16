@@ -927,9 +927,7 @@ public class LayersSTHandler extends RestActionHandler {
 
       PostStatus status = null;
       if ("index_values".equals(params.getRequiredParam("action"))) {
-        System.out.println(
-          "STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea")
-        );
+        System.out.println("ENTERING INDEX VALUES!!!!!!!!!!");
         indexSuitability(params);
       } else if ("copy_data".equals(params.getRequiredParam("action"))) {
         if (
@@ -1943,8 +1941,10 @@ public class LayersSTHandler extends RestActionHandler {
 
   private void indexSuitability(ActionParameters params)
     throws ActionParamsException {
+    System.out.println("STARTING INDEX VALUES!!!!!!!!!!");
     System.out.println(
-      "STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea")
+      "STUDY AREA!!!!!!!!!! " +
+      Long.parseLong(params.getRequiredParam("studyArea"))
     );
     String errorMsg = "getStudyAreas";
     try (
@@ -1986,9 +1986,6 @@ public class LayersSTHandler extends RestActionHandler {
       Array public_settings = connection.createArrayOf(
         "TEXT",
         params.getRequest().getParameterValues("public_settings")
-      );
-      System.out.println(
-        "STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea")
       );
       statement.setArray(1, layers);
       statement.setArray(2, public_layers);
