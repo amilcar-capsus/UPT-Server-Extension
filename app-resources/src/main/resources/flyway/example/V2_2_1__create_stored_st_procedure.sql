@@ -1,7 +1,10 @@
 CREATE OR REPLACE FUNCTION public.suitability_index_values(
 	layers_list integer[],
+        public_layer_list integer[],
 	filters_list integer[],
+        public_filters_list integer[],
 	settings_list text[],
+        public_settings_list text[],
 	study_area bigint,
 	operation integer,
 	projection integer)
@@ -54,6 +57,29 @@ BEGIN
     CREATE INDEX study_filtered_study_area_idx
     ON study_filtered USING gist
     (study_area);
+
+    DROP TABLE IF EXISTS mmu_public_layers;
+    CREATE TEMPORARY TABLE mmu_public_layers (
+        public_layer_id bigint,
+        value double precision,
+        mmu_code text,
+        geometry geometry
+    );
+    CREATE INDEX mmu_public_layers_geometry_idx
+    ON mmu_public_layers USING gist
+    (geometry);
+    
+    CREATE INDEX mmu_public_layers_mmu_code_idx
+    ON mmu_public_layers USING btree
+    (mmu_code ASC NULLS LAST);
+
+    DROP TABLE IF EXISTS public_filters;
+    CREATE TEMPORARY TABLE public_filters (
+        "geometry" geometry
+    );
+    CREATE INDEX public_filters_geometry_idx
+    ON filters USING gist
+    (geometry);
     -- Load study area
     SELECT
         st_astext (geometry) INTO study_area_wkt
@@ -62,6 +88,7 @@ BEGIN
     WHERE
         user_layer_id = study_area;
     
+    -- Normal code
     insert into mmu_layers(user_layer_id, mmu_code, value, geometry)
     select 
             user_layer_data.user_layer_id
@@ -302,6 +329,248 @@ BEGIN
                                     mmu_index_resutls.value,unique_mmu.geometry
                     ) as mmu_geometries
     );
+    -- Public layers code
+    insert into mmu_public_layers(public_layer_id, mmu_code, value, geometry)
+    select 
+            public_layer_data.public_layer_id
+            , (public_layer_data.property_json ->>st_public_layers.layer_mmu_code)::text as mmu_code
+            , case when (public_layer_data.property_json ->>st_public_layers.layer_field)::double precision is null then 0 else (public_layer_data.property_json ->>st_public_layers.layer_field)::double precision end as value
+            , public_layer_data.geometry
+    from 
+            public_layer_data
+            inner join st_public_layers on st_public_layers.public_layer_id=public_layer_data.public_layer_id
+    where 
+            st_public_layers.id =any(public_layers_list)
+            and st_intersects(st_geomfromtext(study_area_wkt), public_layer_data.geometry);
+    
+    
+    FOR filter_pol IN (
+        SELECT
+            geometry
+        FROM
+            public_layer_data
+            INNER JOIN st_public_filters ON public_layer_data.public_layer_id = st_public_filters.public_layer_id
+        WHERE
+            st_public_filters.id = ANY (public_filters_list))
+    LOOP
+        IF first_time THEN
+            intersected = filter_pol;
+			first_time=false;
+        ELSE
+            IF (operation = 2) THEN
+                intersected = ST_CollectionExtract(st_intersection (intersected, filter_pol), 3 );
+            ELSIF (operation = 3) then
+                intersected = ST_CollectionExtract(st_difference (intersected, filter_pol), 3 );
+            ELSE
+                intersected = ST_CollectionExtract(st_union (intersected, filter_pol), 3 );
+            END IF;
+        END IF;
+    END LOOP;
+    
+    IF ARRAY_LENGTH(public_filters_list, 1) IS NULL THEN
+        INSERT INTO public_filters ("geometry")
+        SELECT
+            st_geomfromtext (study_area_wkt);
+        INSERT INTO study_filtered ("geometry", study_area)
+        SELECT st_geomfromtext (study_area_wkt),st_geomfromtext (study_area_wkt);
+    ELSE
+        INSERT INTO public_filters ("geometry")
+        SELECT
+            intersected;
+        INSERT INTO study_filtered ("geometry", study_area)
+        SELECT
+            st_intersection (st_geomfromtext (study_area_wkt),intersected) AS geometry,
+            st_geomfromtext (study_area_wkt)
+        FROM
+            public_filters;
+    END IF;
+
+
+    DROP TABLE IF EXISTS vals_public_settings;
+    create temp table vals_public_settings as
+    SELECT
+                    user_config.public_layer_id,
+                    user_config.st_public_layers_id,
+                    user_config.smaller_better,
+                    user_config.weight,
+                    user_config.normalization_method,
+                    -- test if normalization method is reference or observe
+                    CASE WHEN user_config.normalization_method != 1 and  user_config.normalization_method != 3  THEN
+                            user_config.range_max
+                    ELSE
+                            vals_obs_max_min.max
+                    END AS range_max,
+                    CASE WHEN user_config.normalization_method != 1 and  user_config.normalization_method != 3 THEN
+                            user_config.range_min
+                    ELSE
+                            vals_obs_max_min.min
+                    END AS range_min,
+                    dev,
+                    mean
+            FROM
+                    st_public_settings
+                    RIGHT JOIN (
+                            SELECT
+                                    st_public_layers.public_layer_id,
+                                    (config.value ->> 'st_layer_id')::int AS st_layers_id,
+                                    (config.value ->> 'normalization_method')::int AS normalization_method,
+                                    (config.value ->> 'smaller_better')::int AS smaller_better,
+                                    (config.value ->> 'range_max')::double precision AS range_max,
+                                    (config.value ->> 'range_min')::double precision AS range_min,
+                                    (config.value ->> 'weight')::double precision AS weight
+                            FROM
+                                    json_array_elements((SELECT unnest(public_settings_list)::json)) as config
+                                    INNER JOIN st_public_layers ON (config.value ->> 'st_layer_id')::bigint = st_public_layers.id
+                    ) as user_config ON st_public_settings.id = user_config.st_public_layers_id
+                    INNER JOIN (
+                            SELECT
+                                    mmu_public_layers.public_layer_id,
+                                    max(mmu_public_layers.value) AS max,
+                                    min(mmu_public_layers.value) AS min,
+                                    stddev_pop(mmu_public_layers.value) AS dev,
+                                    avg(mmu_public_layers.value) AS mean
+                            FROM
+                                    mmu_public_layers
+                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.public_layer_id,
+                                    study_filtered
+                            WHERE
+                                    st_public_layers.id = ANY (public_layers_list)
+                                    AND st_intersects (study_filtered.study_area, mmu_layers.geometry)
+                            GROUP BY
+                                    mmu_public_layers.public_layer_id
+                    )as vals_obs_max_min ON user_config.public_layer_id = vals_obs_max_min.public_layer_id
+            WHERE
+                    user_config.st_layers_id = ANY (public_layers_list);
+	
+    CREATE INDEX vals_settings_public_layer_id_idx
+    ON vals_public_settings USING btree
+    (public_layer_id);
+
+    create temp table unique_public_mmu as
+    select distinct mmu_code,geometry from mmu_public_layers;
+
+    CREATE INDEX unique_public_mmu_mmu_code_idx
+    ON unique_public_mmu USING btree
+    (mmu_code);
+
+    delete from unique_public_mmu
+    where not st_intersects(unique_public_mmu.geometry,(select geometry from study_filtered));
+
+    update unique_public_mmu set geometry = st_intersection(unique_public_mmu.geometry,study_filtered.geometry)
+    from study_filtered,(select st_boundary(geometry) as geometry from study_filtered) c1
+    where st_intersects(c1.geometry,unique_public_mmu.geometry);
+    
+
+    create temp table public_total as
+    SELECT
+            sum(vals_public_settings.weight) AS weight,
+            count(vals_public_settings.weight) AS num_layers
+    FROM
+            vals_public_settings
+    WHERE
+            st_layers_id = ANY (public_layers_list);
+	-- evaluate index values for all mmu
+    create temp table public_mmu_index_adjusted AS (
+            SELECT
+                    mmu_public_settings.user_layer_id,
+                    mmu_code,
+                    CASE WHEN mmu_public_settings.normalization_method != 3 THEN
+                            weight * (value - range_min) / (range_max - range_min)::double precision
+                    ELSE
+                            weight*(((value - mean) / dev::double precision) - ((range_min - mean) / dev::double precision))::double precision / (((range_max - mean) / dev::double precision) - ((range_min - mean) / dev::double precision) )::double precision 
+                    END AS value,
+                    smaller_better,
+                    weight
+            FROM
+                    (
+                            SELECT
+                                    mmu_public_layers.public_layer_id,
+                                    mmu_public_layers.value,
+                                    mmu_public_layers.mmu_code,
+                                    study_filtered.geometry,
+                                    mmu_public_layers.geometry,
+                                    vals_public_settings.smaller_better,
+                                    vals_public_settings.weight / total.weight::double precision AS weight,
+                                    vals_public_settings.range_max,
+                                    vals_public_settings.range_min,
+                                    vals_public_settings.normalization_method,
+                                    vals_public_settings.dev,
+                                    vals_public_settings.mean
+                            FROM
+                                    mmu_public_layers
+                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.public_layer_id
+                                    INNER JOIN vals_public_settings ON mmu_public_layers.public_layer_id = vals_public_settings.public_layer_id
+                                    INNER JOIN total ON 1 = 1,
+                                    study_filtered
+                            WHERE
+                                    vals_public_settings.st_layers_id = ANY (public_layers_list)
+                                    AND st_intersects (study_filtered.geometry, mmu_public_layers.geometry)
+                    ) as mmu_public_settings
+    );
+    CREATE INDEX public_mmu_index_adjusted_mmu_code_idx
+    ON public_mmu_index_adjusted USING btree
+    (mmu_code);
+	--
+    create temp table public_mmu_index_resutls as
+    SELECT
+            mmu_code,
+            round(CAST(sum(value) / public_total.num_layers AS numeric), 0) AS value
+    FROM
+            (
+                    SELECT
+                            public_layer_id,
+                            mmu_code,
+                            CASE WHEN smaller_better = 0 THEN
+                                    100*value
+                            ELSE
+                                    100*(1 - value)
+                            END AS value
+                    FROM
+                            (
+                                    SELECT
+                                            public_layer_id,
+                                            mmu_code,
+                                            CASE WHEN value < 0 THEN
+                                                    0
+                                            WHEN value > 1 THEN
+                                                    1
+                                            ELSE
+                                                    value
+                                            END AS value,
+                                            smaller_better,
+                                            weight
+                                    FROM
+                                            public_mmu_index_adjusted
+                            ) as public_mmu_index,
+                            public_total
+            ) as public_mmu_adjust,
+            public_total
+    GROUP BY
+            mmu_code,
+            public_total.num_layers;
+	
+    CREATE INDEX public_mmu_index_resutls_value_idx
+    ON public_mmu_index_resutls USING btree
+    (value);
+	--
+    create temp table test_public_geoms AS (
+            SELECT
+                    replace(st_geometrytype (geometry), 'ST_', '') AS point_type,
+                    ST_ForceRHR (st_setsrid (geometry, projection)) AS geom,
+                    value
+            FROM
+                    (
+                            SELECT
+                                    public_mmu_index_resutls.value,
+                                    st_union(st_collectionextract (unique_public_mmu.geometry, 3)) AS geometry
+                            FROM
+                                    public_mmu_index_resutls
+                                    INNER JOIN unique_public_mmu ON unique_public_mmu.mmu_code = public_mmu_index_resutls.mmu_code
+                            GROUP BY
+                                    public_mmu_index_resutls.value,unique_mmu.public_geometry
+                    ) as public_mmu_geometries
+    );
+
     -- get study_area
     RETURN query 
 	SELECT
@@ -336,6 +605,6 @@ BEGIN
 			)
 		)::text
 	FROM
-		test_geoms;
+		test_geoms, test_public_geoms;
 END;
 $$;
