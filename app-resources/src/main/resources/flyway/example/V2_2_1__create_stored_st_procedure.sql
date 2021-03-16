@@ -580,6 +580,14 @@ BEGIN
                                     INNER JOIN unique_public_mmu ON unique_public_mmu.mmu_code = public_mmu_index_resutls.mmu_code
                             GROUP BY
                                     public_mmu_index_resutls.value,unique_public_mmu.geometry
+                            UNION SELECT
+                                    mmu_index_resutls.value,
+                                    st_union(st_collectionextract (unique_mmu.geometry, 3)) AS geometry
+                            FROM
+                                    mmu_index_resutls
+                                    INNER JOIN unique_mmu ON unique_mmu.mmu_code = mmu_index_resutls.mmu_code
+                            GROUP BY
+                                    mmu_index_resutls.value,unique_mmu.geometry
                     ) as public_mmu_geometries
     );
 
@@ -617,6 +625,7 @@ BEGIN
 			)
 		)::text
 	FROM
-		test_geoms, test_public_geoms;
+		test_public_geoms;
+                --test_geoms, test_public_geoms;
 END;
 $$;
