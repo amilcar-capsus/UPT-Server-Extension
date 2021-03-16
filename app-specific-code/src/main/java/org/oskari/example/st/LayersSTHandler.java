@@ -927,7 +927,6 @@ public class LayersSTHandler extends RestActionHandler {
 
       PostStatus status = null;
       if ("index_values".equals(params.getRequiredParam("action"))) {
-        System.out.println("ENTERING INDEX VALUES!!!!!!!!!!");
         indexSuitability(params);
       } else if ("copy_data".equals(params.getRequiredParam("action"))) {
         if (
@@ -1941,7 +1940,6 @@ public class LayersSTHandler extends RestActionHandler {
 
   private void indexSuitability(ActionParameters params)
     throws ActionParamsException {
-    System.out.println("STARTING INDEX VALUES!!!!!!!!!!");
     System.out.println(
       "STUDY AREA!!!!!!!!!! " +
       Long.parseLong(params.getRequiredParam("studyArea"))
