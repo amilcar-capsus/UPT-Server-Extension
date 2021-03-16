@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION public.suitability_index_values(
 	layers_list integer[],
-        public_layer_list integer[],
+        public_layers_list integer[],
 	filters_list integer[],
         public_filters_list integer[],
 	settings_list text[],
