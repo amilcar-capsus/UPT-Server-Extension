@@ -435,7 +435,7 @@ BEGIN
                                     study_filtered
                             WHERE
                                     st_public_layers.id = ANY (public_layers_list)
-                                    AND st_intersects (study_filtered.study_area, mmu_layers.geometry)
+                                    AND st_intersects (study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
                                     mmu_public_layers.public_layer_id
                     )as vals_obs_max_min ON user_config.public_layer_id = vals_obs_max_min.public_layer_id
