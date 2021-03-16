@@ -1981,7 +1981,7 @@ public class LayersSTHandler extends RestActionHandler {
         "TEXT",
         params.getRequest().getParameterValues("public_settings")
       );
-
+      console.log("STUDY AREA!!!!!! " + params.getRequiredParamLong("studyArea"))
       statement.setArray(1, layers);
       statement.setArray(2, public_layers);
       statement.setArray(3, filters);
