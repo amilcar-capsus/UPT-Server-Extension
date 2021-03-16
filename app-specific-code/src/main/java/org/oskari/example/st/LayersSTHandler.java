@@ -1990,7 +1990,10 @@ public class LayersSTHandler extends RestActionHandler {
       statement.setArray(4, public_filters);
       statement.setArray(5, settings);
       statement.setArray(6, public_settings);
-      statement.setLong(7, params.getRequiredParamLong("studyArea"));
+      statement.setLong(
+        7,
+        Long.parseLong(params.getRequiredParam("studyArea"))
+      );
       statement.setInt(8, params.getRequiredParamInt("joinMethod"));
       statement.setInt(9, Integer.parseInt(stProjection));
       errors.put(
