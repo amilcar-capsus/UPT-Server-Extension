@@ -515,7 +515,7 @@ BEGIN
                                     mmu_public_layers
                                     INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.public_layer_id
                                     INNER JOIN vals_public_settings ON mmu_public_layers.public_layer_id = vals_public_settings.public_layer_id
-                                    INNER JOIN total ON 1 = 1,
+                                    INNER JOIN public_total ON 1 = 1,
                                     public_study_filtered
                             WHERE
                                     vals_public_settings.st_layers_id = ANY (public_layers_list)
