@@ -413,12 +413,12 @@ BEGIN
                     CASE WHEN user_config.normalization_method != 1 and  user_config.normalization_method != 3  THEN
                             user_config.range_max
                     ELSE
-                            vals_obs_max_min.max
+                            public_vals_obs_max_min.max
                     END AS range_max,
                     CASE WHEN user_config.normalization_method != 1 and  user_config.normalization_method != 3 THEN
                             user_config.range_min
                     ELSE
-                            vals_obs_max_min.min
+                            public_vals_obs_max_min.min
                     END AS range_min,
                     dev,
                     mean
@@ -453,7 +453,7 @@ BEGIN
                                     AND st_intersects (public_study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
                                     mmu_public_layers.public_layer_id
-                    )as vals_obs_max_min ON user_config.public_layer_id = vals_obs_max_min.public_layer_id
+                    )as public_vals_obs_max_min ON user_config.public_layer_id = public_vals_obs_max_min.public_layer_id
             WHERE
                     user_config.st_layers_id = ANY (public_layers_list);
 	
@@ -505,7 +505,7 @@ BEGIN
                                     public_study_filtered.geometry,
                                     mmu_public_layers.geometry,
                                     vals_public_settings.smaller_better,
-                                    vals_public_settings.weight / total.weight::double precision AS weight,
+                                    vals_public_settings.weight / public_total.weight::double precision AS weight,
                                     vals_public_settings.range_max,
                                     vals_public_settings.range_min,
                                     vals_public_settings.normalization_method,
