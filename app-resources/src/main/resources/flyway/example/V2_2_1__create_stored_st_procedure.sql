@@ -63,7 +63,7 @@ BEGIN
 
     DROP TABLE IF EXISTS mmu_public_layers;
     CREATE TEMPORARY TABLE mmu_public_layers (
-        public_layer_id bigint,
+        user_layer_id bigint,
         value double precision,
         mmu_code text,
         geometry geometry
@@ -345,7 +345,7 @@ BEGIN
                     ) as mmu_geometries
     );
     -- Public layers code
-    insert into mmu_public_layers(public_layer_id, mmu_code, value, geometry)
+    insert into mmu_public_layers(user_layer_id, mmu_code, value, geometry)
     select 
             public_layer_data.public_layer_id
             , (public_layer_data.property_json ->>st_public_layers.layer_mmu_code)::text as mmu_code
@@ -404,7 +404,7 @@ BEGIN
     DROP TABLE IF EXISTS vals_public_settings;
     create temp table vals_public_settings as
     SELECT
-                    user_config.public_layer_id,
+                    user_config.user_layer_id,
                     user_config.st_layers_id,
                     user_config.smaller_better,
                     user_config.weight,
@@ -439,27 +439,27 @@ BEGIN
                     ) as user_config ON st_public_settings.id = user_config.st_layers_id
                     INNER JOIN (
                             SELECT
-                                    mmu_public_layers.public_layer_id,
+                                    mmu_public_layers.user_layer_id,
                                     max(mmu_public_layers.value) AS max,
                                     min(mmu_public_layers.value) AS min,
                                     stddev_pop(mmu_public_layers.value) AS dev,
                                     avg(mmu_public_layers.value) AS mean
                             FROM
                                     mmu_public_layers
-                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.public_layer_id,
+                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.user_layer_id,
                                     public_study_filtered
                             WHERE
                                     st_public_layers.id = ANY (public_layers_list)
                                     AND st_intersects (public_study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
-                                    mmu_public_layers.public_layer_id
+                                    mmu_public_layers.user_layer_id
                     )as public_vals_obs_max_min ON user_config.public_layer_id = public_vals_obs_max_min.public_layer_id
             WHERE
                     user_config.st_layers_id = ANY (public_layers_list);
 	
     CREATE INDEX vals_settings_public_layer_id_idx
     ON vals_public_settings USING btree
-    (public_layer_id);
+    (user_layer_id);
 
     create temp table unique_public_mmu as
     select distinct mmu_code,geometry from mmu_public_layers;
@@ -499,7 +499,7 @@ BEGIN
             FROM
                     (
                             SELECT
-                                    mmu_public_layers.public_layer_id,
+                                    mmu_public_layers.user_layer_id,
                                     mmu_public_layers.value,
                                     mmu_public_layers.mmu_code,
                                     public_study_filtered.geometry,
@@ -513,8 +513,8 @@ BEGIN
                                     vals_public_settings.mean
                             FROM
                                     mmu_public_layers
-                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.public_layer_id
-                                    INNER JOIN vals_public_settings ON mmu_public_layers.public_layer_id = vals_public_settings.public_layer_id
+                                    INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.user_layer_id
+                                    INNER JOIN vals_public_settings ON mmu_public_layers.user_layer_id = vals_public_settings.user_layer_id
                                     INNER JOIN public_total ON 1 = 1,
                                     public_study_filtered
                             WHERE
