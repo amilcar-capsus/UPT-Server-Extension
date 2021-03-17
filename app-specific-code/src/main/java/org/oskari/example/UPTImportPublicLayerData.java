@@ -296,7 +296,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
       PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,to_json(?),ST_GeomFromText(?));"
+        "INSERT INTO public.public_layer_data(public_layer_id, uuid, feature_id,property_json, geometry)VALUES ( ?, ?, ?,?,ST_GeomFromText(?));"
       );
 
       connection.setAutoCommit(false);
@@ -359,7 +359,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
           statement.setLong(1, study_area);
           statement.setString(2, user_uuid);
           statement.setString(3, feature.getID());
-          statement.setString(4, fullFeature);
+          statement.setString(4, fullFeature.toString());
           statement.setString(5, fullFeature.get(geomKey).toString());
           statement.addBatch();
         }
