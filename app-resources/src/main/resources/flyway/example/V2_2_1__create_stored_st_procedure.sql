@@ -17,11 +17,14 @@ CREATE OR REPLACE FUNCTION public.suitability_index_values(
 AS $$
 DECLARE
     intersected geometry = NULL;
+    public_intersected geometry = NULL;
     filter_pol geometry;
+    public_filter_pol geometry;
     study_area_wkt text;
     data_row record;
     layer_loop text;
 	first_time boolean=true;
+        public_first_time boolean=true;
 BEGIN
     DROP TABLE IF EXISTS mmu_layers;
     CREATE TEMPORARY TABLE mmu_layers (
@@ -356,7 +359,7 @@ BEGIN
             and st_intersects(st_geomfromtext(study_area_wkt), public_layer_data.geometry);
     
     
-    FOR filter_pol IN (
+    FOR public_filter_pol IN (
         SELECT
             geometry
         FROM
@@ -365,16 +368,16 @@ BEGIN
         WHERE
             st_public_filters.id = ANY (public_filters_list))
     LOOP
-        IF first_time THEN
-            intersected = filter_pol;
-			first_time=false;
+        IF public_first_time THEN
+            public_intersected = public_filter_pol;
+			public_first_time=false;
         ELSE
             IF (operation = 2) THEN
-                intersected = ST_CollectionExtract(st_intersection (intersected, filter_pol), 3 );
+                public_intersected = ST_CollectionExtract(st_intersection (public_intersected, public_filter_pol), 3 );
             ELSIF (operation = 3) then
-                intersected = ST_CollectionExtract(st_difference (intersected, filter_pol), 3 );
+                public_intersected = ST_CollectionExtract(st_difference (public_intersected, public_filter_pol), 3 );
             ELSE
-                intersected = ST_CollectionExtract(st_union (intersected, filter_pol), 3 );
+                public_intersected = ST_CollectionExtract(st_union (public_intersected, public_filter_pol), 3 );
             END IF;
         END IF;
     END LOOP;
