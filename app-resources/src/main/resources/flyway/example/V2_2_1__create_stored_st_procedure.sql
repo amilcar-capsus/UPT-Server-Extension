@@ -391,10 +391,10 @@ BEGIN
     ELSE
         INSERT INTO public_filters ("geometry")
         SELECT
-            intersected;
+            public_intersected;
         INSERT INTO public_study_filtered ("geometry", study_area)
         SELECT
-            st_intersection (st_geomfromtext (study_area_wkt),intersected) AS geometry,
+            st_intersection (st_geomfromtext (study_area_wkt),public_intersected) AS geometry,
             st_geomfromtext (study_area_wkt)
         FROM
             public_filters;
