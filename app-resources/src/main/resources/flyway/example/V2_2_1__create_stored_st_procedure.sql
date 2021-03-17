@@ -453,7 +453,7 @@ BEGIN
                                     AND st_intersects (public_study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
                                     mmu_public_layers.user_layer_id
-                    )as public_vals_obs_max_min ON user_config.public_layer_id = public_vals_obs_max_min.public_layer_id
+                    )as public_vals_obs_max_min ON user_config.user_layer_id = public_vals_obs_max_min.user_layer_id
             WHERE
                     user_config.st_layers_id = ANY (public_layers_list);
 	
