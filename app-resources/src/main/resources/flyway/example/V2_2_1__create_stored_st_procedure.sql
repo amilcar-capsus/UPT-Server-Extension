@@ -426,7 +426,7 @@ BEGIN
                     st_public_settings
                     RIGHT JOIN (
                             SELECT
-                                    st_public_layers.public_layer_id,
+                                    st_public_layers.public_layer_id as user_layer_id,
                                     (config.value ->> 'st_layer_id')::int AS st_layers_id,
                                     (config.value ->> 'normalization_method')::int AS normalization_method,
                                     (config.value ->> 'smaller_better')::int AS smaller_better,
@@ -453,7 +453,7 @@ BEGIN
                                     AND st_intersects (public_study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
                                     mmu_public_layers.user_layer_id
-                    )as public_vals_obs_max_min ON user_config.user_layer_id = public_vals_obs_max_min.user_layer_id
+                    )as public_vals_obs_max_min ON user_config.user_layer_id = public_vals_obs_max_min.public_layer_id
             WHERE
                     user_config.st_layers_id = ANY (public_layers_list);
 	
