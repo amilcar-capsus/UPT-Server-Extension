@@ -533,7 +533,7 @@ BEGIN
     FROM
             (
                     SELECT
-                            public_layer_id,
+                            user_layer_id,
                             mmu_code,
                             CASE WHEN smaller_better = 0 THEN
                                     100*value
@@ -543,7 +543,7 @@ BEGIN
                     FROM
                             (
                                     SELECT
-                                            public_layer_id,
+                                            user_layer_id,
                                             mmu_code,
                                             CASE WHEN value < 0 THEN
                                                     0
