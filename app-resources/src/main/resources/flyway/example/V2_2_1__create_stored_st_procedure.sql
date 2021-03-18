@@ -362,7 +362,7 @@ BEGIN
     FOR tmp_pub_mmu IN 
       SELECT * FROM mmu_public_layers
    LOOP
-      RAISE NOTICE 'col1: %s, col2: %s', quote_ident(tmp_pub_mmu.col1), quote_ident(tmp_pub_mmu.col2);    -- this, too
+      RAISE NOTICE 'col1: %s, col2: %s, col3: %s', quote_ident(tmp_pub_mmu.user_layer_id), quote_ident(tmp_pub_mmu.mmu_code), quote_ident(tmp_pub_mmu.value);    -- this, too
    END LOOP;
 
    --RAISE NOTICE '%', tmp_pub_mmu_array;   -- get feedback
