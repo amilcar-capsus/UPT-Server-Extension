@@ -358,7 +358,7 @@ BEGIN
             st_public_layers.id =any(public_layers_list)
             and st_intersects(st_geomfromtext(study_area_wkt), public_layer_data.geometry);
     
-    SELECT * FROM mmu_public_layers;
+    RETURN EXECUTE QUERY 'SELECT * FROM mmu_public_layers';
     
     FOR public_filter_pol IN (
         SELECT
