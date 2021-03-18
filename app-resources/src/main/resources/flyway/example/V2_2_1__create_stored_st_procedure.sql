@@ -16,8 +16,8 @@ CREATE OR REPLACE FUNCTION public.suitability_index_values(
     ROWS 1000
 AS $$
 DECLARE
-    tmp_pub_mmu "mmu_public_layers";
-    tmp_pub_mmu_array "mmu_public_layers"[];
+    tmp_pub_mmu record;
+    tmp_pub_mmu_array record[];
     intersected geometry = NULL;
     public_intersected geometry = NULL;
     filter_pol geometry;
