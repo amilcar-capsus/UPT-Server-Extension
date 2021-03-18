@@ -151,7 +151,7 @@ BEGIN
         END IF;
     END LOOP;
     
-    CASE WHEN ARRAY_LENGTH(filters_list, 1) IS NULL OR ARRAY_LENGTH(public_filters_list, 1) IS NULL THEN
+    CASE WHEN ARRAY_LENGTH(filters_list, 1) IS NULL AND ARRAY_LENGTH(public_filters_list, 1) IS NULL THEN
         INSERT INTO filters ("geometry")
         SELECT
             st_geomfromtext (study_area_wkt);
