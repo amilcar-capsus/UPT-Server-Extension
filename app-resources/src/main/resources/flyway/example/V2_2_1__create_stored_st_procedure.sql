@@ -151,7 +151,24 @@ BEGIN
         END IF;
     END LOOP;
     
-    IF ARRAY_LENGTH(filters_list, 1) IS NULL THEN
+    CASE WHEN ARRAY_LENGTH(filters_list, 1) IS NULL, ARRAY_LENGTH(public_filters_list, 1) IS NULL THEN
+        INSERT INTO filters ("geometry")
+        SELECT
+            st_geomfromtext (study_area_wkt);
+        INSERT INTO study_filtered ("geometry", study_area)
+    ELSE
+        INSERT INTO filters ("geometry")
+        SELECT
+            intersected;
+        INSERT INTO study_filtered ("geometry", study_area)
+        SELECT
+            st_intersection (st_geomfromtext (study_area_wkt),intersected) AS geometry,
+            st_geomfromtext (study_area_wkt)
+        FROM
+            filters;
+    END CASE;
+
+    /*IF ARRAY_LENGTH(filters_list, 1) IS NULL THEN
         INSERT INTO filters ("geometry")
         SELECT
             st_geomfromtext (study_area_wkt);
@@ -167,7 +184,7 @@ BEGIN
             st_geomfromtext (study_area_wkt)
         FROM
             filters;
-    END IF;
+    END IF;*/
 
 
     DROP TABLE IF EXISTS vals_settings;
