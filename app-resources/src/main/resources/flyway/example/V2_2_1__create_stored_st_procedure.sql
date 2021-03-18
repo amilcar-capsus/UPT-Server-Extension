@@ -375,14 +375,14 @@ BEGIN
             public_layer_data
             INNER JOIN st_public_filters ON public_layer_data.public_layer_id = st_public_filters.public_layer_id
         WHERE
-            st_public_filters.id = ANY (public_filters_list))
+            st_public_filters.id = ANY (public_filters_list)
         UNION SELECT
             geometry
         FROM
             user_layer_data
             INNER JOIN st_filters ON user_layer_data.user_layer_id = st_filters.user_layer_id
         WHERE
-            st_filters.id = ANY (filters_list))
+            st_filters.id = ANY (filters_list))    
     LOOP
         IF public_first_time THEN
             public_intersected = public_filter_pol;
