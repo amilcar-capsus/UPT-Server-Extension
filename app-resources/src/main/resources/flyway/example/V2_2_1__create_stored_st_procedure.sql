@@ -16,6 +16,8 @@ CREATE OR REPLACE FUNCTION public.suitability_index_values(
     ROWS 1000
 AS $$
 DECLARE
+    tmp_pub_mmu "mmu_public_layers";
+    tmp_pub_mmu_array "mmu_public_layers"[];
     intersected geometry = NULL;
     public_intersected geometry = NULL;
     filter_pol geometry;
@@ -358,7 +360,13 @@ BEGIN
             st_public_layers.id =any(public_layers_list)
             and st_intersects(st_geomfromtext(study_area_wkt), public_layer_data.geometry);
     
-    RETURN QUERY EXECUTE 'SELECT * FROM mmu_public_layers';
+    FOR tmp_pub_mmu IN 
+      SELECT * FROM "mmu_public_layers"
+   LOOP
+      tmp_pub_mmu_array := tmp_pub_mmu_array || tmp_pub_mmu;        -- this, too
+   END LOOP;
+
+   RAISE NOTICE '%', tmp_pub_mmu_array;   -- get feedback
     
     FOR public_filter_pol IN (
         SELECT
