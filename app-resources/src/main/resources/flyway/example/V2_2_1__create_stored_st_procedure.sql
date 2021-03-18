@@ -156,6 +156,7 @@ BEGIN
         SELECT
             st_geomfromtext (study_area_wkt);
         INSERT INTO study_filtered ("geometry", study_area)
+        SELECT st_geomfromtext (study_area_wkt),st_geomfromtext (study_area_wkt);
     ELSE
         INSERT INTO filters ("geometry")
         SELECT
