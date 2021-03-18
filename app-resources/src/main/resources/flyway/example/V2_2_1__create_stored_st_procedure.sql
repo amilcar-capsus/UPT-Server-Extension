@@ -427,7 +427,7 @@ BEGIN
                     RIGHT JOIN (
                             SELECT
                                     st_public_layers.public_layer_id as user_layer_id,
-                                    (config.value ->> 'st_layer_id')::int AS st_layers_id,
+                                    (config.value ->> 'st_public_layer_id')::int AS st_layers_id,
                                     (config.value ->> 'normalization_method')::int AS normalization_method,
                                     (config.value ->> 'smaller_better')::int AS smaller_better,
                                     (config.value ->> 'range_max')::double precision AS range_max,
