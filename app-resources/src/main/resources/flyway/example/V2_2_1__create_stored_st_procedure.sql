@@ -77,7 +77,7 @@ BEGIN
     ON mmu_public_layers USING btree
     (mmu_code ASC NULLS LAST);
 
-    DROP TABLE IF EXISTS public_filters;
+    /* DROP TABLE IF EXISTS public_filters;
     CREATE TEMPORARY TABLE public_filters (
         "geometry" geometry
     );
@@ -95,7 +95,7 @@ BEGIN
     (geometry);
     CREATE INDEX public_study_filtered_study_area_idx
     ON study_filtered USING gist
-    (study_area);
+    (study_area); */
     -- Load study area
     SELECT
         st_astext (geometry) INTO study_area_wkt
@@ -168,25 +168,6 @@ BEGIN
         FROM
             filters;
     END CASE;
-
-    /*IF ARRAY_LENGTH(filters_list, 1) IS NULL THEN
-        INSERT INTO filters ("geometry")
-        SELECT
-            st_geomfromtext (study_area_wkt);
-        INSERT INTO study_filtered ("geometry", study_area)
-        SELECT st_geomfromtext (study_area_wkt),st_geomfromtext (study_area_wkt);
-    ELSE
-        INSERT INTO filters ("geometry")
-        SELECT
-            intersected;
-        INSERT INTO study_filtered ("geometry", study_area)
-        SELECT
-            st_intersection (st_geomfromtext (study_area_wkt),intersected) AS geometry,
-            st_geomfromtext (study_area_wkt)
-        FROM
-            filters;
-    END IF;*/
-
 
     DROP TABLE IF EXISTS vals_settings;
     create temp table vals_settings as
@@ -388,7 +369,7 @@ BEGIN
 
    --RAISE NOTICE '%', tmp_pub_mmu_array;   -- get feedback
     
-    FOR public_filter_pol IN (
+    /*FOR public_filter_pol IN (
         SELECT
             geometry
         FROM
@@ -434,7 +415,7 @@ BEGIN
             st_geomfromtext (study_area_wkt)
         FROM
             public_filters;
-    END IF;
+    END IF;*/
 
 
     DROP TABLE IF EXISTS vals_public_settings;
@@ -483,10 +464,10 @@ BEGIN
                             FROM
                                     mmu_public_layers
                                     INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.user_layer_id,
-                                    public_study_filtered
+                                    study_filtered
                             WHERE
                                     st_public_layers.id = ANY (public_layers_list)
-                                    AND st_intersects (public_study_filtered.study_area, mmu_public_layers.geometry)
+                                    AND st_intersects (study_filtered.study_area, mmu_public_layers.geometry)
                             GROUP BY
                                     mmu_public_layers.user_layer_id
                     )as public_vals_obs_max_min ON user_config.user_layer_id = public_vals_obs_max_min.user_layer_id
@@ -511,10 +492,10 @@ BEGIN
     (mmu_code);
 
     delete from unique_public_mmu
-    where not st_intersects(unique_public_mmu.geometry,(select geometry from public_study_filtered));
+    where not st_intersects(unique_public_mmu.geometry,(select geometry from study_filtered));
 
-    update unique_public_mmu set geometry = st_intersection(unique_public_mmu.geometry,public_study_filtered.geometry)
-    from public_study_filtered,(select st_boundary(geometry) as geometry from public_study_filtered) c1
+    update unique_public_mmu set geometry = st_intersection(unique_public_mmu.geometry,study_filtered.geometry)
+    from study_filtered,(select st_boundary(geometry) as geometry from study_filtered) c1
     where st_intersects(c1.geometry,unique_public_mmu.geometry);
     
 
@@ -544,7 +525,7 @@ BEGIN
                                     mmu_public_layers.user_layer_id,
                                     mmu_public_layers.value,
                                     mmu_public_layers.mmu_code,
-                                    public_study_filtered.geometry,
+                                    study_filtered.geometry,
                                     mmu_public_layers.geometry,
                                     vals_public_settings.smaller_better,
                                     vals_public_settings.weight / public_total.weight::double precision AS weight,
@@ -558,10 +539,10 @@ BEGIN
                                     INNER JOIN st_public_layers ON st_public_layers.public_layer_id = mmu_public_layers.user_layer_id
                                     INNER JOIN vals_public_settings ON mmu_public_layers.user_layer_id = vals_public_settings.user_layer_id
                                     INNER JOIN public_total ON 1 = 1,
-                                    public_study_filtered
+                                    study_filtered
                             WHERE
                                     vals_public_settings.st_layers_id = ANY (public_layers_list)
-                                    AND st_intersects (public_study_filtered.geometry, mmu_public_layers.geometry)
+                                    AND st_intersects (study_filtered.geometry, mmu_public_layers.geometry)
                     ) as mmu_public_settings
     );
     CREATE INDEX public_mmu_index_adjusted_mmu_code_idx
