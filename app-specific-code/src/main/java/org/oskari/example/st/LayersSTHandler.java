@@ -928,6 +928,9 @@ public class LayersSTHandler extends RestActionHandler {
       PostStatus status = null;
       if ("index_values".equals(params.getRequiredParam("action"))) {
         indexSuitability(params);
+      }
+      if ("public_index_values".equals(params.getRequiredParam("action"))) {
+        publicIndexSuitability(params);
       } else if ("copy_data".equals(params.getRequiredParam("action"))) {
         if (
           params.getRequiredParam("layerSTName") != null &&
@@ -1940,10 +1943,6 @@ public class LayersSTHandler extends RestActionHandler {
 
   private void indexSuitability(ActionParameters params)
     throws ActionParamsException {
-    System.out.println(
-      "STUDY AREA!!!!!!!!!! " +
-      Long.parseLong(params.getRequiredParam("studyArea"))
-    );
     String errorMsg = "getStudyAreas";
     try (
       Connection connection = DriverManager.getConnection(
@@ -1953,6 +1952,131 @@ public class LayersSTHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "select * from public.suitability_index_values(?,?,?,?,?,?,?,?,?)"
+        //PreparedStatement statement = connection.prepareStatement(query
+      );
+    ) {
+      Array layers = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("layers")
+      );
+
+      Array public_layers = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("public_layers")
+      );
+
+      Array filters = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("filters")
+      );
+
+      Array public_filters = connection.createArrayOf(
+        "INTEGER",
+        params.getRequest().getParameterValues("public_filters")
+      );
+
+      Array settings = connection.createArrayOf(
+        "TEXT",
+        params.getRequest().getParameterValues("settings")
+      );
+
+      Array public_settings = connection.createArrayOf(
+        "TEXT",
+        params.getRequest().getParameterValues("public_settings")
+      );
+      statement.setArray(1, layers);
+      statement.setArray(2, public_layers);
+      statement.setArray(3, filters);
+      statement.setArray(4, public_filters);
+      statement.setArray(5, settings);
+      statement.setArray(6, public_settings);
+      statement.setLong(
+        7,
+        Long.parseLong(params.getRequiredParam("studyArea"))
+      );
+      statement.setInt(8, params.getRequiredParamInt("joinMethod"));
+      statement.setInt(9, Integer.parseInt(stProjection));
+      System.out.println("QUERY!!!! " + statement.toString());
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("OK", statement.toString()))
+        )
+      );
+      //ResultSet data = statement.executeQuery();
+      ResultSet data = statement.executeQuery();
+      JSONArray geoJson = new JSONArray();
+      while (data.next()) {
+        final JSONObject json = JSONHelper.createJSONObject(
+          data.getString("json")
+        );
+        geoJson.put(json);
+        break;
+      }
+      ResponseHelper.writeResponse(params, geoJson);
+    } catch (SQLException e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Detail", e.getMessage()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException | JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(
+            STStandardizationMethodHandler.class.getName()
+          )
+          .log(Level.SEVERE, null, ex);
+      }
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Detail", e.getMessage()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException | JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(STLayersHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  private void publicIndexSuitability(ActionParameters params)
+    throws ActionParamsException {
+    String errorMsg = "getStudyAreas";
+    try (
+      Connection connection = DriverManager.getConnection(
+        stURL,
+        stUser,
+        stPassword
+      );
+      PreparedStatement statement = connection.prepareStatement(
+        "select * from public.suitability_public_index_values(?,?,?,?,?,?,?,?,?)"
         //PreparedStatement statement = connection.prepareStatement(query
       );
     ) {
