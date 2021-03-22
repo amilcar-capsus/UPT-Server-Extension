@@ -512,15 +512,6 @@ public class LayersSTHandler extends RestActionHandler {
           Integer.parseInt(params.getRequiredParam("layer_id"))
         );
 
-        String layerUrl = ml.getUrl();
-        String layerVersion = ml.getVersion();
-        String layerTypename = ml.getName();
-        String parsedLayerUrl = WFSDescribeFeatureHelper.parseDescribeFeatureUrl(
-          layerUrl,
-          layerVersion,
-          layerTypename
-        );
-
         JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
           ml,
           params.getRequiredParam("layer_id")
