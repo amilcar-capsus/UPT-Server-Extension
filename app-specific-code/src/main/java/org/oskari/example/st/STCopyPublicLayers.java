@@ -164,6 +164,7 @@ public class STCopyPublicLayers extends RestActionHandler {
     Long user_id
   )
     throws Exception {
+    System.out.println("LAYER ID: " + layer);
     String tableUP[] = new String[tableup.length + 4];
     System.arraycopy(tableup, 0, tableUP, 0, tableup.length);
     tableUP[tableup.length] = "study_area";
