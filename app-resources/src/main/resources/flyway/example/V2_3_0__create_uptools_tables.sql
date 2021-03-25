@@ -2080,7 +2080,7 @@ begin;
     CREATE INDEX  if not exists st_layers_public_layer_id
     ON public.st_public_layers USING btree
     (public_layer_id ASC NULLS LAST)
-    TABLESPACE pg_default;
+    TABLESPACE pg_default;;
 
     create table if not exists st_settings(
         id bigserial not null,
