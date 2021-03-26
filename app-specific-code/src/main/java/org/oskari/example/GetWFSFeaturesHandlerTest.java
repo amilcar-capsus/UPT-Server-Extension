@@ -149,15 +149,12 @@ public class GetWFSFeaturesHandlerTest extends RestActionHandler {
             names.put(attr.getLocalName());
           }
         } finally {}
-        //attributes.put(attributes);
-        System.out.println("ID: " + feature.getID());
         for (int i = 0; i < names.length(); i++) {
           fullFeature.put(
             names.get(i).toString(),
             attributes.get(i).toString()
           );
         }
-        System.out.println("Full Feature: " + fullFeature);
         Iterator<String> featureKeys = fullFeature.keys();
         String geomKey = "";
         try {
@@ -167,9 +164,7 @@ public class GetWFSFeaturesHandlerTest extends RestActionHandler {
               geomKey = tmp;
             }
           }
-        } finally {
-          System.out.println("NECESSARY KEY!!!!!!!!!! " + geomKey);
-        }
+        } finally {}
         PostStatus status = new PostStatus();
         String query = "";
         try (
@@ -202,9 +197,7 @@ public class GetWFSFeaturesHandlerTest extends RestActionHandler {
               )
             )
           );
-          System.out.println("QUERY!!!!!" + statement.toString());
           status.message = statement.toString();
-          //statement.execute();
 
           errors.put(
             JSONHelper.createJSONObject(

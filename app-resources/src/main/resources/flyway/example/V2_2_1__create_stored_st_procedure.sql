@@ -367,56 +367,6 @@ BEGIN
             st_public_layers.id =any(public_layers_list)
             and st_intersects(st_geomfromtext(study_area_wkt), public_layer_data.geometry);
 
-   --RAISE NOTICE '%', tmp_pub_mmu_array;   -- get feedback
-    
-    /*FOR public_filter_pol IN (
-        SELECT
-            geometry
-        FROM
-            public_layer_data
-            INNER JOIN st_public_filters ON public_layer_data.public_layer_id = st_public_filters.public_layer_id
-        WHERE
-            st_public_filters.id = ANY (public_filters_list)
-        UNION SELECT
-            geometry
-        FROM
-            user_layer_data
-            INNER JOIN st_filters ON user_layer_data.user_layer_id = st_filters.user_layer_id
-        WHERE
-            st_filters.id = ANY (filters_list))    
-    LOOP
-        IF public_first_time THEN
-            public_intersected = public_filter_pol;
-			public_first_time=false;
-        ELSE
-            IF (operation = 2) THEN
-                public_intersected = ST_CollectionExtract(st_intersection (public_intersected, public_filter_pol), 3 );
-            ELSIF (operation = 3) then
-                public_intersected = ST_CollectionExtract(st_difference (public_intersected, public_filter_pol), 3 );
-            ELSE
-                public_intersected = ST_CollectionExtract(st_union (public_intersected, public_filter_pol), 3 );
-            END IF;
-        END IF;
-    END LOOP;
-    
-    IF ARRAY_LENGTH(public_filters_list, 1) IS NULL THEN
-        INSERT INTO public_filters ("geometry")
-        SELECT
-            st_geomfromtext (study_area_wkt);
-        INSERT INTO public_study_filtered ("geometry", study_area)
-        SELECT st_geomfromtext (study_area_wkt),st_geomfromtext (study_area_wkt);
-    ELSE
-        INSERT INTO public_filters ("geometry")
-        SELECT
-            public_intersected;
-        INSERT INTO public_study_filtered ("geometry", study_area)
-        SELECT
-            st_intersection (st_geomfromtext (study_area_wkt),public_intersected) AS geometry,
-            st_geomfromtext (study_area_wkt)
-        FROM
-            public_filters;
-    END IF;*/
-
 
     DROP TABLE IF EXISTS vals_public_settings;
     create temp table vals_public_settings as

@@ -91,8 +91,6 @@ public class STLayersPubLyrHandler extends RestActionHandler {
           )
         )
       );
-      //statement.setLong(2, user_id);
-      System.out.println("STATEMENT!!!!! " + statement.toString());
       boolean status = statement.execute();
       if (status) {
         ResultSet data = statement.getResultSet();

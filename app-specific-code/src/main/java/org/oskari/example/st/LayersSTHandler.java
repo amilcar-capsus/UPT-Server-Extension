@@ -1708,25 +1708,6 @@ public class LayersSTHandler extends RestActionHandler {
     }
   }
 
-  /* private void getPublicColumns(String id) throws Exception {
-        String errorMsg = "getLayers";
-        ArrayList<String> layers = new ArrayList<String>();
-        try {
-            JSONObject myJSON = GetWFSDescribeFeatureHandler.getFeatureTypesTextOrNumeric(id);
-            System.out.println(myJSON.toString());
-        } catch (Exception e) {
-            try {
-                errors.put(JSONHelper.createJSONObject(Obj.writeValueAsString(new PostStatus("Error", e.toString()))));
-                //ResponseHelper.writeError(null, "", 500, new JSONObject().put("Errors", errors));
-            } catch (JsonProcessingException ex) {
-                java.util.logging.Logger.getLogger(STStandardizationMethodHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            errorMsg = errorMsg + e.toString();
-            log.error(e, errorMsg);
-            throw new Exception();
-        }
-    } */
-
   private STFieldsList getSTColumns(String table) throws Exception {
     String errorMsg = "getSTLayers";
 
@@ -1987,7 +1968,6 @@ public class LayersSTHandler extends RestActionHandler {
       );
       statement.setInt(8, params.getRequiredParamInt("joinMethod"));
       statement.setInt(9, Integer.parseInt(stProjection));
-      System.out.println("QUERY!!!! " + statement.toString());
       errors.put(
         JSONHelper.createJSONObject(
           Obj.writeValueAsString(new PostStatus("OK", statement.toString()))
@@ -2112,7 +2092,6 @@ public class LayersSTHandler extends RestActionHandler {
       );
       statement.setInt(8, params.getRequiredParamInt("joinMethod"));
       statement.setInt(9, Integer.parseInt(stProjection));
-      System.out.println("QUERY!!!! " + statement.toString());
       errors.put(
         JSONHelper.createJSONObject(
           Obj.writeValueAsString(new PostStatus("OK", statement.toString()))
