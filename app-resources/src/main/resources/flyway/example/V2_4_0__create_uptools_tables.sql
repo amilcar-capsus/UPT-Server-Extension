@@ -1878,7 +1878,7 @@ begin;
         study_area bigint,
         created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated timestamp with time zone,
-        CONSTRAINT scenario_pkey PRIMARY KEY (id),
+        CONSTRAINT public_scenario_pkey PRIMARY KEY (id),
         CONSTRAINT up_public_scenario_oskari_users_id_fkey FOREIGN KEY (owner_id)
                 REFERENCES public.oskari_users(id) MATCH SIMPLE
                 ON UPDATE NO ACTION
@@ -1925,8 +1925,8 @@ begin;
         "source" text,
         created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated timestamp with time zone,
-        CONSTRAINT up_assumptions_pkey PRIMARY KEY (id),
-        CONSTRAINT up_public_assumptions_user_layer_id_fkey FOREIGN KEY (study_area)
+        CONSTRAINT up_public_assumptions_pkey PRIMARY KEY (id),
+        CONSTRAINT up_public_assumptions_public_layer_id_fkey FOREIGN KEY (study_area)
                 REFERENCES public.oskari_maplayer(id) MATCH SIMPLE
                 ON UPDATE NO ACTION
                 ON DELETE CASCADE,
@@ -2046,7 +2046,7 @@ begin;
         REFERENCES public.up_public_scenario(id) MATCH SIMPLE
                 ON UPDATE NO ACTION
                 ON DELETE CASCADE,
-        CONSTRAINT up_public_scenarios_layers_user_layer_id_fkey FOREIGN KEY (source_layer)
+        CONSTRAINT up_public_scenarios_layers_public_layer_id_fkey FOREIGN KEY (source_layer)
                 REFERENCES public.oskari_maplayer(id) MATCH SIMPLE
                 ON UPDATE NO ACTION
                 ON DELETE CASCADE,
