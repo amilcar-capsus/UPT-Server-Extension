@@ -42,7 +42,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @OskariActionRoute("up_public_scenario")
-public class UPScenarioHandler extends RestActionHandler {
+public class UPScenarioHandlerPubStdArea extends RestActionHandler {
   private static String upURL;
   private static String upUser;
   private static String upPassword;
