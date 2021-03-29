@@ -124,7 +124,7 @@ public class LayersUPHandler extends RestActionHandler {
         pdir.setData("public_data");
         pdir.setLabel("Public Data");
         pdir.setIcon(null);
-        directories.add(dir);
+        directories.add(pdir);
 
         //Get layers
         ArrayList<Directories> pLayers = getPublicLayers();
