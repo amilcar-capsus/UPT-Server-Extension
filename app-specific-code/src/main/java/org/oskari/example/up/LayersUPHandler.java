@@ -540,7 +540,7 @@ public class LayersUPHandler extends RestActionHandler {
         "select up_modules_translation.name from up_modules_translation\n" +
         " inner join up_public_scenario_modules on up_modules_translation.id=up_public_scenario_modules.module\n" +
         " inner join up_public_scenario on up_public_scenario.id=up_public_scenario_modules.scenario\n" +
-        " where up_scenario.id=" +
+        " where up_public_scenario.id=" +
         Integer.parseInt(scenario_id)
       );
 
