@@ -149,10 +149,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     PostStatus status = new PostStatus();
     String query = "";
     Long user_id = params.getUser().getId();
-    user_uuid = params.getUser().getUuid();
-
-    System.out.println("USER ID: " + user_id);
-    System.out.println("USER UUID: " + user_uuid);
     Long study_area;
     study_area = Long.parseLong(params.getRequiredParam("study_area"));
     try (
