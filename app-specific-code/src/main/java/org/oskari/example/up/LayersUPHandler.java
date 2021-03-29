@@ -120,35 +120,15 @@ public class LayersUPHandler extends RestActionHandler {
         ArrayList<Directories> layers = getLayers();
         dir.setChildren(layers);
 
-        JSONArray out = new JSONArray();
-        for (Directories index : directories) {
-          //Convert to Json Object
-          ObjectMapper Obj = new ObjectMapper();
-          final JSONObject json = JSONHelper.createJSONObject(
-            Obj.writeValueAsString(index)
-          );
-          out.put(json);
-        }
-        ObjectMapper Obj = new ObjectMapper();
-        tree.setData(directories);
-        final JSONObject outs = JSONHelper.createJSONObject(
-          Obj.writeValueAsString(tree)
-        );
-
-        ResponseHelper.writeResponse(params, outs);
-      } else if (
-        "list_public_layers".equals(params.getRequiredParam("action"))
-      ) {
-        //Get directories
-        Directories dir = new Directories();
-        dir.setData("public_data");
-        dir.setLabel("Public Data");
-        dir.setIcon(null);
+        Directories pdir = new Directories();
+        pdir.setData("public_data");
+        pdir.setLabel("Public Data");
+        pdir.setIcon(null);
         directories.add(dir);
 
         //Get layers
         ArrayList<Directories> layers = getPublicLayers();
-        dir.setChildren(layers);
+        pdir.setChildren(layers);
 
         JSONArray out = new JSONArray();
         for (Directories index : directories) {
@@ -479,13 +459,11 @@ public class LayersUPHandler extends RestActionHandler {
       );
       PreparedStatement statement = connection.prepareStatement(
         "with public_layers as(\n" +
-        "    select oskari_maplayer.id ,\n" +
-        "    name as layer_name \n" +
-        "    from oskari_maplayer\n" +
-        "    where lower(name) not like '%buffer%' and lower(name) not like '%distance%'\n and type LIKE 'wfslayer'" +
-        ")\n" +
-        "select id,layer_name\n" +
-        "from public_layers"
+        "   SELECT distinct oskari_maplayer.id, name as layer_name FROM oskari_maplayer\n" +
+        "   INNER JOIN public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id WHERE type = 'wfslayer' AND public_layer_data.uuid = ?\n" +
+        "   AND lower(name) not like '%buffer%' and lower(name) not like '%distance%'\n" +
+        "   )\n" +
+        "select id, layer_name from public_layers"
       );
     ) {
       //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
