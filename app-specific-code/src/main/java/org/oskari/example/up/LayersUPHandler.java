@@ -136,6 +136,36 @@ public class LayersUPHandler extends RestActionHandler {
         );
 
         ResponseHelper.writeResponse(params, outs);
+      } else if (
+        "list_public_layers".equals(params.getRequiredParam("action"))
+      ) {
+        //Get directories
+        Directories dir = new Directories();
+        dir.setData("public_data");
+        dir.setLabel("Public Data");
+        dir.setIcon(null);
+        directories.add(dir);
+
+        //Get layers
+        ArrayList<Directories> layers = getPublicLayers();
+        dir.setChildren(layers);
+
+        JSONArray out = new JSONArray();
+        for (Directories index : directories) {
+          //Convert to Json Object
+          ObjectMapper Obj = new ObjectMapper();
+          final JSONObject json = JSONHelper.createJSONObject(
+            Obj.writeValueAsString(index)
+          );
+          out.put(json);
+        }
+        ObjectMapper Obj = new ObjectMapper();
+        tree.setData(directories);
+        final JSONObject outs = JSONHelper.createJSONObject(
+          Obj.writeValueAsString(tree)
+        );
+
+        ResponseHelper.writeResponse(params, outs);
       } else if ("list_up_layers".equals(params.getRequiredParam("action"))) {
         //Get directories
         Directories dir = new Directories();
@@ -411,6 +441,51 @@ public class LayersUPHandler extends RestActionHandler {
         ")\n" +
         "select id,layer_name\n" +
         "from user_layers"
+      );
+    ) {
+      //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
+      statement.setString(1, user_uuid);
+
+      boolean status = statement.execute();
+      if (status) {
+        ResultSet data = statement.getResultSet();
+        while (data.next()) {
+          Directories child = new Directories();
+          child.setData(data.getString("id"));
+          child.setLabel(data.getString("layer_name"));
+          child.setExpandedIcon(null);
+          child.setCollapsedIcon(null);
+          child.setType("layer");
+          children.add(child);
+        }
+        return children;
+      }
+      return children;
+    } catch (SQLException e) {
+      errorMsg = errorMsg + e.toString();
+      log.error(e, errorMsg);
+    }
+    return children;
+  }
+
+  private ArrayList<Directories> getPublicLayers() {
+    String errorMsg = "getLayers";
+    ArrayList<Directories> children = new ArrayList<Directories>();
+    try (
+      Connection connection = DriverManager.getConnection(
+        upURL,
+        upUser,
+        upPassword
+      );
+      PreparedStatement statement = connection.prepareStatement(
+        "with public_layers as(\n" +
+        "    select oskari_maplayer.id ,\n" +
+        "    name as layer_name \n" +
+        "    from oskari_maplayer\n" +
+        "    where lower(name) not like '%buffer%' and lower(name) not like '%distance%'\n and type LIKE 'wfslayer'" +
+        ")\n" +
+        "select id,layer_name\n" +
+        "from public_layers"
       );
     ) {
       //"select id,layer_name from user_layer where uuid=? and lower(layer_name) not like '%buffer%' and lower(layer_name) not like '%distance%'");) {
