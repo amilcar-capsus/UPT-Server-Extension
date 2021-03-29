@@ -127,8 +127,8 @@ public class LayersUPHandler extends RestActionHandler {
         directories.add(dir);
 
         //Get layers
-        ArrayList<Directories> layers = getPublicLayers();
-        pdir.setChildren(layers);
+        ArrayList<Directories> pLayers = getPublicLayers();
+        pdir.setChildren(pLayers);
 
         JSONArray out = new JSONArray();
         for (Directories index : directories) {
