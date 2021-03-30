@@ -7,12 +7,17 @@ import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.ActionParamsException;
 import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.control.feature.GetWFSFeaturesHandler;
+import fi.nls.oskari.control.layer.GetWFSDescribeFeatureHandler;
 import fi.nls.oskari.domain.User;
+import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
+import fi.nls.oskari.map.layer.OskariLayerService;
 import fi.nls.oskari.util.JSONHelper;
 import fi.nls.oskari.util.PropertyUtil;
 import fi.nls.oskari.util.ResponseHelper;
+import fi.nls.oskari.util.WFSDescribeFeatureHelper;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,13 +28,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.oskari.example.*;
 import org.oskari.example.up.UPFields;
 import org.oskari.example.up.UPFieldsList;
 import org.oskari.example.up.UPJobs;
 import org.oskari.example.up.UPRoads;
+import org.oskari.service.util.ServiceFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +61,9 @@ public class LayersUPHandler extends RestActionHandler {
   String user_uuid;
 
   private static final Logger log = LogFactory.getLogger(LayersUPHandler.class);
+  private static OskariLayerService LAYER_SERVICE = ServiceFactory.getMapLayerService();
+  private static GetWFSDescribeFeatureHandler describeFeature = new GetWFSDescribeFeatureHandler();
+  private static GetWFSFeaturesHandler featuresList = new GetWFSFeaturesHandler();
 
   public void preProcess(ActionParameters params) throws ActionException {
     // common method called for all request methods
@@ -65,6 +80,9 @@ public class LayersUPHandler extends RestActionHandler {
       PropertyUtil
         .get("oskari.native.srs")
         .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
+
+    describeFeature.init();
+    featuresList.init();
   }
 
   @Override
@@ -214,6 +232,52 @@ public class LayersUPHandler extends RestActionHandler {
         Layers layers = new Layers();
         layers.setColumns(getColumns(params.getRequiredParam("layer_id")));
         ObjectMapper Obj = new ObjectMapper();
+        final JSONObject json = JSONHelper.createJSONObject(
+          Obj.writeValueAsString(layers)
+        );
+        ResponseHelper.writeResponse(params, json);
+      } else if (
+        "list_public_columns".equals(params.getRequiredParam("action"))
+      ) {
+        Layers layers = new Layers();
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting oskari columns")
+            )
+          )
+        );
+        //testFeatures.testGetExternalFeatures();
+        OskariLayer ml = LAYER_SERVICE.find(
+          Integer.parseInt(params.getRequiredParam("layer_id"))
+        );
+
+        JSONObject mapFields = WFSDescribeFeatureHelper.getFeatureTypesTextOrNumeric(
+          ml,
+          params.getRequiredParam("layer_id")
+        );
+        JSONObject propertyTypes = mapFields.getJSONObject("propertyTypes");
+        JSONArray ptArray = propertyTypes.names();
+        ArrayList<String> pt = new ArrayList<String>();
+        if (ptArray != null) {
+          for (int i = 0; i < ptArray.length(); i++) {
+            pt.add(ptArray.getString(i));
+          }
+        }
+        pt.removeIf(s -> s.contains("the_geom"));
+        pt.add("geometry");
+
+        layers.setColumns(pt);
+
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(
+              new PostStatus("OK", "Getting oskari executed")
+            )
+          )
+        );
+
+        // final JSONObject json = JSONHelper.createJSONObject(Obj.writeValueAsString(layers));
         final JSONObject json = JSONHelper.createJSONObject(
           Obj.writeValueAsString(layers)
         );
