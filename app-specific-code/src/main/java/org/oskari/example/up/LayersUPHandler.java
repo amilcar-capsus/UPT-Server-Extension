@@ -57,6 +57,8 @@ public class LayersUPHandler extends RestActionHandler {
   private static String upwsHost;
   private static String upwsPort;
   private static String upProjection;
+  private JSONArray errors;
+  private ObjectMapper Obj;
 
   String user_uuid;
 
