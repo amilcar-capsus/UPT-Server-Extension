@@ -81,6 +81,8 @@ public class LayersUPHandler extends RestActionHandler {
         .get("oskari.native.srs")
         .substring(PropertyUtil.get("oskari.native.srs").indexOf(":") + 1);
 
+    errors = new JSONArray();
+    Obj = new ObjectMapper();
     describeFeature.init();
     featuresList.init();
   }
