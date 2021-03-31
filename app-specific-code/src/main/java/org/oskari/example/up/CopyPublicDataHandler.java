@@ -1382,6 +1382,7 @@ public class CopyPublicDataHandler extends RestActionHandler {
     System.out.println("tableUP: " + tableup);
     System.out.println("table: " + table);
     System.out.println("scenarioId: " + scenarioId);
+    System.out.println("uuid: " + user_uuid);
 
     for (int i = 0; i < tableUP.length; i++) {
       switch (tableUP[i]) {
