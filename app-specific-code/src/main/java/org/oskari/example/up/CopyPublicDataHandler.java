@@ -306,10 +306,11 @@ public class CopyPublicDataHandler extends RestActionHandler {
         values +
         " from oskari_maplayer\n" +
         " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
-        " where public_layer.id=" +
+        " where oskari_maplayer.id=" +
         layer +
-        " and public_layer_data.uuid=" +
-        user_uuid;
+        " and public_layer_data.uuid='" +
+        user_uuid +
+        "'";
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -561,7 +562,7 @@ public class CopyPublicDataHandler extends RestActionHandler {
       values.replaceAll(",,", ",") +
       " from oskari_maplayer\n" +
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
-      " where public_layer.id=" +
+      " where oskari_maplayer.id=" +
       layer +
       " and public_layer_data.uuid='" +
       user_uuid +
@@ -666,7 +667,7 @@ public class CopyPublicDataHandler extends RestActionHandler {
       values.replaceAll(",,", ",") +
       " from oskari_maplayer\n" +
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
-      " where public_layer.id=" +
+      " where oskari_maplayer.id=" +
       layer +
       " and public_layer_data.uuid='" +
       user_uuid +
@@ -783,7 +784,7 @@ public class CopyPublicDataHandler extends RestActionHandler {
       values +
       " from oskari_maplayer\n" +
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
-      " where public_layer.id=" +
+      " where oskari_maplayer.id=" +
       layer +
       " and public_layer_data.uuid='" +
       user_uuid +
@@ -1385,13 +1386,6 @@ public class CopyPublicDataHandler extends RestActionHandler {
     System.arraycopy(tableup, 0, tableUP, 0, tableup.length);
 
     String group = "";
-
-    System.out.println("layerUP: " + layerUP);
-    System.out.println("layer: " + layer);
-    System.out.println("tableUP: " + tableup);
-    System.out.println("table: " + table);
-    System.out.println("scenarioId: " + scenarioId);
-    System.out.println("uuid: " + user_uuid);
 
     for (int i = 0; i < tableUP.length; i++) {
       switch (tableUP[i]) {
