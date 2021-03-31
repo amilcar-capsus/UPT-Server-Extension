@@ -446,8 +446,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -562,8 +563,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where public_layer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -666,8 +668,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where public_layer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -782,8 +785,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where public_layer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -888,8 +892,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
     ResultSet data = statement.executeQuery(query);
     ArrayList<UPTransitInfo> data_in = new ArrayList<>();
 
@@ -991,8 +996,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -1098,8 +1104,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -1213,8 +1220,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
     ResultSet data = statement.executeQuery(query);
 
     ArrayList<UPJobs> data_in = new ArrayList<>();
@@ -1310,8 +1318,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -1444,8 +1453,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
+      " and public_layer_data.uuid='" +
       user_uuid +
+      "'" +
       " group by " +
       group;
 
@@ -1565,8 +1575,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
@@ -1671,8 +1682,9 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " inner join public_layer_data on oskari_maplayer.id = public_layer_data.public_layer_id\n" +
       " where oskari_maplayer.id=" +
       layer +
-      " and public_layer_data.uuid=" +
-      user_uuid;
+      " and public_layer_data.uuid='" +
+      user_uuid +
+      "'";
 
     errors.put(
       JSONHelper.createJSONObject(
