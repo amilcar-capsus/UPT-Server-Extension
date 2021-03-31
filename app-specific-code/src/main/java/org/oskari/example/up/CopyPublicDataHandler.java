@@ -1449,6 +1449,7 @@ public class CopyPublicDataHandler extends RestActionHandler {
       " group by " +
       group;
 
+    System.out.println(query);
     errors.put(
       JSONHelper.createJSONObject(
         Obj.writeValueAsString(
