@@ -1353,11 +1353,6 @@ public class CopyDataHandler extends RestActionHandler {
     System.arraycopy(tableup, 0, tableUP, 0, tableup.length);
 
     String group = "";
-    System.out.println("layerUP: " + layerUP);
-    System.out.println("layer: " + layer);
-    System.out.println("tableUP: " + tableup);
-    System.out.println("table: " + table);
-    System.out.println("scenarioId: " + scenarioId);
 
     for (int i = 0; i < tableUP.length; i++) {
       switch (tableUP[i]) {
