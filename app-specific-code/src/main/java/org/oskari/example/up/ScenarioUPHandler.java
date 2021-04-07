@@ -185,10 +185,10 @@ public class ScenarioUPHandler extends RestActionHandler {
           ",",
           params.getRequest().getParameterValues("scenariosPublicId")
         );
-        /* String scenario = String.join(
+        String scenario = String.join(
           "_",
-          params.getRequest().getParameterValues("scenariosId")
-        ); */
+          params.getRequest().getParameterValues("scenariosPublicId")
+        );
         //String indicators = params.getRequiredParam("indicators");
 
         //Get scenario indicators
@@ -238,10 +238,16 @@ public class ScenarioUPHandler extends RestActionHandler {
           ",",
           params.getRequest().getParameterValues("scenariosPublicId")
         );
-        String scenario = String.join(
-          "_",
-          params.getRequest().getParameterValues("scenariosId")
-        );
+        String scenario =
+          String.join(
+            "_",
+            params.getRequest().getParameterValues("scenariosId")
+          ) +
+          "_" +
+          String.join(
+            "_",
+            params.getRequest().getParameterValues("scenariosPublicId")
+          );
         //String indicators = params.getRequiredParam("indicators");
 
         //Get scenario indicators
