@@ -136,6 +136,104 @@ public class ScenarioUPHandler extends RestActionHandler {
           ",",
           params.getRequest().getParameterValues("scenariosId")
         );
+        String scenario = String.join(
+          "_",
+          params.getRequest().getParameterValues("scenariosId")
+        );
+        //String indicators = params.getRequiredParam("indicators");
+
+        //Get scenario indicators
+        Connection connection = DriverManager.getConnection(
+          upURL,
+          upUser,
+          upPassword
+        );
+        Statement statement = connection.createStatement();
+        ResultSet data = statement.executeQuery(
+          "select up_modules_translation.name from up_modules_translation\n" +
+          "inner join up_scenario_modules on up_modules_translation.id=up_scenario_modules.module\n" +
+          "inner join up_scenario on up_scenario.id=up_scenario_modules.scenario\n" +
+          "where up_scenario.id in (" +
+          scenarios +
+          ") "
+        );
+        String indicators = "";
+        while (data.next()) {
+          indicators += data.getString("name") + "_";
+        }
+        indicators = indicators.substring(0, indicators.length() - 1);
+        boolean results = evaluateScenario(
+          user_id.toString(),
+          scenario,
+          indicators
+        );
+        ObjectMapper mapper = new ObjectMapper();
+        log.debug(
+          "User:  " +
+          user_id.toString() +
+          " -> " +
+          mapper.writeValueAsString(results)
+        );
+
+        ResponseHelper.writeResponse(
+          params,
+          JSONHelper.createJSONObject(mapper.writeValueAsString(results))
+        );
+      }
+      if ("evaluate_public".equals(params.getRequiredParam("action"))) {
+        String scenariosPublic = String.join(
+          ",",
+          params.getRequest().getParameterValues("scenariosPublicId")
+        );
+        String scenario = String.join(
+          "_",
+          params.getRequest().getParameterValues("scenariosId")
+        );
+        //String indicators = params.getRequiredParam("indicators");
+
+        //Get scenario indicators
+        Connection connection = DriverManager.getConnection(
+          upURL,
+          upUser,
+          upPassword
+        );
+        Statement statement = connection.createStatement();
+        ResultSet data = statement.executeQuery(
+          "union select up_modules_translation.name from up_modules_translation\n" +
+          "inner join up_public_scenario_modules on up_modules_translation.id=up_public_scenario_modules.module\n" +
+          "inner join up_public_scenario on up_public_scenario.id=up_public_scenario_modules.scenario\n" +
+          "where up_public_scenario.id in (" +
+          scenariosPublic +
+          ")"
+        );
+        String indicators = "";
+        while (data.next()) {
+          indicators += data.getString("name") + "_";
+        }
+        indicators = indicators.substring(0, indicators.length() - 1);
+        boolean results = evaluateScenario(
+          user_id.toString(),
+          scenario,
+          indicators
+        );
+        ObjectMapper mapper = new ObjectMapper();
+        log.debug(
+          "User:  " +
+          user_id.toString() +
+          " -> " +
+          mapper.writeValueAsString(results)
+        );
+
+        ResponseHelper.writeResponse(
+          params,
+          JSONHelper.createJSONObject(mapper.writeValueAsString(results))
+        );
+      }
+      if ("evaluate_both".equals(params.getRequiredParam("action"))) {
+        String scenarios = String.join(
+          ",",
+          params.getRequest().getParameterValues("scenariosId")
+        );
         String scenariosPublic = String.join(
           ",",
           params.getRequest().getParameterValues("scenariosPublicId")
