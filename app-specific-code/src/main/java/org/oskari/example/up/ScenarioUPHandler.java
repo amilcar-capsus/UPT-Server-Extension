@@ -199,7 +199,7 @@ public class ScenarioUPHandler extends RestActionHandler {
         );
         Statement statement = connection.createStatement();
         ResultSet data = statement.executeQuery(
-          "union select up_modules_translation.name from up_modules_translation\n" +
+          "select up_modules_translation.name from up_modules_translation\n" +
           "inner join up_public_scenario_modules on up_modules_translation.id=up_public_scenario_modules.module\n" +
           "inner join up_public_scenario on up_public_scenario.id=up_public_scenario_modules.scenario\n" +
           "where up_public_scenario.id in (" +
