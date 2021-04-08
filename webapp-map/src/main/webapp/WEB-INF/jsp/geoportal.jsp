@@ -7,7 +7,7 @@
             <!--viewName-->
 
             <head>
-                <title>Contagion Hotspots</title>
+                <title>Geoportal</title>
 
                 <!-- ############# css ################# -->
                 <link rel="icon" type="image/png" href="/Oskari${path}/PLID/assets/img/16x16 CH.png" sizes="16x16">
