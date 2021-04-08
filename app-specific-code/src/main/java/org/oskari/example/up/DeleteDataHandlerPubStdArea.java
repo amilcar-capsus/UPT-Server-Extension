@@ -88,6 +88,9 @@ public class DeleteDataHandlerPubStdArea extends RestActionHandler {
           case "mmu":
             this.deleteMmu(params.getRequiredParam("scenarioId"));
             break;
+          case "mmu_info":
+            this.deleteMmuInfo(params.getRequiredParam("scenarioId"));
+            break;
           case "transit":
             this.deleteTransit(params.getRequiredParam("scenarioId"));
             break;
@@ -187,6 +190,42 @@ public class DeleteDataHandlerPubStdArea extends RestActionHandler {
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.delete(
         "http://" + upwsHost + ":" + upwsPort + "/mmu/{id}",
+        params
+      );
+    } catch (Exception e) {
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          null,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException ex) {
+        java
+          .util.logging.Logger.getLogger(DeleteDataHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      } catch (JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(DeleteDataHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+      throw new Exception();
+    }
+  }
+
+  private void deleteMmuInfo(String scenarioId) throws Exception {
+    try {
+      Map<String, String> params = new HashMap<String, String>();
+      params.put("id", scenarioId);
+
+      RestTemplate restTemplate = new RestTemplate();
+      restTemplate.delete(
+        "http://" + upwsHost + ":" + upwsPort + "/mmu_info/{id}",
         params
       );
     } catch (Exception e) {
