@@ -184,7 +184,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         ReferencedEnvelope bbox = new ReferencedEnvelope(envelope, webMercator);
 
         SimpleFeatureCollection sfc = handler.featureClient.getFeatures(
-          study_area.toString(),
+          ids.toString(),
           ml,
           bbox,
           webMercator,
