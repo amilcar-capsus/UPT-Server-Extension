@@ -228,29 +228,33 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             } finally {}
             //featureArray.put(fullFeature);
 
-            statement.setLong(1, ids);
+            statement.setLong(1, parseLong(ids));
             statement.setString(2, user_uuid);
             statement.setString(3, feature.getID());
             statement.setString(4, fullFeature.toString());
             statement.setString(5, fullFeature.get(geomKey).toString());
             statement.addBatch();
+
+            CoordinateReferenceSystem actualCRS = sfc
+              .getSchema()
+              .getGeometryDescriptor()
+              .getCoordinateReferenceSystem();
+            assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
+            errors.put(
+              JSONHelper.createJSONObject(
+                Obj.writeValueAsString(
+                  new PostStatus(
+                    "OK",
+                    "Executing query: " + statement.toString()
+                  )
+                )
+              )
+            );
           }
         } finally {
           iterator.close();
         }
       }
-      CoordinateReferenceSystem actualCRS = sfc
-        .getSchema()
-        .getGeometryDescriptor()
-        .getCoordinateReferenceSystem();
-      assertTrue(CRS.equalsIgnoreMetadata(webMercator, actualCRS));
-      errors.put(
-        JSONHelper.createJSONObject(
-          Obj.writeValueAsString(
-            new PostStatus("OK", "Executing query: " + statement.toString())
-          )
-        )
-      );
       int[] inserted = statement.executeBatch();
       connection.commit();
       statement.close();
@@ -411,7 +415,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       }
 
       for (String ids : study_areas) {
-        statement.setLong(1, ids);
+        statement.setLong(1, parseLong(ids));
         statement.setString(2, user_uuid);
         statement.addBatch();
       }
