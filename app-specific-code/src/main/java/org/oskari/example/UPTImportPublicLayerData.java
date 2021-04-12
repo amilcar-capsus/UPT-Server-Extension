@@ -149,8 +149,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     PostStatus status = new PostStatus();
     String query = "";
     Long user_id = params.getUser().getId();
-    Long study_area;
-    study_area = Long.parseLong(params.getRequiredParam("study_area"));
     String[] study_areas;
     study_areas = params.getRequest().getParameterValues("studyAreasId");
     try (
@@ -390,8 +388,6 @@ public class UPTImportPublicLayerData extends RestActionHandler {
   @Override
   public void handleDelete(ActionParameters params) throws ActionException {
     String errorMsg = "Layers get";
-    Long id;
-    id = Long.parseLong(params.getRequiredParam("id"));
     user_uuid = params.getUser().getUuid();
     String[] study_areas;
     study_areas = params.getRequest().getParameterValues("studyAreasId");
