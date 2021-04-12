@@ -389,6 +389,8 @@ public class UPTImportPublicLayerData extends RestActionHandler {
     Long id;
     id = Long.parseLong(params.getRequiredParam("id"));
     user_uuid = params.getUser().getUuid();
+    String[] study_areas;
+    study_areas = params.getRequest().getParameterValues("studyAreasId");
     PostStatus status = new PostStatus();
     String query = "";
     try (
@@ -408,8 +410,11 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      statement.setLong(1, id);
-      statement.setString(2, user_uuid);
+      for (String ids : study_areas) {
+        statement.setLong(1, ids);
+        statement.setString(2, user_uuid);
+        statement.addBatch();
+      }
 
       errors.put(
         JSONHelper.createJSONObject(
@@ -419,7 +424,9 @@ public class UPTImportPublicLayerData extends RestActionHandler {
         )
       );
 
-      statement.execute();
+      int[] inserted = statement.executeBatch();
+      connection.commit();
+      statement.close();
 
       errors.put(
         JSONHelper.createJSONObject(
