@@ -172,7 +172,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       connection.setAutoCommit(false);
 
       for (String ids : study_areas) {
-        OskariLayer ml = LAYER_SERVICE.find(parseInt(ids));
+        OskariLayer ml = LAYER_SERVICE.find(Integer.parseInt(ids));
         JSONArray featureArray = new JSONArray();
         CoordinateReferenceSystem webMercator = CRS.decode("EPSG:3857", true);
         // PropertyUtil.addProperty("oskari.native.srs", "EPSG:" + stProjection, true);
@@ -228,7 +228,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
             } finally {}
             //featureArray.put(fullFeature);
 
-            statement.setLong(1, parseLong(ids));
+            statement.setLong(1, Long.parseLong(ids));
             statement.setString(2, user_uuid);
             statement.setString(3, feature.getID());
             statement.setString(4, fullFeature.toString());
@@ -415,7 +415,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       }
 
       for (String ids : study_areas) {
-        statement.setLong(1, parseLong(ids));
+        statement.setLong(1, Long.parseLong(ids));
         statement.setString(2, user_uuid);
         statement.addBatch();
       }
