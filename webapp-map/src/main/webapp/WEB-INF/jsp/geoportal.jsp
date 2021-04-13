@@ -452,7 +452,7 @@
                         app-root .geoportal-btn.tools-geoportal.ui-button {
                             background-color: #d9d9d9!important;
                             border: 1px solid #d9d9d9!important;
-                            color: #47A599!important;
+                            color: #ffffff!important;
                             min-width: 2.5em !important;
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button:hover,
