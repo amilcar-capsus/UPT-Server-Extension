@@ -88,7 +88,7 @@
                         html body div#contentMap.oskariui.container-fluid div.row-fluid.oskariui-mode-content {
                             padding-top: -1.5em;
                         }
-                        .textarea,
+                        /* .textarea,
                         button:not(.ui-button),
                         input[type=button]:not([class*=ant-]):not(.ui-button),
                         input[type=email],
@@ -254,7 +254,7 @@
                         textarea:disabled {
                             cursor: default !important;
                             opacity: .5 !important
-                        }
+                        } */
                         app-root table.ui-table-scrollable-body-table,
                         app-root .ui-table-wrapper table,
                         app-root .ui-table-scrollable-header-box,
