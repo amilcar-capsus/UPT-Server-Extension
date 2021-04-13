@@ -409,6 +409,7 @@ public class UPTImportPublicLayerData extends RestActionHandler {
       if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
         throw new Exception("User privilege is not enough for this action");
       }
+      connection.setAutoCommit(false);
 
       for (String ids : study_areas) {
         statement.setLong(1, Long.parseLong(ids));
