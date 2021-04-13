@@ -325,7 +325,7 @@
                         app-root .suitability .ui-table .ui-table-tbody>tr.ui-state-highlight,
                         app-root .suitability .ui-paginator-page.ui-state-active,
                         app-root .suitability .ui-progressbar .ui-progressbar-value {
-                            background-color: #196480 !important;
+                            background-color: #47A599 !important;
                         }
                         app-root .suitability .ui-table.settingsTable tr.ui-state-highlight {
                             background-color: #323232 !important;
@@ -352,8 +352,8 @@
                         }
                         app-root .suitability .ui-button,
                         app-root .suitability .ui-chkbox-box.ui-state-active {
-                            background-color: #196480 !important;
-                            border-color: #196480 !important;
+                            background-color: #47A599 !important;
+                            border-color: #47A599 !important;
                             color: #FFFFFF !important;
                         }
                         app-root .urbanperformance .ui-inputtext:hover,
@@ -382,16 +382,16 @@
                         app-root .suitability .ui-multiselect-item.ui-state-highlight,
                         app-root .suitability .ui-dropdown-item.ui-state-highlight,
                         app-root .suitability .ui-treenode-label.ui-state-highlight {
-                            background-color: #196480 !important;
+                            background-color: #47A599 !important;
                         }
                         app-root .suitability .ui-button,
                         app-root .suitability .ui-chkbox-box.ui-state-active {
-                            background-color: #196480 !important;
-                            border-color: #196480 !important;
+                            background-color: #47A599 !important;
+                            border-color: #47A599 !important;
                             text-decoration: none;
                         }
                         app-root .suitability .ui-inputswitch-checked .ui-inputswitch-slider {
-                            background-color: #196480 !important;
+                            background-color: #47A599 !important;
                         }
                         app-root .suitability .ui-inputtext:hover,
                         app-root .suitability .ui-inputtext:focus,
@@ -406,11 +406,11 @@
                         app-root .suitability .ui-chkbox-box:hover,
                         app-root .suitability .ui-chkbox-box:focus,
                         app-root .suitability .ui-chkbox-box:active {
-                            border-color: #196480 !important;
+                            border-color: #47A599 !important;
                         }
                         app-root .suitability .ui-chkbox-box.ui-state-focus,
                         app-root .suitability .ui-button:enabled:focus {
-                            box-shadow: 0 0 0 0.2em #196480 !important;
+                            box-shadow: 0 0 0 0.2em #47A599 !important;
                         }
                         app-root .urbanperformance .ui-chkbox-box.ui-state-focus,
                         app-root .urbanperformance .ui-button:enabled:focus {
@@ -418,7 +418,7 @@
                         }
                         app-root .suitability .ui-dropdown-filter-icon,
                         app-root .suitability .ui-multiselect-filter-icon {
-                            color: #196480 !important;
+                            color: #47A599 !important;
                         }
                         app-root .geoportal-btn.suitability:not(.calculateUP) .ui-button-icon-left,
                         app-root .geoportal-btn.urbanperformance:not(.calculateUP) .ui-button-icon-left,
@@ -438,8 +438,8 @@
                         app-root .geoportal-btn.suitability .ui-button,
                         app-root .geoportal-btn.suitability .ui-button:hover,
                         app-root .geoportal-btn.suitability .ui-button:focus {
-                            background-color: #196480 !important;
-                            border: #196480 !important;
+                            background-color: #47A599 !important;
+                            border: #47A599 !important;
                             min-width: 2.5em !important;
                         }
                         app-root .geoportal-btn.advanced-geoportal .ui-button,
@@ -452,15 +452,15 @@
                         app-root .geoportal-btn.tools-geoportal.ui-button {
                             background-color: #d9d9d9!important;
                             border: 1px solid #d9d9d9!important;
-                            color: #196480!important;
+                            color: #47A599!important;
                             min-width: 2.5em !important;
                         }
                         app-root .geoportal-btn.tools-geoportal .ui-button:hover,
                         app-root .geoportal-btn.tools-geoportal .ui-button:focus,
                         app-root .geoportal-btn.tools-geoportal.ui-button:hover,
                         app-root .geoportal-btn.tools-geoportal.ui-button:focus {
-                            background-color: #f5ad3c!important;
-                            border: 1px solid #f5ad3c!important;
+                            background-color: #47A599!important;
+                            border: 1px solid #47A599!important;
                             color: #ffffff!important;
                         }
                         app-root .ui-button.ui-state-default.ui-button-warning,
@@ -484,8 +484,8 @@
                             color: #FF8680 !important;
                         }
                         app-root #suitability .ui-spinner-button {
-                            background-color: #196480 !important;
-                            border-color: #196480 !important;
+                            background-color: #47A599 !important;
+                            border-color: #47A599 !important;
                         }
                         app-root .urbanperformance .ui-spinner-button,
                         app-root #urbanperformance .ui-spinner-button {
@@ -599,20 +599,20 @@
                         app-root .suitability .ui-button:enabled:focus,
                         app-root .suitability .ui-button.uh-save-btn:hover,
                         app-root .suitability .ui-button.uh-save-btn:focus {
-                            background-color: #f5ad3c!important;
-                            border: 1px solid #f5ad3c!important;
+                            background-color: #47A599!important;
+                            border: 1px solid #47A599!important;
                             color: #ffffff!important;
                         }
                         app-root #analysis.suitability.geoportal-btn.ui-button {
-                            border: 1px solid #196480 !important;
-                            background-color: #196480 !important;
+                            border: 1px solid #47A599 !important;
+                            background-color: #47A599 !important;
                         }
 
                         app-root #analysis.suitability.geoportal-btn.ui-button:hover,
                         app-root #analysis.suitability.geoportal-btn.ui-button:focus,
                         app-root #analysis.suitability.geoportal-btn.ui-button:active {
-                            border: 1px solid #196480 !important;
-                            background-color: #196480 !important;
+                            border: 1px solid #47A599 !important;
+                            background-color: #47A599 !important;
                         }
 
                         .download-basket-tile {
