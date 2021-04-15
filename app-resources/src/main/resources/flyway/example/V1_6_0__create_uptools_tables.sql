@@ -2110,6 +2110,7 @@ begin;
 	VALUES (1,'english','Observe'),
         (2,'english','Reference'),
         (3,'english','Standarize') on conflict(value,  language) do nothing;
+    DELETE FROM public.st_normalization_method_options WHERE id = 1;
 
     create table if not exists st_normalization_type_options(
             id serial not null,
@@ -2196,6 +2197,18 @@ begin;
         updated timestamp with time zone,
         CONSTRAINT st_tables_pkey PRIMARY KEY (id),
         CONSTRAINT st_tables_language_name_key UNIQUE (language, name)
+    );
+    insert into st_tables(
+        language,name, label
+    )
+    values(
+        'english','mmu','Source layer'
+    );
+    insert into st_tables(
+        language,name, label
+    )
+    values(
+        'english','amenities','Target features'
     );
     CREATE TABLE if not exists st_tables_fields
     (

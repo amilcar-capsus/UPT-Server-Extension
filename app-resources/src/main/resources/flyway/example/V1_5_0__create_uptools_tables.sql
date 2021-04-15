@@ -2110,6 +2110,7 @@ begin;
 	VALUES (1,'english','Observe'),
         (2,'english','Reference'),
         (3,'english','Standarize') on conflict(value,  language) do nothing;
+    DELETE FROM public.st_normalization_method_options WHERE id = 1;
 
     create table if not exists st_normalization_type_options(
             id serial not null,
