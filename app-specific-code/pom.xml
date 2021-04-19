@@ -15,7 +15,12 @@
             <groupId>fi.nls.oskari.service</groupId>
             <artifactId>oskari-control-base</artifactId>
         </dependency>
-
+        
+        <dependency>
+            <groupId>fi.nls.oskari</groupId>
+            <artifactId>download-basket</artifactId>
+            <version>${oskari.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -87,8 +92,12 @@
         <dependency>
             <groupId>org.oskari</groupId>
             <artifactId>control-userlayer</artifactId>
-            <version>1.55.1</version>
+            <version>1.54.1</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>
