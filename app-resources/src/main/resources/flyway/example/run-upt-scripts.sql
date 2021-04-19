@@ -1,6 +1,6 @@
-\i V2_2_1__create_stored_st_procedure.sql
-\i V2_2_2__create_stored_st_procedure_public.sql
-\i V2_3_0__create_uptools_tables.sql
-\i V2_4_0__create_uptools_tables.sql
-\i V2_5_0__create_uptools_tables.sql
-\i V2_6_0__create_public_layer_data.sql
+\ir V2_2_1__create_stored_st_procedure.sql
+\ir V2_2_2__create_stored_st_procedure_public.sql
+\ir V2_3_0__create_uptools_tables.sql
+\ir V2_4_0__create_uptools_tables.sql
+\ir V2_5_0__create_uptools_tables.sql
+\ir V2_6_0__create_public_layer_data.sql
