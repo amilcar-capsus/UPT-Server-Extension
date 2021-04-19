@@ -595,7 +595,7 @@
                     }
                 </style>
                 <!-- ############# /css ################# -->
-                <link rel="stylesheet" href="/Oskari${path}/PLID/styles.aa8ee104adf91a39d229.css">
+                <link rel="stylesheet" href="/Oskari${path}/PLID/styles.css">
                 <script>
                     window.__session_active = false;
                 </script>
