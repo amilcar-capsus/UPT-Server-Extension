@@ -1,11 +1,5 @@
-package example.oskari.db;
+package org.oskari.example.db;
 
-import example.oskari.helpers.LayerHelper;
-import example.oskari.jobs.SynchronizeUserDataJob;
-import example.oskari.parser.CKANDataParser;
-import example.oskari.parser.CKANOrganization;
-import example.oskari.parser.CKANUser;
-import example.oskari.util.DatabaseUserServiceCKAN;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
@@ -19,6 +13,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.oskari.example.helpers.LayerHelper;
+import org.oskari.example.jobs.SynchronizeUserDataJob;
+import org.oskari.example.parser.CKANDataParser;
+import org.oskari.example.parser.CKANOrganization;
+import org.oskari.example.parser.CKANUser;
+import org.oskari.example.util.DatabaseUserServiceCKAN;
 
 public class SynchronizeDatabase {
   private static final Logger LOG = LogFactory.getLogger(

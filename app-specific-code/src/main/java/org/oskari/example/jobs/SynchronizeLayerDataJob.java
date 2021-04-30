@@ -1,11 +1,11 @@
-package example.oskari.jobs;
+package org.oskari.example.jobs;
 
-import example.oskari.db.SynchronizeDatabase;
 import fi.nls.oskari.annotation.Oskari;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import java.util.Date;
 import java.util.Map;
+import org.oskari.example.db.SynchronizeDatabase;
 
 @Oskari("SynchronizeLayerDataJob")
 public class SynchronizeLayerDataJob extends fi.nls.oskari.worker.ScheduledJob {

@@ -1,4 +1,4 @@
-package example.oskari.parser;
+package org.oskari.example.parser;
 
 import fi.nls.oskari.domain.Role;
 import fi.nls.oskari.domain.User;

@@ -1,11 +1,11 @@
-package example.oskari;
+package org.oskari.example;
 
-import example.oskari.db.SynchronizeDatabase;
 import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.*;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.ResponseHelper;
+import org.oskari.example.db.SynchronizeDatabase;
 
 /**
  * CKAN Integration Rest action route

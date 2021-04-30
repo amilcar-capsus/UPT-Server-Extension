@@ -1,6 +1,5 @@
-package example.oskari.parser;
+package org.oskari.example.parser;
 
-import example.oskari.util.CKANLayerDataHandler;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import java.io.BufferedReader;
@@ -15,6 +14,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.oskari.example.util.CKANLayerDataHandler;
 
 public class CKANDataParser {
   private static final Logger LOG = LogFactory.getLogger(CKANDataParser.class);

@@ -1,10 +1,5 @@
-package example.oskari.util;
+package org.oskari.example.util;
 
-import example.oskari.helpers.FileHelper;
-import example.oskari.helpers.LayerHelper;
-import example.oskari.helpers.LayerJSONHelper;
-import example.oskari.parser.CKANDataParser;
-import example.oskari.parser.CKANOrganization;
 import fi.nls.oskari.domain.map.DataProvider;
 import fi.nls.oskari.domain.map.OskariLayer;
 import fi.nls.oskari.log.LogFactory;
@@ -52,6 +47,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
+import org.oskari.example.helpers.FileHelper;
+import org.oskari.example.helpers.LayerHelper;
+import org.oskari.example.helpers.LayerJSONHelper;
+import org.oskari.example.parser.CKANDataParser;
+import org.oskari.example.parser.CKANOrganization;
 
 public class CKANLayerDataHandler {
   private static final Logger LOG = LogFactory.getLogger(CKANDataParser.class);

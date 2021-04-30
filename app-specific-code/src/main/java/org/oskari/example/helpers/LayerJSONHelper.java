@@ -1,4 +1,4 @@
-package example.oskari.helpers;
+package org.oskari.example.helpers;
 
 import java.util.Arrays;
 import org.json.JSONArray;
