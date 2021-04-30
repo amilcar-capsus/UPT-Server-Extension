@@ -1,5 +1,7 @@
-package org.oskari.example.util;
+package example.oskari.util;
 
+import example.oskari.parser.CKANOrganization;
+import example.oskari.parser.CKANUser;
 import fi.nls.oskari.domain.Role;
 import fi.nls.oskari.domain.User;
 import fi.nls.oskari.log.LogFactory;
@@ -11,8 +13,6 @@ import fi.nls.oskari.user.MybatisUserService;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.oskari.example.parser.CKANOrganization;
-import org.oskari.example.parser.CKANUser;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**

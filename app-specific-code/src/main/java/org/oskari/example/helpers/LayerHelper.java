@@ -1,4 +1,4 @@
-package org.oskari.example.helpers;
+package example.oskari.helpers;
 
 import fi.mml.map.mapwindow.service.db.OskariMapLayerGroupService;
 import fi.nls.oskari.control.ActionException;

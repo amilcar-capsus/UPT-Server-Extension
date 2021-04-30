@@ -1,4 +1,4 @@
-package org.oskari.example.helpers;
+package example.oskari.helpers;
 
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
