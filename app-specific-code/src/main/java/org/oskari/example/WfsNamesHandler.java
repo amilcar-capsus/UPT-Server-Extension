@@ -65,7 +65,7 @@ public class WfsNamesHandler extends RestActionHandler {
 
       PreparedStatement statement = connection.prepareStatement(
         "with public_layers as(\n" +
-        "   SELECT distinct oskari_maplayer.id, split_apart(name, ':', 2) as layer_name FROM oskari_maplayer\n" +
+        "   SELECT distinct oskari_maplayer.id, split_part(name, ':', 2) as layer_name FROM oskari_maplayer\n" +
         "   WHERE type = 'wfslayer' OR type = 'wmslayer'\n" +
         "   )\n" +
         "select id, layer_name from public_layers"
