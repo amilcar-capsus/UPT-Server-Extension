@@ -160,6 +160,9 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
             "values(?,?,?,?,?,?,?,?) \n" +
             "on conflict(study_area, scenario, category, name) do nothing \n"
           );
+          for (String s : nextLine) {
+            System.out.println(s);
+          }
           if (!headers) {
             statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
