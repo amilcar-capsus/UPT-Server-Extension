@@ -155,7 +155,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
         String[] header = null;
         String[] nextLine = null;
         while ((nextLine = reader.readNext()) != null) {
-          System.out.println(nextLine.length));
+          System.out.println(nextLine.length);
           System.out.println(
             "TAG" +
             nextLine[0] +
