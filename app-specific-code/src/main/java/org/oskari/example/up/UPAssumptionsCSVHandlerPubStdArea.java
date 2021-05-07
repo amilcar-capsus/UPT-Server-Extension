@@ -155,13 +155,21 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
         String[] header = null;
         String[] nextLine = null;
         while ((nextLine = reader.readNext()) != null) {
+          System.out.println(
+            "TAG",
+            nextLine[0] +
+            nextLine[1] +
+            nextLine[2] +
+            nextLine[3] +
+            nextLine[4] +
+            nextLine[5]
+          );
           PreparedStatement statement = connection.prepareStatement(
             "insert into up_public_assumptions(study_area,scenario,category,name,value,units,description,source) \n" +
             "values(?,?,?,?,?,?,?,?) \n" +
             "on conflict(study_area, scenario, category, name) do nothing \n"
           );
           if (!headers) {
-            System.out.println(ArrayUtils.indexOf(header, "description"));
             statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
             statement.setString(
