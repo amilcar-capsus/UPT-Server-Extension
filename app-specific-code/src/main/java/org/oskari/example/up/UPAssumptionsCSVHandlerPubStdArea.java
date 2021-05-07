@@ -197,7 +197,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
             headers = false;
           }
         }
-
+        System.out.println(scenario_id);
         setCreateAssumptions(
           scenario_id,
           params.getRequiredParam("study_area")
