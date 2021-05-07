@@ -149,7 +149,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
           new InputStreamReader(csv.getInputStream()),
           ',',
           '"',
-          0
+          1
         );
         boolean headers = true;
         String[] header = null;
