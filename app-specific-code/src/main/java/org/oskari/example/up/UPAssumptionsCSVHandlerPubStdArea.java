@@ -161,9 +161,9 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
             "on conflict(study_area, scenario, category, name) do nothing \n"
           );
           for (String s : nextLine) {
-            System.out.println(s);
+            System.out.println(s + ",");
           }
-          if (!headers) {
+          /*if (!headers) {
             statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
             statement.setString(
@@ -201,7 +201,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
         setCreateAssumptions(
           scenario_id,
           params.getRequiredParam("study_area")
-        );
+        );*/
       }
     } catch (Exception e) {
       log.error(e, errorMsg);
