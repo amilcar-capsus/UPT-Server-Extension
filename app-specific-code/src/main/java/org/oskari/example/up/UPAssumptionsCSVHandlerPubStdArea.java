@@ -163,10 +163,10 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
           for (String s : nextLine) {
             System.out.println(s + ",");
           }
-          for (String s : header) {
-            System.out.println(s + ",");
-          }
           if (!headers) {
+            for (String s : header) {
+              System.out.println(s + ",");
+            }
             statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
             statement.setString(
