@@ -163,7 +163,10 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
           for (String s : nextLine) {
             System.out.println(s + ",");
           }
-          /*if (!headers) {
+          for (String s : header) {
+            System.out.println(s + ",");
+          }
+          if (!headers) {
             statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
             statement.setString(
@@ -197,7 +200,6 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
             headers = false;
           }*/
         }
-        System.out.println(scenario_id);
         /*setCreateAssumptions(
           scenario_id,
           params.getRequiredParam("study_area")
