@@ -166,7 +166,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
           System.out.println(ArrayUtils.getLength(nextLine));
           if (!headers) {
             System.out.println(ArrayUtils.toString(header));
-            /*statement.setLong(1, study_area);
+            statement.setLong(1, study_area);
             statement.setInt(2, scenario_id);
             statement.setString(
               3,
@@ -193,7 +193,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
               nextLine[ArrayUtils.indexOf(header, "source")]
             );
 
-            statement.execute();*/
+            statement.execute();
           } else {
             header = nextLine;
             headers = false;
