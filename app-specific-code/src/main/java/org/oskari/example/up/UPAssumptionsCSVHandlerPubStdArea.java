@@ -198,7 +198,7 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
           } else {
             header = nextLine;
             headers = false;
-          }*/
+          }
         }
         /*setCreateAssumptions(
           scenario_id,
