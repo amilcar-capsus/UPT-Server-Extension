@@ -199,10 +199,10 @@ public class UPAssumptionsCSVHandlerPubStdArea extends RestActionHandler {
             headers = false;
           }
         }
-        /*setCreateAssumptions(
+        setCreateAssumptions(
           scenario_id,
           params.getRequiredParam("study_area")
-        );*/
+        );
       }
     } catch (Exception e) {
       log.error(e, errorMsg);
