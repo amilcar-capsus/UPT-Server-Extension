@@ -114,7 +114,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
       params.requireLoggedInUser();
       ArrayList<String> roles = new UPTRoles()
       .handleGet(params, params.getUser());
-      if (!roles.contains("uptadmin") && !roles.contains("uptuser")) {
+      if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser")) {
         throw new Exception("User privilege is not enough for this action");
       }
 
@@ -408,7 +408,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
           new ParameterizedTypeReference<List<IndicatorUP>>() {}
         );
       List<IndicatorUP> response = returns.getBody();
-      System.out.println(ArrayUtils.toString(response));
+
       try (
         Connection connection = DriverManager.getConnection(
           upURL,
@@ -416,23 +416,21 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
           upPassword
         );
       ) {
-        PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO public.up_modules_translation(\n" +
-          "	language, name, label, tooltip)\n" +
-          "	VALUES (?, ?, ?, ?)\n" +
-          "on conflict (language, name)\n" +
-          "do nothing;"
-        );
         for (IndicatorUP index : response) {
+          PreparedStatement statement = connection.prepareStatement(
+            "INSERT INTO public.up_modules_translation(\n" +
+            "	language, name, label, tooltip)\n" +
+            "	VALUES (?, ?, ?, ?)\n" +
+            "on conflict (language, name)\n" +
+            "do nothing;"
+          );
           statement.setString(1, "english");
           statement.setString(2, index.getName());
           statement.setString(3, index.getModule());
           statement.setString(4, index.getDescription());
 
-          statement.addBatch();
+          statement.execute();
         }
-        connection.commit();
-        statement.close();
       }
     } catch (Exception e) {
       try {
