@@ -408,7 +408,7 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
           new ParameterizedTypeReference<List<IndicatorUP>>() {}
         );
       List<IndicatorUP> response = returns.getBody();
-
+      System.out.println(ArrayUtils.toString(response));
       try (
         Connection connection = DriverManager.getConnection(
           upURL,
