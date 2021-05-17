@@ -416,14 +416,14 @@ public class UPCalculusModulesInstallerHandler extends RestActionHandler {
           upPassword
         );
       ) {
+        PreparedStatement statement = connection.prepareStatement(
+          "INSERT INTO public.up_modules_translation(\n" +
+          "	language, name, label, tooltip)\n" +
+          "	VALUES (?, ?, ?, ?)\n" +
+          "on conflict (language, name)\n" +
+          "do nothing;"
+        );
         for (IndicatorUP index : response) {
-          PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO public.up_modules_translation(\n" +
-            "	language, name, label, tooltip)\n" +
-            "	VALUES (?, ?, ?, ?)\n" +
-            "on conflict (language, name)\n" +
-            "do nothing;"
-          );
           statement.setString(1, "english");
           statement.setString(2, index.getName());
           statement.setString(3, index.getModule());
