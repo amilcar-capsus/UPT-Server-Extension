@@ -2226,6 +2226,7 @@ begin;
     );
 
     insert into st_normalization(name) values ('observe'),('benchmark'),('standardize') on conflict(name) do nothing;
+    DELETE FROM st_normalization  WHERE name = 'observe';
 
     create table if not exists st_normalization_method_options(
 	id serial not null,
