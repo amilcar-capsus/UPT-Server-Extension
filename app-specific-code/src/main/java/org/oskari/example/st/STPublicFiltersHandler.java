@@ -70,7 +70,6 @@ public class STPublicFiltersHandler extends RestActionHandler {
         "		, study_area\n" +
         "	where \n" +
         "		st_intersects(study_area.geometry,user_layer_data.geometry)\n" +
-        "		--and user_layer_data.user_layer_id=?\n" +
         "), public_layers as(\n" +
         "	select distinct st_filters.id,st_filters.user_layer_id,st_filter_label,st_filter_label as label\n" +
         "	from st_filters\n" +

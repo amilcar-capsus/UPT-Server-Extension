@@ -180,7 +180,7 @@ public class ScenarioUPHandler extends RestActionHandler {
           JSONHelper.createJSONObject(mapper.writeValueAsString(results))
         );
       }
-      if ("evaluate_public".equals(params.getRequiredParam("action"))) {
+      else if ("evaluate_public".equals(params.getRequiredParam("action"))) {
         String scenariosPublic = String.join(
           ",",
           params.getRequest().getParameterValues("scenariosPublicId")
@@ -229,7 +229,7 @@ public class ScenarioUPHandler extends RestActionHandler {
           JSONHelper.createJSONObject(mapper.writeValueAsString(results))
         );
       }
-      if ("evaluate_both".equals(params.getRequiredParam("action"))) {
+      else if ("evaluate_both".equals(params.getRequiredParam("action"))) {
         String scenarios = String.join(
           ",",
           params.getRequest().getParameterValues("scenariosId")
