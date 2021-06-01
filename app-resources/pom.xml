@@ -17,11 +17,6 @@
             <artifactId>content-resources</artifactId>
         </dependency>
         <dependency>
-            <groupId>fi.nls.oskari</groupId>
-            <artifactId>download-basket</artifactId>
-            <version>${oskari.version}</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
