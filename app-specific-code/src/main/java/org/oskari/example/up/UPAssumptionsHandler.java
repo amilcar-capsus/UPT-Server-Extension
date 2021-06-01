@@ -318,7 +318,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
       param.post("assumptions_id", params.getRequiredParam("id"));
-      restTemplate.post(
+      restTemplate.put(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
         val,
         param
