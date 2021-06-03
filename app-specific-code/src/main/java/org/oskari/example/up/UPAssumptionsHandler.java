@@ -377,11 +377,12 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      restTemplate.postForObject(
+      Assumptions result = restTemplate.postForObject(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
         val,
         Assumptions.class
       );
+      System.out.println(result);
     } catch (Exception e) {
       errors.put(
         JSONHelper.createJSONObject(
