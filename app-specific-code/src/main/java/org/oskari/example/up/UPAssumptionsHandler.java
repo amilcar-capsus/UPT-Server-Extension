@@ -376,7 +376,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
     throws Exception {
     try {
       HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON_TYPE);
+      headers.setContentType(MediaType.APPLICATION_JSON);
       PostStatus postStatus = new PostStatus();
       Assumptions val = new Assumptions();
       val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
