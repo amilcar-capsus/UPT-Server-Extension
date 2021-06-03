@@ -372,6 +372,8 @@ public class UPAssumptionsHandler extends RestActionHandler {
   )
     throws Exception {
     try {
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
       PostStatus postStatus = new PostStatus();
       Assumptions val = new Assumptions();
       val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
@@ -379,13 +381,14 @@ public class UPAssumptionsHandler extends RestActionHandler {
       val.name = params.getRequiredParam("name");
       val.value = Double.parseDouble(params.getRequiredParam("value"));
       val.owner_id = user_logged.getId();
+      HttpEntity<Assumptions> request = new HttpEntity<>(val, headers);
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
       postStatus =
         restTemplate.postForObject(
           "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-          val,
+          request,
           PostStatus.class
         );
       System.out.println(postStatus);
