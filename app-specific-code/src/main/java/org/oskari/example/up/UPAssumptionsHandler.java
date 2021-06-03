@@ -303,6 +303,66 @@ public class UPAssumptionsHandler extends RestActionHandler {
     }
   }
 
+  @Override
+  public void handleDelete(ActionParameters params) throws ActionException {
+    //Just UPTAdmin can use this method
+    String errorMsg = "UPAssumptions post";
+    JSONObject json = null;
+    try (
+      Connection connection = DriverManager.getConnection(
+        upURL,
+        upUser,
+        upPassword
+      );
+    ) {
+      params.requireLoggedInUser();
+      ArrayList<String> roles = new UPTRoles()
+      .handleGet(params, params.getUser());
+      if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser")) {
+        throw new Exception("User privilege is not enough for this action");
+      }
+
+      Long user_id = params.getUser().getId();
+      Long id = Long.parseLong(params.getRequiredParam("id"));
+      Long study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      Integer scenario = Integer.parseInt(params.getRequiredParam("scenario"));
+      String category = params.getRequiredParam("category");
+      String name = params.getRequiredParam("name");
+      Double value = Double.parseDouble(params.getRequiredParam("value"));
+      String units = params.getRequiredParam("units");
+      String description = params.getRequiredParam("description");
+      String source = params.getRequiredParam("source");
+
+      PreparedStatement statement = connection.prepareStatement(
+        "DELET FROM up_assumptions where id=? \n"
+      );
+      statement.setLong(1, study_area);
+
+      statement.execute();
+
+      setDeleteAssumptions(scenario, params);
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException | JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(UPAssumptionsHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
   protected void setCreateAssumptions(
     Integer scenario_id,
     ActionParameters params
@@ -317,11 +377,9 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      param.put("assumptions_id", params.getRequiredParam("id"));
       restTemplate.put(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-        val,
-        param
+        val
       );
     } catch (Exception e) {
       errors.put(
@@ -351,6 +409,29 @@ public class UPAssumptionsHandler extends RestActionHandler {
       restTemplate.put(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
         val,
+        param
+      );
+    } catch (Exception e) {
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+        )
+      );
+      throw new Exception();
+    }
+  }
+
+  protected void setDeleteAssumptions(
+    Integer scenario_id,
+    ActionParameters params
+  )
+    throws Exception {
+    try {
+      RestTemplate restTemplate = new RestTemplate();
+      Map<String, String> param = new HashMap<String, String>();
+      param.put("assumptions_id", params.getRequiredParam("id"));
+      restTemplate.delete(
+        "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
         param
       );
     } catch (Exception e) {
