@@ -27,6 +27,7 @@ import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
@@ -389,8 +390,9 @@ public class UPAssumptionsHandler extends RestActionHandler {
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
       postStatus =
-        restTemplate.postForObject(
+        restTemplate.exchange(
           "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
+          HttpMethod.POST,
           request,
           PostStatus.class
         );
