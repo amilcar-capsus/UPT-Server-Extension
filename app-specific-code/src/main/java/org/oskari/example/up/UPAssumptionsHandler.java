@@ -389,14 +389,15 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      postStatus =
-        restTemplate.exchange(
+      String result = restTemplate
+        .exchange(
           "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
           HttpMethod.POST,
           request,
           PostStatus.class
-        );
-      System.out.println(postStatus.toString());
+        )
+        .getBody();
+      System.out.println(result);
     } catch (Exception e) {
       errors.put(
         JSONHelper.createJSONObject(
