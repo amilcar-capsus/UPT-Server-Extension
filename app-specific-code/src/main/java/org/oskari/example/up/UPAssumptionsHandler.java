@@ -394,7 +394,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
           "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
           HttpMethod.POST,
           request,
-          PostStatus.class
+          String.class
         )
         .getBody();
       System.out.println(result);
