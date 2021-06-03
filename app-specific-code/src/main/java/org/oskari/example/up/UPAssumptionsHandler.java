@@ -322,7 +322,16 @@ public class UPAssumptionsHandler extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
+      Long user_id = params.getUser().getId();
       Long id = Long.parseLong(params.getRequiredParam("id"));
+      Long study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      Integer scenario = Integer.parseInt(params.getRequiredParam("scenario"));
+      String category = params.getRequiredParam("category");
+      String name = params.getRequiredParam("name");
+      Double value = Double.parseDouble(params.getRequiredParam("value"));
+      String units = params.getRequiredParam("units");
+      String description = params.getRequiredParam("description");
+      String source = params.getRequiredParam("source");
 
       PreparedStatement statement = connection.prepareStatement(
         "DELETE FROM up_assumptions where id=? \n"
