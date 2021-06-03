@@ -322,21 +322,12 @@ public class UPAssumptionsHandler extends RestActionHandler {
         throw new Exception("User privilege is not enough for this action");
       }
 
-      Long user_id = params.getUser().getId();
       Long id = Long.parseLong(params.getRequiredParam("id"));
-      Long study_area = Long.parseLong(params.getRequiredParam("study_area"));
-      Integer scenario = Integer.parseInt(params.getRequiredParam("scenario"));
-      String category = params.getRequiredParam("category");
-      String name = params.getRequiredParam("name");
-      Double value = Double.parseDouble(params.getRequiredParam("value"));
-      String units = params.getRequiredParam("units");
-      String description = params.getRequiredParam("description");
-      String source = params.getRequiredParam("source");
 
       PreparedStatement statement = connection.prepareStatement(
-        "DELET FROM up_assumptions where id=? \n"
+        "DELETE FROM up_assumptions where id=? \n"
       );
-      statement.setLong(1, study_area);
+      statement.setLong(1, id);
 
       statement.execute();
 
@@ -377,7 +368,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      restTemplate.put(
+      restTemplate.postForLocation(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
         val
       );
