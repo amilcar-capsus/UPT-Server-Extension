@@ -169,6 +169,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
     String description = params.getRequiredParam("description");
     String source = params.getRequiredParam("source");
 
+    PostStatus status = new PostStatus();
     status.status = "Error";
     JSONObject json = null;
     try (
@@ -371,7 +372,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
   )
     throws Exception {
     try {
-      PostStatus status = new PostStatus();
+      PostStatus postStatus = new PostStatus();
       Assumptions val = new Assumptions();
       val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
       val.category = params.getRequiredParam("category");
