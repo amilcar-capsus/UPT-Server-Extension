@@ -34,6 +34,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
   private static String upwsHost;
   private static String upwsPort;
+  private User user_logged;
   private static final Logger log = LogFactory.getLogger(
     UPAssumptionsHandler.class
   );
@@ -55,6 +56,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
     errors = new JSONArray();
     Obj = new ObjectMapper();
+    user_logged = params.getUser();
   }
 
   @Override
@@ -374,15 +376,17 @@ public class UPAssumptionsHandler extends RestActionHandler {
       val.category = params.getRequiredParam("category");
       val.name = params.getRequiredParam("name");
       val.value = Double.parseDouble(params.getRequiredParam("value"));
+      val.owner_id = user_logged.getId();
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      Assumptions result = restTemplate.postForObject(
-        "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-        val,
-        Assumptions.class
-      );
-      System.out.println(result);
+      postStatus =
+        restTemplate.postForObject(
+          "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
+          val,
+          PostStatus.class
+        );
+      System.out.println(postStatus);
     } catch (Exception e) {
       errors.put(
         JSONHelper.createJSONObject(
