@@ -377,9 +377,10 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
-      restTemplate.postForLocation(
+      restTemplate.postForObject(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-        val
+        val,
+        Assumptions.class
       );
     } catch (Exception e) {
       errors.put(
@@ -397,6 +398,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
   )
     throws Exception {
     try {
+      PostStatus postStatus;
       Assumptions val = new Assumptions();
       val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
       val.category = params.getRequiredParam("category");
