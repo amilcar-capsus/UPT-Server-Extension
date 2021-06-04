@@ -376,28 +376,52 @@ public class UPAssumptionsHandler extends RestActionHandler {
   )
     throws Exception {
     try {
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-      PostStatus postStatus = new PostStatus();
-      Assumptions val = new Assumptions();
-      val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
-      val.category = params.getRequiredParam("category");
-      val.name = params.getRequiredParam("name");
-      val.value = Double.parseDouble(params.getRequiredParam("value"));
-      val.owner_id = user_logged.getId();
-      HttpEntity<Assumptions> request = new HttpEntity<>(val, headers);
+      PostStatus postStatus;
+      PreparedStatement statement = connection.prepareStatement(
+        "with assumptions as(\n" +
+        "	SELECT distinct study_area,category,name,value,units,description,source\n" +
+        "	FROM public.up_assumptions\n" +
+        "	where study_area=?\n" +
+        "\n" +
+        ")\n" +
+        "select   \n" +
+        "	? as scenario,\n" +
+        "	assumptions.study_area,\n" +
+        "	assumptions.category,\n" +
+        "	assumptions.name,\n" +
+        "	assumptions.value,\n" +
+        "	assumptions.units,\n" +
+        "	assumptions.description,\n" +
+        "	assumptions.source\n" +
+        "from assumptions"
+      );
+      statement.setInt(
+        1,
+        Integer.parseInt(params.getRequiredParam("study_area"))
+      );
+      statement.setInt(2, scenario_id);
+      statement.executeQuery();
+
+      ResultSet data_set = statement.getResultSet();
+      ArrayList<Assumptions> data_in = new ArrayList<>();
+      while (data_set.next()) {
+        Assumptions val = new Assumptions();
+        val.scenario = data_set.getInt("scenario");
+        val.category = data_set.getString("category");
+        val.name = data_set.getString("name");
+        val.value = data_set.getDouble("value");
+        val.owner_id = user_logged.getId();
+        data_in.add(val);
+      }
+      Tables<Assumptions> final_data = new Tables<>(data_in);
 
       RestTemplate restTemplate = new RestTemplate();
-      Map<String, String> param = new HashMap<String, String>();
-      String result = restTemplate
-        .exchange(
+      postStatus =
+        restTemplate.postForObject(
           "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-          HttpMethod.POST,
-          request,
-          String.class
-        )
-        .getBody();
-      System.out.println(result);
+          final_data,
+          PostStatus.class
+        );
     } catch (Exception e) {
       errors.put(
         JSONHelper.createJSONObject(
