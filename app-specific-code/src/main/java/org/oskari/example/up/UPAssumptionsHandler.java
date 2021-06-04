@@ -6,6 +6,7 @@ import fi.nls.oskari.annotation.OskariActionRoute;
 import fi.nls.oskari.control.ActionException;
 import fi.nls.oskari.control.ActionParameters;
 import fi.nls.oskari.control.RestActionHandler;
+import fi.nls.oskari.domain.User;
 import fi.nls.oskari.log.LogFactory;
 import fi.nls.oskari.log.Logger;
 import fi.nls.oskari.util.JSONHelper;
@@ -24,6 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
 import org.oskari.example.UPTRoles;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 @OskariActionRoute("up_assumptions")
@@ -34,6 +39,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
   private static String upwsHost;
   private static String upwsPort;
+  private User user_logged;
   private static final Logger log = LogFactory.getLogger(
     UPAssumptionsHandler.class
   );
@@ -55,6 +61,7 @@ public class UPAssumptionsHandler extends RestActionHandler {
 
     errors = new JSONArray();
     Obj = new ObjectMapper();
+    user_logged = params.getUser();
   }
 
   @Override
@@ -303,12 +310,135 @@ public class UPAssumptionsHandler extends RestActionHandler {
     }
   }
 
+  @Override
+  public void handleDelete(ActionParameters params) throws ActionException {
+    //Just UPTAdmin can use this method
+    String errorMsg = "UPAssumptions post";
+    JSONObject json = null;
+    try (
+      Connection connection = DriverManager.getConnection(
+        upURL,
+        upUser,
+        upPassword
+      );
+    ) {
+      params.requireLoggedInUser();
+      ArrayList<String> roles = new UPTRoles()
+      .handleGet(params, params.getUser());
+      if (!roles.contains("UPTAdmin") && !roles.contains("UPTUser")) {
+        throw new Exception("User privilege is not enough for this action");
+      }
+
+      Long user_id = params.getUser().getId();
+      Long id = Long.parseLong(params.getRequiredParam("id"));
+      Long study_area = Long.parseLong(params.getRequiredParam("study_area"));
+      Integer scenario = Integer.parseInt(params.getRequiredParam("scenario"));
+      String category = params.getRequiredParam("category");
+      String name = params.getRequiredParam("name");
+      Double value = Double.parseDouble(params.getRequiredParam("value"));
+      String units = params.getRequiredParam("units");
+      String description = params.getRequiredParam("description");
+      String source = params.getRequiredParam("source");
+
+      PreparedStatement statement = connection.prepareStatement(
+        "DELETE FROM up_assumptions where id=? \n"
+      );
+      statement.setLong(1, id);
+
+      statement.execute();
+
+      setDeleteAssumptions(scenario, params);
+    } catch (Exception e) {
+      errorMsg = errorMsg + e.toString();
+      try {
+        errors.put(
+          JSONHelper.createJSONObject(
+            Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+          )
+        );
+        ResponseHelper.writeError(
+          params,
+          "",
+          500,
+          new JSONObject().put("Errors", errors)
+        );
+      } catch (JsonProcessingException | JSONException ex) {
+        java
+          .util.logging.Logger.getLogger(UPAssumptionsHandler.class.getName())
+          .log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
   protected void setCreateAssumptions(
     Integer scenario_id,
     ActionParameters params
   )
     throws Exception {
     try {
+      PostStatus postStatus;
+      PreparedStatement statement = connection.prepareStatement(
+        "with assumptions as(\n" +
+        "	SELECT distinct study_area,category,name,value,units,description,source\n" +
+        "	FROM public.up_assumptions\n" +
+        "	where study_area=?\n" +
+        "\n" +
+        ")\n" +
+        "select   \n" +
+        "	? as scenario,\n" +
+        "	assumptions.study_area,\n" +
+        "	assumptions.category,\n" +
+        "	assumptions.name,\n" +
+        "	assumptions.value,\n" +
+        "	assumptions.units,\n" +
+        "	assumptions.description,\n" +
+        "	assumptions.source\n" +
+        "from assumptions"
+      );
+      statement.setInt(
+        1,
+        Integer.parseInt(params.getRequiredParam("study_area"))
+      );
+      statement.setInt(2, scenario_id);
+      statement.executeQuery();
+
+      ResultSet data_set = statement.getResultSet();
+      ArrayList<Assumptions> data_in = new ArrayList<>();
+      while (data_set.next()) {
+        Assumptions val = new Assumptions();
+        val.scenario = data_set.getInt("scenario");
+        val.category = data_set.getString("category");
+        val.name = data_set.getString("name");
+        val.value = data_set.getDouble("value");
+        val.owner_id = user_logged.getId();
+        data_in.add(val);
+      }
+      Tables<Assumptions> final_data = new Tables<>(data_in);
+
+      RestTemplate restTemplate = new RestTemplate();
+      postStatus =
+        restTemplate.postForObject(
+          "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
+          final_data,
+          PostStatus.class
+        );
+    } catch (Exception e) {
+      errors.put(
+        JSONHelper.createJSONObject(
+          Obj.writeValueAsString(new PostStatus("Error", e.toString()))
+        )
+      );
+      throw new Exception();
+    }
+  }
+
+  protected void setUpdateAssumptions(
+    Integer scenario_id,
+    ActionParameters params
+  )
+    throws Exception {
+    try {
+      PostStatus postStatus;
       Assumptions val = new Assumptions();
       val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
       val.category = params.getRequiredParam("category");
@@ -333,24 +463,17 @@ public class UPAssumptionsHandler extends RestActionHandler {
     }
   }
 
-  protected void setUpdateAssumptions(
+  protected void setDeleteAssumptions(
     Integer scenario_id,
     ActionParameters params
   )
     throws Exception {
     try {
-      Assumptions val = new Assumptions();
-      val.scenario = Integer.parseInt(params.getRequiredParam("scenario"));
-      val.category = params.getRequiredParam("category");
-      val.name = params.getRequiredParam("name");
-      val.value = Double.parseDouble(params.getRequiredParam("value"));
-
       RestTemplate restTemplate = new RestTemplate();
       Map<String, String> param = new HashMap<String, String>();
       param.put("assumptions_id", params.getRequiredParam("id"));
-      restTemplate.put(
+      restTemplate.delete(
         "http://" + upwsHost + ":" + upwsPort + "/assumptions/",
-        val,
         param
       );
     } catch (Exception e) {
