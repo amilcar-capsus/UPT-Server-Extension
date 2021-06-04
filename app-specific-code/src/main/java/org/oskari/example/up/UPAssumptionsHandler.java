@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
+import org.oskari.example.Tables;
 import org.oskari.example.UPTRoles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
