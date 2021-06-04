@@ -378,6 +378,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
     throws Exception {
     try {
       PostStatus postStatus;
+      Connection connection = DriverManager.getConnection(
+        upURL,
+        upUser,
+        upPassword
+      );
       PreparedStatement statement = connection.prepareStatement(
         "with assumptions as(\n" +
         "	SELECT distinct study_area,category,name,value,units,description,source\n" +
