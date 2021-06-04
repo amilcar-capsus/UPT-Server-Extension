@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.oskari.example.PostStatus;
+import org.oskari.example.Tables;
 import org.oskari.example.UPTRoles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -377,6 +378,11 @@ public class UPAssumptionsHandler extends RestActionHandler {
     throws Exception {
     try {
       PostStatus postStatus;
+      Connection connection = DriverManager.getConnection(
+        upURL,
+        upUser,
+        upPassword
+      );
       PreparedStatement statement = connection.prepareStatement(
         "with assumptions as(\n" +
         "	SELECT distinct study_area,category,name,value,units,description,source\n" +
