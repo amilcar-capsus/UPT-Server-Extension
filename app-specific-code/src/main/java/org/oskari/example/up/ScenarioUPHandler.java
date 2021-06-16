@@ -179,8 +179,7 @@ public class ScenarioUPHandler extends RestActionHandler {
           params,
           JSONHelper.createJSONObject(mapper.writeValueAsString(results))
         );
-      }
-      else if ("evaluate_public".equals(params.getRequiredParam("action"))) {
+      } else if ("evaluate_public".equals(params.getRequiredParam("action"))) {
         String scenariosPublic = String.join(
           ",",
           params.getRequest().getParameterValues("scenariosPublicId")
@@ -228,8 +227,7 @@ public class ScenarioUPHandler extends RestActionHandler {
           params,
           JSONHelper.createJSONObject(mapper.writeValueAsString(results))
         );
-      }
-      else if ("evaluate_both".equals(params.getRequiredParam("action"))) {
+      } else if ("evaluate_both".equals(params.getRequiredParam("action"))) {
         String scenarios = String.join(
           ",",
           params.getRequest().getParameterValues("scenariosId")
@@ -536,6 +534,11 @@ public class ScenarioUPHandler extends RestActionHandler {
     String scenario,
     String indicators
   ) {
+    System.out.println("############ Start Evaluate Scenarios #############");
+    System.out.println("user: " + user);
+    System.out.println("scenario: " + scenario);
+    System.out.println("indicators: " + indicators);
+    System.out.println("############ End evaluate scenarios vars");
     String errorMsg = "Scenario UP post ";
     ScenarioExecutionUP returns = new ScenarioExecutionUP();
 
