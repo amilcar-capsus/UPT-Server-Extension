@@ -538,7 +538,7 @@ public class ScenarioUPHandler extends RestActionHandler {
     System.out.println("user: " + user);
     System.out.println("scenario: " + scenario);
     System.out.println("indicators: " + indicators);
-    System.out.println("############ End evaluate scenarios vars");
+    System.out.println("############ End evaluate scenarios vars ############");
     String errorMsg = "Scenario UP post ";
     ScenarioExecutionUP returns = new ScenarioExecutionUP();
 
